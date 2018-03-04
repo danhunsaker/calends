@@ -1,0 +1,295 @@
+// Calends is a library for handling dates and times across arbitrary calendar
+// systems.
+/*
+
+Dates and times are converted to "TAI64NAXUR instants", values that
+unambiguously encode moments over 146 billion years into the past or future, in
+increments as small as 10**-45 seconds (internally called a "roctosecond", but
+there's no actual prefix for units this small, even though the Planck Time - the
+smallest meaningful period of time in quantum physics - is 54 of them).
+Calculations and comparisons are done using these instants, to maintain the
+highest accuracy possible while working with such values. A single Calends value
+can hold either a single instant, or a time span between two of them; the
+duration of such a value is automatically calculated during object creation, for
+easy use elsewhere. When you need a version of the instant itself (either of
+them, for a span) that you can use elsewhere, it is converted back to a
+date/time string in whatever calendar system you need at the time.
+
+Several calendar systems are supported officially, and the library is easily
+extended to support others without having to modify the core in any way.
+
+*/
+package calends
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"math/big"
+
+	"github.com/danhunsaker/calends/calendars"
+)
+
+// The core of the library, and the primary interface with it.
+type Calends struct {
+	startTime calendars.TAI64NAXURTime
+	duration  *big.Float
+	endTime   calendars.TAI64NAXURTime
+}
+
+// The version of the library
+var Version string = "0.0.0"
+
+// Create is the mechanism for constructing new Calends objects.
+/*
+
+It is preferred over using `make`, `new`, or `Calends{}` directly. It takes a
+date/time value, a calendar name, and a format string, and returns a Calends
+object representing the instant that date/time value took place. It also returns
+an error object, if something goes wrong.
+
+If the calendar passed is the empty string (`""`), Calends will use the
+`"unix"` calendar automatically. If the format is the empty string, Calends
+will use a default format provided by the calendar system itself.
+
+The date/time value can be one of many types, and the exact list of types
+supported varies by calendar system. At a minimum, string values should always
+be supported. The documentation for each calendar system should provide more
+detail on what other types are supported, and what ways the values can be
+presented with each.
+
+In any case, the date/time value can either be a single interface{} value, or a
+map[string]interface{} containing two or three of them. The valid map keys are
+'start', 'end', and 'duration'. Any combination of two will create the Calends
+object with the associated time span. If all three are provided, the 'duration'
+is ignored, and recalculated from the 'start' and 'end' values exclusively.
+
+*/
+func Create(stamp interface{}, calendar, format string) (instance Calends, err error) {
+	if stamp == nil {
+		return
+	}
+
+	if calendar == "" {
+		calendar = "unix"
+	}
+	if !calendars.Registered(calendar) {
+		err = calendars.UnknownCalendarError
+		return
+	}
+
+	if format == "" {
+		format = calendars.DefaultFormat(calendar)
+	}
+
+	switch stamp := stamp.(type) {
+	default:
+		var internal calendars.TAI64NAXURTime
+
+		internal, err = calendars.ToInternal(calendar, stamp, format)
+		instance = Calends{
+			startTime: internal,
+			duration:  big.NewFloat(0.),
+			endTime:   internal,
+		}
+	case map[string]interface{}:
+		var start, end calendars.TAI64NAXURTime
+		var duration big.Float
+
+		rawStart, hasStart := stamp["start"]
+		rawEnd, hasEnd := stamp["end"]
+		rawDuration, hasDuration := stamp["duration"]
+
+		if hasStart {
+			start, err = calendars.ToInternal(calendar, rawStart, format)
+			if err != nil {
+				return Calends{}, err
+			}
+		}
+		if hasEnd {
+			end, err = calendars.ToInternal(calendar, rawEnd, format)
+			if err != nil {
+				return Calends{}, err
+			}
+		}
+		if hasDuration {
+			switch rawDuration.(type) {
+			case int:
+				duration = *big.NewFloat(float64(rawDuration.(int)))
+			case float64:
+				duration = *big.NewFloat(rawDuration.(float64))
+			case *big.Float:
+				tmp := rawDuration.(*big.Float)
+				duration = *tmp
+			case big.Float:
+				duration = rawDuration.(big.Float)
+			default:
+				err = errors.New("Invalid Duration Type")
+			}
+			if err != nil {
+				return
+			}
+		}
+
+		if hasStart && hasEnd {
+			instance = Calends{
+				startTime: start,
+				duration:  end.Sub(start).Float(),
+				endTime:   end,
+			}
+		} else if hasStart && hasDuration {
+			instance = Calends{
+				startTime: start,
+				duration:  &duration,
+				endTime:   start.Add(calendars.TAI64NAXURTimeFromFloat(duration)),
+			}
+		} else if hasEnd && hasDuration {
+			instance = Calends{
+				startTime: end.Sub(calendars.TAI64NAXURTimeFromFloat(duration)),
+				duration:  &duration,
+				endTime:   end,
+			}
+		} else {
+			var internal calendars.TAI64NAXURTime
+
+			internal, err = calendars.ToInternal(calendar, stamp, format)
+			instance = Calends{
+				startTime: internal,
+				duration:  big.NewFloat(0.),
+				endTime:   internal,
+			}
+		}
+	}
+
+	return
+}
+
+// Date is used to retrieve the value of an instant in a given calendar system.
+func (c Calends) Date(calendar, format string) (string, error) {
+	if calendar == "" {
+		calendar = "unix"
+	}
+	if !calendars.Registered(calendar) {
+		err := calendars.UnknownCalendarError
+		return "", err
+	}
+
+	if format == "" {
+		format = calendars.DefaultFormat(calendar)
+	}
+
+	return calendars.FromInternal(calendar, c.startTime, format)
+}
+
+// Duration retrieves the number of seconds between the start and end instants.
+func (c Calends) Duration() *big.Float {
+	return c.duration
+}
+
+// EndDate retrieves the value of the end instant in a given calendar system.
+func (c Calends) EndDate(calendar, format string) (string, error) {
+	if calendar == "" {
+		calendar = "unix"
+	}
+	if !calendars.Registered(calendar) {
+		err := calendars.UnknownCalendarError
+		return "", err
+	}
+
+	if format == "" {
+		format = calendars.DefaultFormat(calendar)
+	}
+
+	return calendars.FromInternal(calendar, c.endTime, format)
+}
+
+// MarshalText implements the encoding.TextMarshaler interface.
+func (c Calends) MarshalText() ([]byte, error) {
+	if tmp, _ := c.duration.Int64(); tmp == 0 {
+		return c.startTime.MarshalText()
+	}
+
+	start, _ := c.startTime.MarshalText()
+	end, _ := c.endTime.MarshalText()
+
+	return []byte(fmt.Sprintf("from %s to %s", start, end)), nil
+}
+
+// UnmarshalText implements the encoding.TextUnmarshaler interface.
+func (c *Calends) UnmarshalText(text []byte) error {
+	var startTime, endTime calendars.TAI64NAXURTime
+	var start, end string
+
+	n, err := fmt.Sscanf(string(text), "from %s to %s", &start, &end)
+	if err != nil && err != io.EOF && err.Error() != "input does not match format" {
+		return err
+	}
+
+	if n < 2 {
+		end = start
+	}
+
+	startTime.UnmarshalText([]byte(start))
+	endTime.UnmarshalText([]byte(end))
+
+	tmp, err := Create(map[string]interface{}{
+		"start": startTime,
+		"end":   endTime,
+	}, "tai64", "tai64naxur")
+
+	c = &tmp
+
+	return err
+}
+
+// MarshalJSON implements the encoding.json.Marshaler interface.
+func (c Calends) MarshalJSON() ([]byte, error) {
+	if tmp, _ := c.duration.Int64(); tmp == 0 {
+		return c.startTime.MarshalText()
+	}
+
+	start, _ := c.startTime.MarshalText()
+	end, _ := c.endTime.MarshalText()
+
+	return []byte(fmt.Sprintf(`{"start":"%s","end":"%s"}`, start, end)), nil
+}
+
+// UnmarshalJSON implements the encoding.json.Unmarshaler interface.
+func (c *Calends) UnmarshalJSON(text []byte) error {
+	var startTime, endTime calendars.TAI64NAXURTime
+
+	parsed := make(map[string]string)
+	err := json.Unmarshal(text, &parsed)
+	if err == nil {
+		err = startTime.UnmarshalText([]byte(parsed["start"]))
+		if err != nil {
+			return errors.New("(*Calends).UnmarshalJSON [convert start time " + parsed["start"] + "]: " + err.Error())
+		}
+
+		err = endTime.UnmarshalText([]byte(parsed["end"]))
+		if err != nil {
+			return errors.New("(*Calends).UnmarshalJSON [convert end time " + parsed["end"] + "]: " + err.Error())
+		}
+	} else {
+		err = startTime.UnmarshalText(text)
+		if err != nil {
+			return errors.New("(*Calends).UnmarshalJSON [convert time " + string(text) + "]: " + err.Error())
+		}
+
+		endTime = startTime
+	}
+
+	temp, err := Create(map[string]interface{}{
+		"start": startTime,
+		"end":   endTime,
+	}, "tai64", "")
+
+	c = &temp
+
+	if err != nil {
+		err = errors.New("(*Calends).UnmarshalJSON [set values]: " + err.Error())
+	}
+
+	return err
+}
