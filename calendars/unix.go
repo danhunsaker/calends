@@ -30,11 +30,13 @@ func init() {
 			switch date.(type) {
 			// TODO - other types
 			case int:
-				stamp = TAI64NAXURTimeFromDecimalString(string(date.(int)))
+				stamp = TAI64NAXURTimeFromDecimalString(fmt.Sprintf("%d", date.(int)))
 			case float64:
 				stamp = TAI64NAXURTimeFromDecimalString(fmt.Sprintf("%f", date.(float64)))
 			case big.Float:
 				stamp = TAI64NAXURTimeFromFloat(date.(big.Float))
+			case *big.Float:
+				stamp = TAI64NAXURTimeFromFloat(*date.(*big.Float))
 			case []byte:
 				stamp = TAI64NAXURTimeFromDecimalString(string(date.([]byte)))
 			case string:

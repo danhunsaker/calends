@@ -83,6 +83,44 @@ func (t TAI64NAXURTime) String() string {
 	return out
 }
 
+// Float returns the math/big.Float representation of the TAI64NAXURTime value.
+func (t TAI64NAXURTime) Float() *big.Float {
+	out, _, _ := big.ParseFloat(t.String(), 10, 176, big.ToNearestAway)
+	return out
+}
+
+// MarshalText implements the encoding.TextMarshaler interface.
+func (t TAI64NAXURTime) MarshalText() ([]byte, error) {
+	out, err := FromInternal("tai64", t, "tai64naxur")
+	return []byte(out), err
+}
+
+// UnmarshalText implements the encoding.TextUnmarshaler interface.
+func (t *TAI64NAXURTime) UnmarshalText(in []byte) error {
+	tmp, err := ToInternal("tai64", in, "tai64naxur")
+	*t = tmp
+	return err
+}
+
+// MarshalBinary implements the encoding.BinaryMarshaler interface.
+func (t *TAI64NAXURTime) MarshalBinary() (out []byte, err error) {
+	in, err := t.MarshalText()
+	if err != nil {
+		return
+	}
+
+	out, err = hex.DecodeString(string(in))
+
+	return
+}
+
+// UnmarshalBinary implements the encoding.BinaryUnmarshaler interface.
+func (t *TAI64NAXURTime) UnmarshalBinary(in []byte) error {
+	out := hex.EncodeToString(in)
+
+	return t.UnmarshalText([]byte(out))
+}
+
 // TAI64NAXURTimeFromDecimalString calculates a TAI64NAXURTime from its decimal
 // string representation.
 func TAI64NAXURTimeFromDecimalString(in string) TAI64NAXURTime {
@@ -99,63 +137,11 @@ func TAI64NAXURTimeFromHexString(in string) TAI64NAXURTime {
 	return out
 }
 
-// Float returns the math.big.Float representation of the TAI64NAXURTime value.
-func (t TAI64NAXURTime) Float() *big.Float {
-	out, _, _ := big.ParseFloat(t.String(), 10, 176, big.ToNearestAway)
-	return out
-}
-
-// TAI64NAXURTimeFromFloat calculates a TAI64NAXURTime from its math.big.Float
+// TAI64NAXURTimeFromFloat calculates a TAI64NAXURTime from its math/big.Float
 // representation.
 func TAI64NAXURTimeFromFloat(in big.Float) TAI64NAXURTime {
 	// fmt.Printf("TAI64NAXURTimeFromFloat: %#v\n", in)
 	return TAI64NAXURTimeFromDecimalString(in.Text('f', 45))
-}
-
-func rollOverAt9(value int32) (roll int32, remain uint32) {
-	if value >= 0 {
-		roll = value / 1000000000
-	} else {
-		roll = 1
-	}
-
-	remain = uint32(math.Mod(float64(value), 1000000000))
-
-	return
-}
-
-// MarshalText implements the encoding.TextMarshaler interface.
-func (t TAI64NAXURTime) MarshalText() ([]byte, error) {
-	out, err := FromInternal("tai64", t, "tai64naxur")
-	return []byte(out), err
-}
-
-// UnmarshalText implements the encoding.TextUnmarshaler interface.
-func (t *TAI64NAXURTime) UnmarshalText(in []byte) error {
-	tmp, err := ToInternal("tai64", in, "tai64naxur")
-	t = &tmp
-	return err
-}
-
-// MarshalBinary implements the encoding.BinaryMarshaler interface.
-func (t *TAI64NAXURTime) MarshalBinary() (out []byte, err error) {
-	in, err := t.MarshalText()
-	if err != nil {
-		return
-	}
-
-	_, err = hex.Decode(out, in)
-
-	return
-}
-
-// UnmarshalBinary implements the encoding.BinaryUnmarshaler interface.
-func (t *TAI64NAXURTime) UnmarshalBinary(in []byte) error {
-	var out []byte
-
-	_ = hex.Encode(out, in)
-
-	return t.UnmarshalText(out)
 }
 
 // UTCtoTAI removes the UTC leap second offset from a TAI64NAXURTime value.
@@ -182,5 +168,17 @@ func TAItoUTC(tai TAI64NAXURTime) (utc TAI64NAXURTime, err error) {
 
 func getTAIOffset(year, month, day int) (offset TAI64NAXURTime, err error) {
 	// Look up the offset
+	return
+}
+
+func rollOverAt9(value int32) (roll int32, remain uint32) {
+	if value >= 0 {
+		roll = value / 1000000000
+	} else {
+		roll = 1
+	}
+
+	remain = uint32(math.Mod(float64(value), 1000000000))
+
 	return
 }

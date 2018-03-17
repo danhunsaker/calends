@@ -27,6 +27,7 @@ import (
 	"fmt"
 	"io"
 	"math/big"
+	"strings"
 
 	"github.com/danhunsaker/calends/calendars"
 )
@@ -39,7 +40,7 @@ type Calends struct {
 }
 
 // The version of the library
-var Version string = "0.0.0"
+var Version string = "0.0.1"
 
 // Create is the mechanism for constructing new Calends objects.
 /*
@@ -67,6 +68,8 @@ is ignored, and recalculated from the 'start' and 'end' values exclusively.
 
 */
 func Create(stamp interface{}, calendar, format string) (instance Calends, err error) {
+	instance.duration = big.NewFloat(0.)
+
 	if stamp == nil {
 		return
 	}
@@ -104,13 +107,13 @@ func Create(stamp interface{}, calendar, format string) (instance Calends, err e
 		if hasStart {
 			start, err = calendars.ToInternal(calendar, rawStart, format)
 			if err != nil {
-				return Calends{}, err
+				return
 			}
 		}
 		if hasEnd {
 			end, err = calendars.ToInternal(calendar, rawEnd, format)
 			if err != nil {
-				return Calends{}, err
+				return
 			}
 		}
 		if hasDuration {
@@ -243,10 +246,11 @@ func (c *Calends) UnmarshalText(text []byte) error {
 	return err
 }
 
-// MarshalJSON implements the encoding.json.Marshaler interface.
+// MarshalJSON implements the encoding/json.Marshaler interface.
 func (c Calends) MarshalJSON() ([]byte, error) {
 	if tmp, _ := c.duration.Int64(); tmp == 0 {
-		return c.startTime.MarshalText()
+		tmp, err := c.startTime.MarshalText()
+		return append(append([]byte{'"'}, tmp...), '"'), err
 	}
 
 	start, _ := c.startTime.MarshalText()
@@ -255,7 +259,7 @@ func (c Calends) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf(`{"start":"%s","end":"%s"}`, start, end)), nil
 }
 
-// UnmarshalJSON implements the encoding.json.Unmarshaler interface.
+// UnmarshalJSON implements the encoding/json.Unmarshaler interface.
 func (c *Calends) UnmarshalJSON(text []byte) error {
 	var startTime, endTime calendars.TAI64NAXURTime
 
@@ -272,9 +276,9 @@ func (c *Calends) UnmarshalJSON(text []byte) error {
 			return errors.New("(*Calends).UnmarshalJSON [convert end time " + parsed["end"] + "]: " + err.Error())
 		}
 	} else {
-		err = startTime.UnmarshalText(text)
+		err = startTime.UnmarshalText([]byte(strings.Trim(string(text), `"`)))
 		if err != nil {
-			return errors.New("(*Calends).UnmarshalJSON [convert time " + string(text) + "]: " + err.Error())
+			return errors.New("(*Calends).UnmarshalJSON [convert time " + strings.Trim(string(text), `"`) + "]: " + err.Error())
 		}
 
 		endTime = startTime
@@ -285,7 +289,7 @@ func (c *Calends) UnmarshalJSON(text []byte) error {
 		"end":   endTime,
 	}, "tai64", "")
 
-	c = &temp
+	*c = temp
 
 	if err != nil {
 		err = errors.New("(*Calends).UnmarshalJSON [set values]: " + err.Error())

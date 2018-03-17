@@ -56,12 +56,7 @@ parsing or formatting.
 
 */
 func RegisterClass(name string, definition CalendarDefinition, defaultFormat string) {
-	registeredCalendars[canonCalendarName(name)] = calendarRegistration{
-		ToInternal:    definition.ToInternal,
-		FromInternal:  definition.FromInternal,
-		Offset:        definition.Offset,
-		DefaultFormat: defaultFormat,
-	}
+	RegisterElements(name, definition.ToInternal, definition.FromInternal, definition.Offset, defaultFormat)
 }
 
 // RegisterElements registers a calendar system from its distinct functions.
@@ -107,6 +102,10 @@ func ToInternal(calendar string, date interface{}, format string) (TAI64NAXURTim
 		return TAI64NAXURTime{}, UnknownCalendarError
 	}
 
+	if format == "" {
+		format = DefaultFormat(calendar)
+	}
+
 	// fmt.Printf("ToInternal: %#v (%#v) [%#v]\n", canonCalendarName(calendar), format, date)
 
 	return registeredCalendars[canonCalendarName(calendar)].ToInternal(date, format)
@@ -116,6 +115,10 @@ func ToInternal(calendar string, date interface{}, format string) (TAI64NAXURTim
 func FromInternal(calendar string, stamp TAI64NAXURTime, format string) (string, error) {
 	if !Registered(calendar) {
 		return "", UnknownCalendarError
+	}
+
+	if format == "" {
+		format = DefaultFormat(calendar)
 	}
 
 	// fmt.Printf("FromInternal: %#v (%#v) [%#v]\n", canonCalendarName(calendar), format, stamp)

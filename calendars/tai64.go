@@ -58,7 +58,7 @@ func init() {
 				if len(tmp) < 2 {
 					tmp = append(tmp, "0")
 				}
-				_, err = fmt.Sscanf(fmt.Sprintf("%020s.%-045s", tmp[0], tmp[1]), "%020d.%09d%09d%09d%09d%09d", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Xicto, &stamp.Ucto, &stamp.Rocto)
+				_, err = fmt.Sscanf(fmt.Sprintf("%s %-045s", tmp[0], tmp[1]), "%d %09d%09d%09d%09d%09d", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Xicto, &stamp.Ucto, &stamp.Rocto)
 			case "tai64naxur":
 				_, err = fmt.Sscanf(dateString, "%016X%08X%08X%08X%08X%08X", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Xicto, &stamp.Ucto, &stamp.Rocto)
 			case "tai64naxu":
@@ -75,7 +75,11 @@ func init() {
 				err = InvalidFormatError
 			}
 
-			if format != "decimal" {
+			if err != nil && err.Error() == "EOF" {
+				err = nil
+			}
+
+			if format != "decimal" && err == nil {
 				stamp.Seconds -= 0x4000000000000000
 			}
 
@@ -111,6 +115,8 @@ func init() {
 			// TODO - other types
 			case big.Float:
 				adjust = TAI64NAXURTimeFromFloat(offset.(big.Float))
+			case *big.Float:
+				adjust = TAI64NAXURTimeFromFloat(*offset.(*big.Float))
 			case []byte:
 				adjust = TAI64NAXURTimeFromDecimalString(string(offset.([]byte)))
 			case string:

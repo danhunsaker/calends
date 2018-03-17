@@ -10,7 +10,7 @@ Supported Input Types:
  - time.Time (time.Duration for Offset)
 
 Supported Format Strings:
- - any format supported by the time library or github.com/jeffjen/datefmt
+ - any format supported by the time library or github.com/danhunsaker/go-datefmt
    (or github.com/olebedev/when for Offset)
 
 */
@@ -21,7 +21,7 @@ import (
 	"strings"
 	"time"
 
-	datefmt "github.com/jeffjen/datefmt"
+	datefmt "github.com/danhunsaker/go-datefmt"
 	when "github.com/olebedev/when"
 	when_common "github.com/olebedev/when/rules/common"
 	when_en "github.com/olebedev/when/rules/en"
@@ -44,7 +44,8 @@ func init() {
 			case []byte:
 				str = string(date.([]byte))
 			default:
-				err = InvalidFormatError
+				err = UnsupportedInputError
+				return
 			}
 
 			if str != "" {
@@ -80,7 +81,11 @@ func init() {
 
 			switch offset.(type) {
 			case time.Duration:
-				str = offset.(time.Duration).String()
+				dur := offset.(time.Duration)
+				r := time.Unix(in.Seconds, int64(in.Nano)).Add(dur)
+				out.Seconds = r.Unix()
+				out.Nano = uint32(r.Nanosecond())
+				return
 			case string:
 				str = offset.(string)
 			case []byte:
