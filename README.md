@@ -2,7 +2,8 @@
 
 [![Software License](https://img.shields.io/github/license/danhunsaker/calends.svg?style=flat-square)](LICENSE)
 [![Gitter](https://img.shields.io/gitter/room/danhunsaker/calends.svg?style=flat-square)](https://gitter.im/danhunsaker/calends)
-[![GoDoc Documentation](https://img.shields.io/badge/GoDoc-documentation-blue.svg?style=flat-square)](https://godoc.org/github.com/danhunsaker/calends)
+[![Go Report Card](https://goreportcard.com/badge/github.com/danhunsaker/calends)](https://goreportcard.com/report/github.com/danhunsaker/calends)
+[![GoDoc Reference](https://img.shields.io/badge/GoDoc-reference-blue.svg?style=flat-square)](https://godoc.org/github.com/danhunsaker/calends)
 
 [![Latest Stable Version](https://img.shields.io/github/release/danhunsaker/calends.svg?label=stable&style=flat-square)](https://github.com/danhunsaker/calends/releases)
 [![Latest Unstable Version](https://img.shields.io/github/release/danhunsaker/calends/all.svg?label=unstable&style=flat-square)](https://github.com/danhunsaker/calends/releases)
@@ -42,6 +43,8 @@ A library for handling dates and times across arbitrary calendar systems
     three more components, to encode out to 45 places instead of just 18; this
     is also actually the internal time scale used by Calends itself, which is
     how it can support such a broad range of dates at such a high resolution.
+
+    - [x] Automatic calculation of leap second offsets
 
     - [ ] Automatic updates for handling leap second insertions
 
@@ -97,6 +100,8 @@ A library for handling dates and times across arbitrary calendar systems
   process when parsing dates, so it is still preferred to supply the calendar
   system, if known, when parsing.)_
 
+- [ ] Time zone support.
+
 - [x] Well-defined interfaces for extending the library.
 
   Add more calendar systems, type conversions, or geo-temporal relationships
@@ -144,7 +149,7 @@ information given here should be valid for all of them.
   `start`, `end`, and `duration`. If all three are provided, `duration` is
   ignored in favor of calculating it directly. If only one is provided, `value`
   is passed to the calendar system itself unchanged. The calendar system then
-  converts `value` to a `TAI64TAI64NAXURTime` instant, which the `Calends`
+  converts `value` to a `TAI64NAXURTime` instant, which the `Calends`
   object sets to the appropriate internal value.
 
 ### Read
@@ -293,7 +298,8 @@ listed below. Formats in **bold** are the default format for that calendar.
     - string with TAI instant representation in one of the following layouts:
       - `decimal` - number of seconds since 1970.01.01 00:00:00 TAI
       - `tai64` - TAI64 External Representation; the hexadecimal version of
-        `decimal` plus 2^62, with no fractional seconds (16 hexits total)
+        `decimal` plus 2<sup>62</sup>, with no fractional seconds (16 hexits
+        total)
       - `tai64n` - TAI64N External Representation; `tai64` with 9 decimal places
         encoded as 8 additional hexadecimal digits (24 hexits total)
       - `tai64na` - TAI64NA External Representation; `tai64n` with 9 more

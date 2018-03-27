@@ -207,6 +207,12 @@ func (c Calends) EndDate(calendar, format string) (string, error) {
 	return calendars.FromInternal(calendar, c.endTime, format)
 }
 
+// String implements the fmt.Stringer interface.
+func (c Calends) String() string {
+	tmp, _ := c.MarshalText()
+	return string(tmp)
+}
+
 // MarshalText implements the encoding.TextMarshaler interface.
 func (c Calends) MarshalText() ([]byte, error) {
 	if tmp, _ := c.duration.Int64(); tmp == 0 {

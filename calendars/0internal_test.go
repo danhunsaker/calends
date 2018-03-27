@@ -37,6 +37,16 @@ func TestString(t *testing.T) {
 	}
 }
 
+func TestHexString(t *testing.T) {
+	in := TAI64NAXURTime{Seconds: 1}
+	want := "40000000000000010000000000000000000000000000000000000000"
+	got := in.HexString()
+
+	if got != want {
+		t.Errorf("%#v.HexString() failed\ngot  %#v\nwant %#v", in, got, want)
+	}
+}
+
 func TestFloat(t *testing.T) {
 	in := TAI64NAXURTime{Seconds: 1}
 	want := big.NewFloat(1)
@@ -116,45 +126,6 @@ func TestTAI64NAXURTimeFromFloat(t *testing.T) {
 
 	if got != want {
 		t.Errorf("TAI64NAXURTimeFromFloat(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
-	}
-}
-
-func TestUTCtoTAI(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
-	want := TAI64NAXURTime{Seconds: 1}
-	got, err := UTCtoTAI(in)
-
-	if err != nil {
-		t.Errorf("UTCtoTAI(%#v) returned error %q", in, err)
-	}
-	if got != want {
-		t.Errorf("UTCtoTAI(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
-	}
-}
-
-func TestTAItoUTC(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
-	want := TAI64NAXURTime{Seconds: 1}
-	got, err := TAItoUTC(in)
-
-	if err != nil {
-		t.Errorf("TAItoUTC(%#v) returned error %q", in, err)
-	}
-	if got != want {
-		t.Errorf("TAItoUTC(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
-	}
-}
-
-func TestGetTAIOffset(t *testing.T) {
-	year, month, day := 1970, 1, 1
-	want := TAI64NAXURTime{}
-	got, err := getTAIOffset(year, month, day)
-
-	if err != nil {
-		t.Errorf("getTAIOffset(%#v, %#v, %#v) returned error %q", year, month, day, err)
-	}
-	if got != want {
-		t.Errorf("getTAIOffset(%#v, %#v, %#v) failed\ngot  %#v\nwant %#v", year, month, day, got, want)
 	}
 }
 

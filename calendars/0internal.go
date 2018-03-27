@@ -1,37 +1,7 @@
-// TAI ↔ UTC CONVERSIONS
-/*
-
-Part of what the helper methods offer is automatic conversion between UTC and
-TAI counts. The difference between the two is the inclusion of leap seconds in
-UTC, to keep noon synchronized with the solar zenith in the times used in
-day-to-day situations. TAI counts do not include such an offset, and as such
-there is a difference of a few seconds between the two values, which varies
-based on when the instant actually occurs.
-
-In order to perform this conversion, Calends makes use of leap second tables
-available from the Centre de la Rotation de la Terre du Service International de
-la Rotation Terrestre et des Systèmes de Référence à L’Observatoire de Paris (in
-English, the Earth Orientation Center, at the International Earth Rotation and
-Reference Systems Service, itself located in the Paris Observatory). The second
-of these tables is the full-second offset between TAI and UTC, starting in 1972
-(when the leap second system itself was devised). The first, then, is the
-calculation used to find the offset from 1961 through 1971, which itself is
-based on the actual differences between Earth's rotation-based time and the
-actual number of seconds elapsed in that period. Times prior to this period are
-unadjusted until a more comprehensive offset can reliably be calculated into the
-past. Times after the latest offset (generally applicable to the present moment)
-are similarly adjusted only to the latest offset, until a decent approximation
-can be devised. These tables are updated periodically, and any updates will be
-reflected by subsequent releases of the Calends library.
-
-NOTE: The TAI ↔ UTC conversion feature has not yet been implemented.
-
-*/
 package calendars
 
 import (
 	"encoding/hex"
-	// "fmt"
 	"math"
 	"math/big"
 )
@@ -80,6 +50,12 @@ func (a TAI64NAXURTime) Sub(b TAI64NAXURTime) TAI64NAXURTime {
 // String returns the decimal string representation of the TAI64NAXURTime value.
 func (t TAI64NAXURTime) String() string {
 	out, _ := FromInternal("tai64", t, "decimal")
+	return out
+}
+
+// HexString returns the hex string representation of the TAI64NAXURTime value.
+func (t TAI64NAXURTime) HexString() string {
+	out, _ := FromInternal("tai64", t, "tai64naxur")
 	return out
 }
 
@@ -144,41 +120,11 @@ func TAI64NAXURTimeFromFloat(in big.Float) TAI64NAXURTime {
 	return TAI64NAXURTimeFromDecimalString(in.Text('f', 45))
 }
 
-// UTCtoTAI removes the UTC leap second offset from a TAI64NAXURTime value.
-func UTCtoTAI(utc TAI64NAXURTime) (tai TAI64NAXURTime, err error) {
-	// Calculate year, month, day
-	var year, month, day int
-	// Remove the leap second offset
-	offset, err := getTAIOffset(year, month, day)
-	tai = utc.Add(offset)
-
-	return
-}
-
-// TAItoUTC adds the UTC leap second offset to a TAI64NAXURTime value.
-func TAItoUTC(tai TAI64NAXURTime) (utc TAI64NAXURTime, err error) {
-	// Calculate year, month, day
-	var year, month, day int
-	// Add the leap second offset
-	offset, err := getTAIOffset(year, month, day)
-	utc = tai.Sub(offset)
-
-	return
-}
-
-func getTAIOffset(year, month, day int) (offset TAI64NAXURTime, err error) {
-	// Look up the offset
-	return
-}
-
 func rollOverAt9(value int32) (roll int32, remain uint32) {
-	if value >= 0 {
-		roll = value / 1000000000
-	} else {
-		roll = 1
-	}
+	working := math.Abs(float64(value))
 
-	remain = uint32(math.Mod(float64(value), 1000000000))
+	roll = int32(working) / 1000000000
+	remain = uint32(math.Mod(working, 1000000000))
 
 	return
 }

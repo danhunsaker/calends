@@ -10,7 +10,7 @@ import (
 )
 
 func testValue(dur float64) Calends {
-	out, _ := Create(map[string]interface{}{"start": 0, "duration": dur}, "", "")
+	out, _ := Create(map[string]interface{}{"start": "0", "duration": dur}, "tai64", "decimal")
 	return out
 }
 
@@ -21,8 +21,6 @@ func TestCreate(t *testing.T) {
 	successCases := []struct {
 		in []interface{}
 	}{
-		{[]interface{}{nil, "", ""}},
-
 		{[]interface{}{0, "", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "end": 0}, "", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": 0}, "", ""}},
@@ -53,6 +51,25 @@ func TestCreate(t *testing.T) {
 		{[]interface{}{map[string]interface{}{"duration": calendars.InvalidFormatError}, "", ""}, errors.New("Invalid Duration Type")},
 	}
 
+	got, err = Create(nil, "", "")
+	if err != nil {
+		t.Errorf("Create(%#v, %#v, %#v) gave error %q", nil, "", "", err)
+	}
+	switch got := got.(type) {
+	case Calends:
+		if got.startTime.String() != "0" {
+			t.Errorf("Create(%#v, %#v, %#v) returned with startTime %s", nil, "", "", got.startTime)
+		}
+		if got.duration.String() != "0" {
+			t.Errorf("Create(%#v, %#v, %#v) returned with duration %s", nil, "", "", got.duration)
+		}
+		if got.endTime.String() != "0" {
+			t.Errorf("Create(%#v, %#v, %#v) returned with endTime %s", nil, "", "", got.endTime)
+		}
+	default:
+		t.Errorf("Create(%#v, %#v, %#v)\n  ==  %#v,\n want %#v", nil, "", "", got, "Calends")
+	}
+
 	for _, c := range successCases {
 		got, err = Create(c.in[0], c.in[1].(string), c.in[2].(string))
 		if err != nil {
@@ -60,14 +77,14 @@ func TestCreate(t *testing.T) {
 		}
 		switch got := got.(type) {
 		case Calends:
-			if got.startTime.String() != "0" {
-				t.Errorf("Create(%q) returned with startTime %#v", c.in, got.startTime)
+			if got.startTime.String() != "-7.997489999999999987778664944926276803016662598" {
+				t.Errorf("Create(%q) returned with startTime %s", c.in, got.startTime)
 			}
 			if got.duration.String() != "0" {
-				t.Errorf("Create(%q) returned with duration %#v", c.in, got.duration)
+				t.Errorf("Create(%q) returned with duration %s", c.in, got.duration)
 			}
-			if got.endTime.String() != "0" {
-				t.Errorf("Create(%q) returned with endTime %#v", c.in, got.endTime)
+			if got.endTime.String() != "-7.997489999999999987778664944926276803016662598" {
+				t.Errorf("Create(%q) returned with endTime %s", c.in, got.endTime)
 			}
 		default:
 			t.Errorf("Create(%q)\n  ==  %#v,\n want %#v", c.in, got, "Calends")
@@ -91,16 +108,16 @@ func TestDate(t *testing.T) {
 	if err != nil {
 		t.Errorf("Date(%q) gave error %q", []interface{}{"unix", ""}, err)
 	}
-	if got != "0.000000000" {
-		t.Errorf("Date(%q)\n  ==  %q,\n want %q", []interface{}{"unix", ""}, got, "0.000000000")
+	if got != "8.000082000" {
+		t.Errorf("Date(%q)\n  ==  %q,\n want %q", []interface{}{"unix", ""}, got, "8.000082000")
 	}
 
 	got, err = testValue(0).Date("", "")
 	if err != nil {
 		t.Errorf("Date(%q) gave error %q", []interface{}{"", ""}, err)
 	}
-	if got != "0.000000000" {
-		t.Errorf("Date(%q)\n  ==  %q,\n want %q", []interface{}{"", ""}, got, "0.000000000")
+	if got != "8.000082000" {
+		t.Errorf("Date(%q)\n  ==  %q,\n want %q", []interface{}{"", ""}, got, "8.000082000")
 	}
 
 	got, err = testValue(0).Date("invalid", "")
@@ -124,16 +141,16 @@ func TestEndDate(t *testing.T) {
 	if err != nil {
 		t.Errorf("EndDate(%q) gave error %q", []interface{}{"unix", ""}, err)
 	}
-	if got != "0.000000000" {
-		t.Errorf("EndDate(%q)\n  ==  %q,\n want %q", []interface{}{"unix", ""}, got, "0.000000000")
+	if got != "8.000082000" {
+		t.Errorf("EndDate(%q)\n  ==  %q,\n want %q", []interface{}{"unix", ""}, got, "8.000082000")
 	}
 
 	got, err = testValue(0).EndDate("", "")
 	if err != nil {
 		t.Errorf("EndDate(%q) gave error %q", []interface{}{"", ""}, err)
 	}
-	if got != "0.000000000" {
-		t.Errorf("EndDate(%q)\n  ==  %q,\n want %q", []interface{}{"", ""}, got, "0.000000000")
+	if got != "8.000082000" {
+		t.Errorf("EndDate(%q)\n  ==  %q,\n want %q", []interface{}{"", ""}, got, "8.000082000")
 	}
 
 	got, err = testValue(0).EndDate("invalid", "")
@@ -142,6 +159,18 @@ func TestEndDate(t *testing.T) {
 	}
 	if err != calendars.UnknownCalendarError {
 		t.Errorf("EndDate(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.UnknownCalendarError)
+	}
+}
+
+func TestString(t *testing.T) {
+	zero := testValue(0).String()
+	if zero != "40000000000000000000000000000000000000000000000000000000" {
+		t.Errorf("zero.String()\n  ==  %q,\n want %q", zero, "40000000000000000000000000000000000000000000000000000000")
+	}
+
+	day := testValue(86400).String()
+	if day != "from 40000000000000000000000000000000000000000000000000000000 to 40000000000151800000000000000000000000000000000000000000" {
+		t.Errorf("day.String()\n  ==  %q,\n want %q", day, "from 40000000000000000000000000000000000000000000000000000000 to 40000000000151800000000000000000000000000000000000000000")
 	}
 }
 

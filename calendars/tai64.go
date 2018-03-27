@@ -11,7 +11,7 @@ Supported Input Types:
   - string
   - []byte
   - TAI64NAXURTime
-  - math.big.Float for Offset
+  - math/big.Float for Offset
 
 Supported Format Strings:
   - decimal     - decimal; full resolution

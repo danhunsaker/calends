@@ -22,10 +22,10 @@ import (
 
 // Interface for calendar systems.
 type CalendarDefinition interface {
-	// Convert a date representation to an internal TAI64TAI64NAXURTime
+	// Convert a date representation to an internal TAI64NAXURTime
 	ToInternal(interface{}, string) (TAI64NAXURTime, error)
 
-	// Convert an internal TAI64TAI64NAXURTime to a date representation
+	// Convert an internal TAI64NAXURTime to a date representation
 	FromInternal(TAI64NAXURTime, string) (string, error)
 
 	// Calculate the TAI64NAXURTime at a given offset from another TAI64NAXURTime
