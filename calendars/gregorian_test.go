@@ -13,10 +13,10 @@ func TestGregorianToInternal(t *testing.T) {
 		{"in": []interface{}{[]byte("Thu, 01 Jan 1970 00:00:01 UTC"), ""}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
 		{"in": []interface{}{time.Unix(1, 0), ""}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
 
-		{"in": []interface{}{1, ""}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
-		{"in": []interface{}{1., ""}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
-		{"in": []interface{}{1.0, ""}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
-		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, ""}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
+		{"in": []interface{}{1, ""}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
+		{"in": []interface{}{1., ""}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
+		{"in": []interface{}{1.0, ""}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
+		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, ""}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
 	}
 
 	for _, c := range cases {
@@ -55,8 +55,8 @@ func TestGregorianOffset(t *testing.T) {
 		{"in": []interface{}{TAI64NAXURTime{}, []byte("in 1 second")}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
 		{"in": []interface{}{TAI64NAXURTime{}, time.Second}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
 
-		{"in": []interface{}{TAI64NAXURTime{}, "in 17 bloxnards"}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
-		{"in": []interface{}{TAI64NAXURTime{}, TAI64NAXURTime{Seconds: 1}}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
+		{"in": []interface{}{TAI64NAXURTime{}, "in 17 bloxnards"}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
+		{"in": []interface{}{TAI64NAXURTime{}, TAI64NAXURTime{Seconds: 1}}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
 	}
 
 	for _, c := range cases {

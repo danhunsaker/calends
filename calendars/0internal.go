@@ -18,33 +18,33 @@ type TAI64NAXURTime struct {
 }
 
 // Add calculates the sum of two TAI64NAXURTime values.
-func (a TAI64NAXURTime) Add(b TAI64NAXURTime) TAI64NAXURTime {
-	var c TAI64NAXURTime
+func (t TAI64NAXURTime) Add(z TAI64NAXURTime) TAI64NAXURTime {
+	var o TAI64NAXURTime
 	var roll int32
 
-	roll, c.Rocto = rollOverAt9(int32(a.Rocto + b.Rocto))
-	roll, c.Ucto = rollOverAt9(int32(a.Ucto+b.Ucto) + roll)
-	roll, c.Xicto = rollOverAt9(int32(a.Xicto+b.Xicto) + roll)
-	roll, c.Atto = rollOverAt9(int32(a.Atto+b.Atto) + roll)
-	roll, c.Nano = rollOverAt9(int32(a.Nano+b.Nano) + roll)
-	c.Seconds = a.Seconds + b.Seconds + int64(roll)
+	roll, o.Rocto = rollOverAt9(int32(t.Rocto + z.Rocto))
+	roll, o.Ucto = rollOverAt9(int32(t.Ucto+z.Ucto) + roll)
+	roll, o.Xicto = rollOverAt9(int32(t.Xicto+z.Xicto) + roll)
+	roll, o.Atto = rollOverAt9(int32(t.Atto+z.Atto) + roll)
+	roll, o.Nano = rollOverAt9(int32(t.Nano+z.Nano) + roll)
+	o.Seconds = t.Seconds + z.Seconds + int64(roll)
 
-	return c
+	return o
 }
 
 // Sub calculates the difference of two TAI64NAXURTime values.
-func (a TAI64NAXURTime) Sub(b TAI64NAXURTime) TAI64NAXURTime {
-	var c TAI64NAXURTime
+func (t TAI64NAXURTime) Sub(z TAI64NAXURTime) TAI64NAXURTime {
+	var o TAI64NAXURTime
 	var roll int32
 
-	roll, c.Rocto = rollOverAt9(int32(a.Rocto) - int32(b.Rocto))
-	roll, c.Ucto = rollOverAt9(int32(a.Ucto) - int32(b.Ucto) - roll)
-	roll, c.Xicto = rollOverAt9(int32(a.Xicto) - int32(b.Xicto) - roll)
-	roll, c.Atto = rollOverAt9(int32(a.Atto) - int32(b.Atto) - roll)
-	roll, c.Nano = rollOverAt9(int32(a.Nano) - int32(b.Nano) - roll)
-	c.Seconds = a.Seconds - b.Seconds - int64(roll)
+	roll, o.Rocto = rollOverAt9(int32(t.Rocto) - int32(z.Rocto))
+	roll, o.Ucto = rollOverAt9(int32(t.Ucto) - int32(z.Ucto) - roll)
+	roll, o.Xicto = rollOverAt9(int32(t.Xicto) - int32(z.Xicto) - roll)
+	roll, o.Atto = rollOverAt9(int32(t.Atto) - int32(z.Atto) - roll)
+	roll, o.Nano = rollOverAt9(int32(t.Nano) - int32(z.Nano) - roll)
+	o.Seconds = t.Seconds - z.Seconds - int64(roll)
 
-	return c
+	return o
 }
 
 // String returns the decimal string representation of the TAI64NAXURTime value.

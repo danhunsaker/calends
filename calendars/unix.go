@@ -82,7 +82,7 @@ func unixParseDate(date interface{}) (stamp TAI64NAXURTime, err error) {
 	case string:
 		stamp = TAI64NAXURTimeFromDecimalString(date.(string))
 	default:
-		err = UnsupportedInputError
+		err = ErrUnsupportedInput
 	}
 
 	return

@@ -1,5 +1,5 @@
-// Calends is a library for handling dates and times across arbitrary calendar
-// systems.
+// Package calends is a library for handling dates and times across arbitrary
+// calendar systems.
 /*
 
 Dates and times are converted to "TAI64NAXUR instants", values that
@@ -32,14 +32,15 @@ import (
 	"github.com/danhunsaker/calends/calendars"
 )
 
-// The core of the library, and the primary interface with it.
+// The Calends type is the core of the library, and the primary interface with
+// it.
 type Calends struct {
 	startTime calendars.TAI64NAXURTime
 	duration  *big.Float
 	endTime   calendars.TAI64NAXURTime
 }
 
-// The version of the library
+// Version of the library
 var Version string = "0.0.1"
 
 // Create is the mechanism for constructing new Calends objects.
@@ -78,7 +79,7 @@ func Create(stamp interface{}, calendar, format string) (instance Calends, err e
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err = calendars.UnknownCalendarError
+		err = calendars.ErrUnknownCalendar
 		return
 	}
 
@@ -97,71 +98,106 @@ func Create(stamp interface{}, calendar, format string) (instance Calends, err e
 			endTime:   internal,
 		}
 	case map[string]interface{}:
-		var start, end calendars.TAI64NAXURTime
-		var duration big.Float
+		instance, err = retrieveInstance(calendar, stamp, format)
+	}
 
-		rawStart, hasStart := stamp["start"]
-		rawEnd, hasEnd := stamp["end"]
-		rawDuration, hasDuration := stamp["duration"]
+	return
+}
 
-		if hasStart {
-			start, err = calendars.ToInternal(calendar, rawStart, format)
-			if err != nil {
-				return
-			}
+func retrieveInstance(calendar string, stamp map[string]interface{}, format string) (instance Calends, err error) {
+	start, hasStart, e := retrieveStart(calendar, stamp, format)
+	if e != nil {
+		err = e
+		return
+	}
+	end, hasEnd, e := retrieveEnd(calendar, stamp, format)
+	if e != nil {
+		err = e
+		return
+	}
+	duration, hasDuration, e := retrieveDuration(calendar, stamp, format)
+	if e != nil {
+		err = e
+		return
+	}
+
+	if hasStart && hasEnd {
+		instance = Calends{
+			startTime: start,
+			duration:  end.Sub(start).Float(),
+			endTime:   end,
 		}
-		if hasEnd {
-			end, err = calendars.ToInternal(calendar, rawEnd, format)
-			if err != nil {
-				return
-			}
+	} else if hasStart && hasDuration {
+		instance = Calends{
+			startTime: start,
+			duration:  &duration,
+			endTime:   start.Add(calendars.TAI64NAXURTimeFromFloat(duration)),
 		}
-		if hasDuration {
-			switch rawDuration.(type) {
-			case int:
-				duration = *big.NewFloat(float64(rawDuration.(int)))
-			case float64:
-				duration = *big.NewFloat(rawDuration.(float64))
-			case *big.Float:
-				tmp := rawDuration.(*big.Float)
-				duration = *tmp
-			case big.Float:
-				duration = rawDuration.(big.Float)
-			default:
-				err = errors.New("Invalid Duration Type")
-			}
-			if err != nil {
-				return
-			}
+	} else if hasEnd && hasDuration {
+		instance = Calends{
+			startTime: end.Sub(calendars.TAI64NAXURTimeFromFloat(duration)),
+			duration:  &duration,
+			endTime:   end,
 		}
+	} else {
+		var internal calendars.TAI64NAXURTime
 
-		if hasStart && hasEnd {
-			instance = Calends{
-				startTime: start,
-				duration:  end.Sub(start).Float(),
-				endTime:   end,
-			}
-		} else if hasStart && hasDuration {
-			instance = Calends{
-				startTime: start,
-				duration:  &duration,
-				endTime:   start.Add(calendars.TAI64NAXURTimeFromFloat(duration)),
-			}
-		} else if hasEnd && hasDuration {
-			instance = Calends{
-				startTime: end.Sub(calendars.TAI64NAXURTimeFromFloat(duration)),
-				duration:  &duration,
-				endTime:   end,
-			}
-		} else {
-			var internal calendars.TAI64NAXURTime
+		internal, err = calendars.ToInternal(calendar, stamp, format)
+		instance = Calends{
+			startTime: internal,
+			duration:  big.NewFloat(0.),
+			endTime:   internal,
+		}
+	}
 
-			internal, err = calendars.ToInternal(calendar, stamp, format)
-			instance = Calends{
-				startTime: internal,
-				duration:  big.NewFloat(0.),
-				endTime:   internal,
-			}
+	return
+}
+
+func retrieveStart(calendar string, stamp map[string]interface{}, format string) (start calendars.TAI64NAXURTime, hasStart bool, err error) {
+	var rawStart interface{}
+	rawStart, hasStart = stamp["start"]
+	if hasStart {
+		start, err = calendars.ToInternal(calendar, rawStart, format)
+		if err != nil {
+			return
+		}
+	}
+
+	return
+}
+
+func retrieveEnd(calendar string, stamp map[string]interface{}, format string) (end calendars.TAI64NAXURTime, hasEnd bool, err error) {
+	var rawEnd interface{}
+	rawEnd, hasEnd = stamp["end"]
+	if hasEnd {
+		end, err = calendars.ToInternal(calendar, rawEnd, format)
+		if err != nil {
+			return
+		}
+	}
+
+	return
+}
+
+func retrieveDuration(calendar string, stamp map[string]interface{}, format string) (duration big.Float, hasDuration bool, err error) {
+	var rawDuration interface{}
+	rawDuration, hasDuration = stamp["duration"]
+	if hasDuration {
+		switch rawDuration.(type) {
+		case int:
+			duration = *big.NewFloat(float64(rawDuration.(int)))
+		case float64:
+			duration = *big.NewFloat(rawDuration.(float64))
+		case *big.Float:
+			tmp := rawDuration.(*big.Float)
+			duration = *tmp
+		case big.Float:
+			duration = rawDuration.(big.Float)
+		default:
+			err = errors.New("Invalid Duration Type")
+		}
+		if err != nil {
+			return
 		}
 	}
 
@@ -174,7 +210,7 @@ func (c Calends) Date(calendar, format string) (string, error) {
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.UnknownCalendarError
+		err := calendars.ErrUnknownCalendar
 		return "", err
 	}
 
@@ -196,7 +232,7 @@ func (c Calends) EndDate(calendar, format string) (string, error) {
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.UnknownCalendarError
+		err := calendars.ErrUnknownCalendar
 		return "", err
 	}
 

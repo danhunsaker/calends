@@ -96,7 +96,7 @@ func (c Calends) SetDate(stamp interface{}, calendar, format string) (Calends, e
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.UnknownCalendarError
+		err := calendars.ErrUnknownCalendar
 		return c, err
 	}
 
@@ -121,7 +121,7 @@ func (c Calends) SetEndDate(stamp interface{}, calendar, format string) (Calends
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.UnknownCalendarError
+		err := calendars.ErrUnknownCalendar
 		return c, err
 	}
 
@@ -162,22 +162,22 @@ func (c Calends) SetDurationFromEnd(duration, calendar string) (Calends, error) 
 	return c.SetDate(offset.endTime, "tai64", "")
 }
 
-// Merges two Calends objects.
+// Merge two Calends objects.
 /*
 
 Creates a new Calends object with the earlier start and later end points of the
 current object and another one
 
 */
-func (a Calends) Merge(b Calends) (Calends, error) {
-	startTime := a.startTime
-	if b.StartsBefore(a) {
-		startTime = b.startTime
+func (c Calends) Merge(z Calends) (Calends, error) {
+	startTime := c.startTime
+	if z.StartsBefore(c) {
+		startTime = z.startTime
 	}
 
-	endTime := a.endTime
-	if b.EndsAfter(a) {
-		endTime = b.endTime
+	endTime := c.endTime
+	if z.EndsAfter(c) {
+		endTime = z.endTime
 	}
 
 	return Create(map[string]interface{}{
@@ -193,19 +193,19 @@ Creates a new Calends object with the overlapping time between the current
 object and another one
 
 */
-func (a Calends) Intersect(b Calends) (Calends, error) {
-	if !a.Overlaps(b) {
-		return a, errors.New("Times do not overlap; no intersection exists")
+func (c Calends) Intersect(z Calends) (Calends, error) {
+	if !c.Overlaps(z) {
+		return c, errors.New("Times do not overlap; no intersection exists")
 	}
 
-	startTime := a.startTime
-	if b.StartsDuring(a) {
-		startTime = b.startTime
+	startTime := c.startTime
+	if z.StartsDuring(c) {
+		startTime = z.startTime
 	}
 
-	endTime := a.endTime
-	if b.EndsDuring(a) {
-		endTime = b.endTime
+	endTime := c.endTime
+	if z.EndsDuring(c) {
+		endTime = z.endTime
 	}
 
 	return Create(map[string]interface{}{
@@ -221,19 +221,19 @@ Creates a new Calends object with the gap in time between the current object and
 another one
 
 */
-func (a Calends) Gap(b Calends) (Calends, error) {
-	if a.Overlaps(b) {
-		return a, errors.New("Times overlap; no gap exists")
+func (c Calends) Gap(z Calends) (Calends, error) {
+	if c.Overlaps(z) {
+		return c, errors.New("Times overlap; no gap exists")
 	}
 
-	startTime := a.endTime
-	if b.EndsBefore(a) {
-		startTime = b.endTime
+	startTime := c.endTime
+	if z.EndsBefore(c) {
+		startTime = z.endTime
 	}
 
-	endTime := a.startTime
-	if b.StartsAfter(a) {
-		endTime = b.startTime
+	endTime := c.startTime
+	if z.StartsAfter(c) {
+		endTime = z.startTime
 	}
 
 	return Create(map[string]interface{}{

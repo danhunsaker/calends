@@ -42,13 +42,13 @@ func TestCreate(t *testing.T) {
 		in   []interface{}
 		want error
 	}{
-		{[]interface{}{0, "invalid", ""}, calendars.UnknownCalendarError},
+		{[]interface{}{0, "invalid", ""}, calendars.ErrUnknownCalendar},
 
-		{[]interface{}{map[string]interface{}{"start": calendars.InvalidFormatError}, "", ""}, calendars.UnsupportedInputError},
-		{[]interface{}{map[string]interface{}{"end": calendars.InvalidFormatError}, "", ""}, calendars.UnsupportedInputError},
-		{[]interface{}{map[string]interface{}{"duration": 0}, "", ""}, calendars.UnsupportedInputError},
+		{[]interface{}{map[string]interface{}{"start": calendars.ErrInvalidFormat}, "", ""}, calendars.ErrUnsupportedInput},
+		{[]interface{}{map[string]interface{}{"end": calendars.ErrInvalidFormat}, "", ""}, calendars.ErrUnsupportedInput},
+		{[]interface{}{map[string]interface{}{"duration": 0}, "", ""}, calendars.ErrUnsupportedInput},
 
-		{[]interface{}{map[string]interface{}{"duration": calendars.InvalidFormatError}, "", ""}, errors.New("Invalid Duration Type")},
+		{[]interface{}{map[string]interface{}{"duration": calendars.ErrInvalidFormat}, "", ""}, errors.New("Invalid Duration Type")},
 	}
 
 	got, err = Create(nil, "", "")
@@ -120,12 +120,12 @@ func TestDate(t *testing.T) {
 		t.Errorf("Date(%q)\n  ==  %q,\n want %q", []interface{}{"", ""}, got, "8.000082000")
 	}
 
-	got, err = testValue(0).Date("invalid", "")
+	_, err = testValue(0).Date("invalid", "")
 	if err == nil {
 		t.Errorf("Date(%q) didn't give error; expected %q", []interface{}{"invalid", ""}, err)
 	}
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("Date(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("Date(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.ErrUnknownCalendar)
 	}
 }
 
@@ -153,12 +153,12 @@ func TestEndDate(t *testing.T) {
 		t.Errorf("EndDate(%q)\n  ==  %q,\n want %q", []interface{}{"", ""}, got, "8.000082000")
 	}
 
-	got, err = testValue(0).EndDate("invalid", "")
+	_, err = testValue(0).EndDate("invalid", "")
 	if err == nil {
 		t.Errorf("EndDate(%q) didn't give error; expected %q", []interface{}{"invalid", ""}, err)
 	}
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("EndDate(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("EndDate(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.ErrUnknownCalendar)
 	}
 }
 

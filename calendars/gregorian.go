@@ -44,7 +44,7 @@ func init() {
 			case []byte:
 				str = string(date.([]byte))
 			default:
-				err = UnsupportedInputError
+				err = ErrUnsupportedInput
 				return
 			}
 
@@ -91,7 +91,7 @@ func init() {
 			case []byte:
 				str = string(offset.([]byte))
 			default:
-				err = UnsupportedInputError
+				err = ErrUnsupportedInput
 			}
 			if err != nil {
 				return
@@ -106,7 +106,7 @@ func init() {
 				return
 			}
 			if r == nil {
-				err = UnsupportedInputError
+				err = ErrUnsupportedInput
 				return
 			}
 

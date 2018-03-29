@@ -16,11 +16,11 @@ func TestTai64ToInternal(t *testing.T) {
 		{"in": []interface{}{"40000000000000010000000000000000", "tai64na"}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
 		{"in": []interface{}{"400000000000000100000000", "tai64n"}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
 		{"in": []interface{}{"4000000000000001", "tai64"}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
-		{"in": []interface{}{"4000000000000001", "invalid"}, "want": []interface{}{TAI64NAXURTime{}, InvalidFormatError}},
+		{"in": []interface{}{"4000000000000001", "invalid"}, "want": []interface{}{TAI64NAXURTime{}, ErrInvalidFormat}},
 
 		{"in": []interface{}{[]byte("40000000000000010000000000000000000000000000000000000000"), "tai64naxur"}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
 		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, "tai64naxur"}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
-		{"in": []interface{}{1, "tai64naxur"}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
+		{"in": []interface{}{1, "tai64naxur"}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
 	}
 
 	for _, c := range cases {
@@ -43,7 +43,7 @@ func TestTai64FromInternal(t *testing.T) {
 		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, "tai64na"}, "want": []interface{}{"40000000000000010000000000000000", nil}},
 		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, "tai64n"}, "want": []interface{}{"400000000000000100000000", nil}},
 		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, "tai64"}, "want": []interface{}{"4000000000000001", nil}},
-		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, "invalid"}, "want": []interface{}{"", InvalidFormatError}},
+		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, "invalid"}, "want": []interface{}{"", ErrInvalidFormat}},
 	}
 
 	for _, c := range cases {
@@ -64,7 +64,7 @@ func TestTai64Offset(t *testing.T) {
 		{"in": []interface{}{TAI64NAXURTime{}, big.NewFloat(1)}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
 		{"in": []interface{}{TAI64NAXURTime{}, *big.NewFloat(1)}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
 		{"in": []interface{}{TAI64NAXURTime{}, TAI64NAXURTime{Seconds: 1}}, "want": []interface{}{TAI64NAXURTime{Seconds: 1}, nil}},
-		{"in": []interface{}{TAI64NAXURTime{}, 1}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
+		{"in": []interface{}{TAI64NAXURTime{}, 1}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
 	}
 
 	for _, c := range cases {

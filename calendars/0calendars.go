@@ -1,4 +1,4 @@
-// The calendars package provides the underlying framework that makes Calends
+// Package calendars provides the underlying framework that makes Calends
 // function across multiple calendar systems.
 /*
 
@@ -20,7 +20,7 @@ import (
 	"strings"
 )
 
-// Interface for calendar systems.
+// CalendarDefinition is the primary interface for defining calendar systems.
 type CalendarDefinition interface {
 	// Convert a date representation to an internal TAI64NAXURTime
 	ToInternal(interface{}, string) (TAI64NAXURTime, error)
@@ -41,9 +41,9 @@ type calendarRegistration struct {
 
 // Error messages returned by Calends operations.
 var (
-	UnknownCalendarError  = errors.New("Unknown Calendar")
-	UnsupportedInputError = errors.New("Unsupported Value")
-	InvalidFormatError    = errors.New("Invalid Format")
+	ErrUnknownCalendar  = errors.New("Unknown Calendar")
+	ErrUnsupportedInput = errors.New("Unsupported Value")
+	ErrInvalidFormat    = errors.New("Invalid Format")
 )
 
 var registeredCalendars = make(map[string]calendarRegistration)
@@ -81,7 +81,7 @@ func RegisterElements(
 	}
 }
 
-// Returns whether or not a calendar system has been registered, yet.
+// Registered returns whether or not a calendar system has been registered, yet.
 func Registered(calendar string) bool {
 	_, set := registeredCalendars[canonCalendarName(calendar)]
 	return set
@@ -99,7 +99,7 @@ func DefaultFormat(calendar string) string {
 // ToInternal returns the associated value from a registered calendar system.
 func ToInternal(calendar string, date interface{}, format string) (TAI64NAXURTime, error) {
 	if !Registered(calendar) {
-		return TAI64NAXURTime{}, UnknownCalendarError
+		return TAI64NAXURTime{}, ErrUnknownCalendar
 	}
 
 	if format == "" {
@@ -114,7 +114,7 @@ func ToInternal(calendar string, date interface{}, format string) (TAI64NAXURTim
 // FromInternal returns the associated value from a registered calendar system.
 func FromInternal(calendar string, stamp TAI64NAXURTime, format string) (string, error) {
 	if !Registered(calendar) {
-		return "", UnknownCalendarError
+		return "", ErrUnknownCalendar
 	}
 
 	if format == "" {
@@ -129,7 +129,7 @@ func FromInternal(calendar string, stamp TAI64NAXURTime, format string) (string,
 // Offset returns the associated value from a registered calendar system.
 func Offset(calendar string, stamp TAI64NAXURTime, offset interface{}) (TAI64NAXURTime, error) {
 	if !Registered(calendar) {
-		return TAI64NAXURTime{}, UnknownCalendarError
+		return TAI64NAXURTime{}, ErrUnknownCalendar
 	}
 
 	return registeredCalendars[canonCalendarName(calendar)].Offset(stamp, offset)

@@ -17,7 +17,7 @@ func TestUnixToInternal(t *testing.T) {
 		{"in": []interface{}{*big.NewFloat(1), ""}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
 		{"in": []interface{}{[]byte("1"), ""}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
 
-		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, ""}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
+		{"in": []interface{}{TAI64NAXURTime{Seconds: 1}, ""}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
 	}
 
 	for _, c := range cases {
@@ -58,7 +58,7 @@ func TestUnixOffset(t *testing.T) {
 		{"in": []interface{}{TAI64NAXURTime{}, []byte("1")}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("1"), nil}},
 		{"in": []interface{}{TAI64NAXURTime{}, big.NewFloat(1)}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("1"), nil}},
 		{"in": []interface{}{TAI64NAXURTime{}, *big.NewFloat(1)}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("1"), nil}},
-		{"in": []interface{}{TAI64NAXURTime{}, TAI64NAXURTime{Seconds: 1}}, "want": []interface{}{TAI64NAXURTime{}, UnsupportedInputError}},
+		{"in": []interface{}{TAI64NAXURTime{}, TAI64NAXURTime{Seconds: 1}}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
 	}
 
 	for _, c := range cases {

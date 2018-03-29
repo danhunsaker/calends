@@ -48,7 +48,7 @@ func init() {
 				stamp = date.(TAI64NAXURTime)
 				return
 			default:
-				err = UnsupportedInputError
+				err = ErrUnsupportedInput
 				return
 			}
 
@@ -72,7 +72,7 @@ func init() {
 			case "tai64":
 				_, err = fmt.Sscanf(dateString, "%016X", &stamp.Seconds)
 			default:
-				err = InvalidFormatError
+				err = ErrInvalidFormat
 			}
 
 			if err != nil && err.Error() == "EOF" {
@@ -103,7 +103,7 @@ func init() {
 			case "tai64":
 				date = fmt.Sprintf("%016X", stamp.Seconds+0x4000000000000000)
 			default:
-				err = InvalidFormatError
+				err = ErrInvalidFormat
 			}
 
 			return
@@ -124,7 +124,7 @@ func init() {
 			case TAI64NAXURTime:
 				adjust = offset.(TAI64NAXURTime)
 			default:
-				err = UnsupportedInputError
+				err = ErrUnsupportedInput
 			}
 
 			out = in.Add(adjust)

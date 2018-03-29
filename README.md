@@ -46,9 +46,9 @@ A library for handling dates and times across arbitrary calendar systems
 
     - [x] Automatic calculation of leap second offsets
 
-    - [ ] Automatic updates for handling leap second insertions
-
     - [ ] Estimation of undefined past and future leap second insertions
+
+    - [ ] Automatic updates for handling leap second insertions
 
   - [x] **Gregorian**: The current international standard calendar system
 
@@ -349,8 +349,8 @@ and not all changes are desired.
 ## Security Reporting
 
 Report all security-related issues to [dan (dot) hunsaker (plus) calends (at)
-gmail](dan.hunsaker+calends@gmail.com), and use PGP or GPG protections on your
-message. Security issues will be addressed internally before making any
+gmail](mailto:dan.hunsaker+calends@gmail.com), and use PGP or GPG protections on
+your message. Security issues will be addressed internally before making any
 vulnerability announcements.
 
 [GitHub]:https://github.com/danhunsaker/calends

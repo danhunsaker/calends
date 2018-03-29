@@ -23,13 +23,13 @@ func TestAdd(t *testing.T) {
 	}
 
 	test, err = testValue(0).Add("86400", "invalid")
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("Add(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("Add(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar)
 	}
 
 	test, err = testValue(0).Add("invalid", "gregorian")
-	if err != calendars.UnsupportedInputError {
-		t.Errorf("Add(%#v, %#v) gives error %#v; wanted %#v", "invalid", "gregorian", err, calendars.UnsupportedInputError)
+	if err != calendars.ErrUnsupportedInput {
+		t.Errorf("Add(%#v, %#v) gives error %#v; wanted %#v", "invalid", "gregorian", err, calendars.ErrUnsupportedInput)
 	}
 }
 
@@ -49,13 +49,13 @@ func TestSubtract(t *testing.T) {
 	}
 
 	test, err = testValue(0).Subtract("86400", "invalid")
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("Subtract(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("Subtract(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar)
 	}
 
 	test, err = testValue(0).Subtract("invalid", "gregorian")
-	if err != calendars.UnsupportedInputError {
-		t.Errorf("Subtract(%#v, %#v) gives error %#v; wanted %#v", "invalid", "gregorian", err, calendars.UnsupportedInputError)
+	if err != calendars.ErrUnsupportedInput {
+		t.Errorf("Subtract(%#v, %#v) gives error %#v; wanted %#v", "invalid", "gregorian", err, calendars.ErrUnsupportedInput)
 	}
 }
 
@@ -75,13 +75,13 @@ func TestAddFromEnd(t *testing.T) {
 	}
 
 	test, err = testValue(0).AddFromEnd("86400", "invalid")
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("AddFromEnd(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("AddFromEnd(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar)
 	}
 
 	test, err = testValue(0).AddFromEnd("invalid", "gregorian")
-	if err != calendars.UnsupportedInputError {
-		t.Errorf("AddFromEnd(%#v, %#v) gives error %#v; wanted %#v", "invalid", "gregorian", err, calendars.UnsupportedInputError)
+	if err != calendars.ErrUnsupportedInput {
+		t.Errorf("AddFromEnd(%#v, %#v) gives error %#v; wanted %#v", "invalid", "gregorian", err, calendars.ErrUnsupportedInput)
 	}
 }
 
@@ -101,13 +101,13 @@ func TestSubtractFromEnd(t *testing.T) {
 	}
 
 	test, err = testValue(0).SubtractFromEnd("86400", "invalid")
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar)
 	}
 
 	test, err = testValue(0).SubtractFromEnd("invalid", "gregorian")
-	if err != calendars.UnsupportedInputError {
-		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %#v; wanted %#v", "invalid", "gregorian", err, calendars.UnsupportedInputError)
+	if err != calendars.ErrUnsupportedInput {
+		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %#v; wanted %#v", "invalid", "gregorian", err, calendars.ErrUnsupportedInput)
 	}
 }
 
@@ -171,12 +171,12 @@ func TestNext(t *testing.T) {
 		t.Errorf("4:Next(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test4.endTime.String(), "86400")
 	}
 
-	if err5 != calendars.UnknownCalendarError {
-		t.Errorf("5:Next(%#v, %#v) gives error %q; want %q", "86400", "invalid", err5, calendars.UnknownCalendarError)
+	if err5 != calendars.ErrUnknownCalendar {
+		t.Errorf("5:Next(%#v, %#v) gives error %q; want %q", "86400", "invalid", err5, calendars.ErrUnknownCalendar)
 	}
 
-	if err6 != calendars.UnsupportedInputError {
-		t.Errorf("6:Next(%#v, %#v) gives error %q; want %q", "invalid", "gregorian", err6, calendars.UnsupportedInputError)
+	if err6 != calendars.ErrUnsupportedInput {
+		t.Errorf("6:Next(%#v, %#v) gives error %q; want %q", "invalid", "gregorian", err6, calendars.ErrUnsupportedInput)
 	}
 }
 
@@ -240,12 +240,12 @@ func TestPrevious(t *testing.T) {
 		t.Errorf("4:Previous(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test4.endTime.String(), "0")
 	}
 
-	if err5 != calendars.UnknownCalendarError {
-		t.Errorf("5:Previous(%#v, %#v) gives error %q; want %q", "86400", "invalid", err5, calendars.UnknownCalendarError)
+	if err5 != calendars.ErrUnknownCalendar {
+		t.Errorf("5:Previous(%#v, %#v) gives error %q; want %q", "86400", "invalid", err5, calendars.ErrUnknownCalendar)
 	}
 
-	if err6 != calendars.UnsupportedInputError {
-		t.Errorf("6:Previous(%#v, %#v) gives error %q; want %q", "invalid", "gregorian", err6, calendars.UnsupportedInputError)
+	if err6 != calendars.ErrUnsupportedInput {
+		t.Errorf("6:Previous(%#v, %#v) gives error %q; want %q", "invalid", "gregorian", err6, calendars.ErrUnsupportedInput)
 	}
 }
 
@@ -279,8 +279,8 @@ func TestSetDate(t *testing.T) {
 	}
 
 	_, err = testValue(0).SetDate("86400", "invalid", "")
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("SetDate(%#v, %#v, %#v) gives error %q; want %q", "86400", "invalid", "", err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("SetDate(%#v, %#v, %#v) gives error %q; want %q", "86400", "invalid", "", err, calendars.ErrUnknownCalendar)
 	}
 
 	_, err = testValue(0).SetDate("invalid", "gregorian", "")
@@ -319,8 +319,8 @@ func TestSetEndDate(t *testing.T) {
 	}
 
 	_, err = testValue(0).SetEndDate("86400", "invalid", "")
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("SetEndDate(%#v, %#v, %#v) gives error %q; want %q", "86400", "invalid", "", err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("SetEndDate(%#v, %#v, %#v) gives error %q; want %q", "86400", "invalid", "", err, calendars.ErrUnknownCalendar)
 	}
 
 	_, err = testValue(0).SetEndDate("invalid", "gregorian", "")
@@ -345,13 +345,13 @@ func TestSetDuration(t *testing.T) {
 	}
 
 	_, err = testValue(0).SetDuration("86400", "invalid")
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("SetDuration(%#v, %#v) gives error %q; want %q", "86400", "invalid", err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("SetDuration(%#v, %#v) gives error %q; want %q", "86400", "invalid", err, calendars.ErrUnknownCalendar)
 	}
 
 	_, err = testValue(0).SetDuration("invalid", "gregorian")
-	if err != calendars.UnsupportedInputError {
-		t.Errorf("SetDuration(%#v, %#v) gives error %q; want %q", "invalid", "gregorian", err, calendars.UnsupportedInputError)
+	if err != calendars.ErrUnsupportedInput {
+		t.Errorf("SetDuration(%#v, %#v) gives error %q; want %q", "invalid", "gregorian", err, calendars.ErrUnsupportedInput)
 	}
 }
 
@@ -372,13 +372,13 @@ func TestSetDurationFromEnd(t *testing.T) {
 	}
 
 	_, err = testValue(0).SetDurationFromEnd("86400", "invalid")
-	if err != calendars.UnknownCalendarError {
-		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q; want %q", "86400", "invalid", err, calendars.UnknownCalendarError)
+	if err != calendars.ErrUnknownCalendar {
+		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q; want %q", "86400", "invalid", err, calendars.ErrUnknownCalendar)
 	}
 
 	_, err = testValue(0).SetDurationFromEnd("invalid", "gregorian")
-	if err != calendars.UnsupportedInputError {
-		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q; want %q", "invalid", "gregorian", err, calendars.UnsupportedInputError)
+	if err != calendars.ErrUnsupportedInput {
+		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q; want %q", "invalid", "gregorian", err, calendars.ErrUnsupportedInput)
 	}
 }
 
