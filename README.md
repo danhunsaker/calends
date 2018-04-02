@@ -52,9 +52,11 @@ A library for handling dates and times across arbitrary calendar systems
 
   - [x] **Gregorian**: The current international standard calendar system
 
+    - [ ] Disconnect from native `time.Time` implementation, and its limitations
+
   - [ ] **Julian**: The previous version of the Gregorian calendar
 
-  - [ ] **Julian Day Count**: A count of days since BCE 4713 Jan 01 12:00:00 UTC
+  - [x] **Julian Day Count**: A count of days since BCE 4713 Jan 01 12:00:00 UTC
     on the proleptic Julian Calendar
 
   - [ ] **Hebrew**: ...
