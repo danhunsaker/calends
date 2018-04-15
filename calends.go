@@ -41,7 +41,7 @@ type Calends struct {
 }
 
 // Version of the library
-var Version string = "0.0.1"
+var Version string = "0.0.2"
 
 // Create is the mechanism for constructing new Calends objects.
 /*
@@ -245,8 +245,15 @@ func (c Calends) EndDate(calendar, format string) (string, error) {
 
 // String implements the fmt.Stringer interface.
 func (c Calends) String() string {
-	tmp, _ := c.MarshalText()
-	return string(tmp)
+	if tmp, _ := c.duration.Int64(); tmp == 0 {
+		out, _ := c.startTime.MarshalText()
+		return string(out)
+	}
+
+	start, _ := c.startTime.MarshalText()
+	end, _ := c.endTime.MarshalText()
+
+	return fmt.Sprintf("from %s to %s", start, end)
 }
 
 // MarshalText implements the encoding.TextMarshaler interface.
@@ -255,10 +262,16 @@ func (c Calends) MarshalText() ([]byte, error) {
 		return c.startTime.MarshalText()
 	}
 
-	start, _ := c.startTime.MarshalText()
-	end, _ := c.endTime.MarshalText()
+	start, err := c.startTime.MarshalText()
+	if err != nil {
+		return []byte{}, err
+	}
+	end, err := c.endTime.MarshalText()
+	if err != nil {
+		return []byte{}, err
+	}
 
-	return []byte(fmt.Sprintf("from %s to %s", start, end)), nil
+	return []byte(fmt.Sprintf("%s::%s", start, end)), nil
 }
 
 // UnmarshalText implements the encoding.TextUnmarshaler interface.
@@ -266,8 +279,8 @@ func (c *Calends) UnmarshalText(text []byte) error {
 	var startTime, endTime calendars.TAI64NAXURTime
 	var start, end string
 
-	n, err := fmt.Sscanf(string(text), "from %s to %s", &start, &end)
-	if err != nil && err != io.EOF && err.Error() != "input does not match format" {
+	n, err := fmt.Sscanf(string(text), "%56s::%56s", &start, &end)
+	if err != nil && err != io.EOF && err.Error() != "input does not match format" && err.Error() != "unexpected EOF" {
 		return err
 	}
 
@@ -295,8 +308,14 @@ func (c Calends) MarshalJSON() ([]byte, error) {
 		return append(append([]byte{'"'}, tmp...), '"'), err
 	}
 
-	start, _ := c.startTime.MarshalText()
-	end, _ := c.endTime.MarshalText()
+	start, err := c.startTime.MarshalText()
+	if err != nil {
+		return []byte{}, err
+	}
+	end, err := c.endTime.MarshalText()
+	if err != nil {
+		return []byte{}, err
+	}
 
 	return []byte(fmt.Sprintf(`{"start":"%s","end":"%s"}`, start, end)), nil
 }

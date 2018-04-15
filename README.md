@@ -109,6 +109,12 @@ A library for handling dates and times across arbitrary calendar systems
   Add more calendar systems, type conversions, or geo-temporal relationships
   without forking/modifying the library itself.
 
+- [x] Shared library (`.so`/`.dll`).
+
+  In order to use the library outside of Golang projects, we first need to
+  export its functionality in a shared library, which can then be accessed from
+  other programming evironments and applications, generally via FFI.
+
 ## Installation
 
 The steps here will vary based on which programming language(s) you're using.
@@ -117,7 +123,7 @@ For Golang, simply run `go get github.com/danhunsaker/calends`, and then place
 `"github.com/danhunsaker/calends"` in the `import` wherever you intend use it.
 
 Other languages will use Calends through a language-specific wrapper around the
-compiled Golang lib. So for PHP, as an example, you'd install the `calends`
+compiled shared library. So for PHP, as an example, you'd install the `calends`
 extension, probably via PECL.
 
 ## Usage
@@ -324,7 +330,7 @@ listed below. Formats in **bold** are the default format for that calendar.
 - `unix`
   - Formats
     - **number of seconds since 1970-01-01 00:00:00 UTC**
-    - input can be integer or float, in either numeric or string representation
+    - input can be integer or float, in either numeric or string types
     - output uses Golang `fmt.Print()` conventions
   - Offsets
     - number of seconds
@@ -341,6 +347,19 @@ listed below. Formats in **bold** are the default format for that calendar.
       - must be relative times
       - use full words instead of abbreviations for time units (such as
         `seconds` instead of just `s`)
+
+- `jdc`
+  - Formats
+    - `full` - the full, canonical Day Count
+    - `fullday` - the full Day Count, without the fractional time part
+    - `fulltime` - just the fractional time part of the full Day Count
+    - **`modified` - an abbreviated Day Count, 2400000.5 less than the full
+      (starts at midnight instead of noon)**
+    - `day` - the modified Day Count, without the fractional time part
+    - `time` - just the fractional time part of the modified Day Count
+  - Offsets
+    - number of days, as integer or float, via numeric or string types
+      - can include fractional days to indicate time
 
 ## Contributing
 

@@ -1,8 +1,6 @@
 language: go
 
 go:
-  - 1.5.x
-  - 1.6.x
   - 1.7.x
   - 1.8.x
   - 1.9.x
@@ -14,6 +12,7 @@ before_install:
 
 script:
   - ./go.test.sh
+  - go build -o calends.so -buildmode=c-shared ./external
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
