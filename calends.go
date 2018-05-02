@@ -41,7 +41,7 @@ type Calends struct {
 }
 
 // Version of the library
-var Version string = "0.0.2"
+var Version string = "0.0.3"
 
 // Create is the mechanism for constructing new Calends objects.
 /*
@@ -79,7 +79,7 @@ func Create(stamp interface{}, calendar, format string) (instance Calends, err e
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err = calendars.ErrUnknownCalendar
+		err = calendars.ErrUnknownCalendar(calendar)
 		return
 	}
 
@@ -158,9 +158,6 @@ func retrieveStart(calendar string, stamp map[string]interface{}, format string)
 	rawStart, hasStart = stamp["start"]
 	if hasStart {
 		start, err = calendars.ToInternal(calendar, rawStart, format)
-		if err != nil {
-			return
-		}
 	}
 
 	return
@@ -171,9 +168,6 @@ func retrieveEnd(calendar string, stamp map[string]interface{}, format string) (
 	rawEnd, hasEnd = stamp["end"]
 	if hasEnd {
 		end, err = calendars.ToInternal(calendar, rawEnd, format)
-		if err != nil {
-			return
-		}
 	}
 
 	return
@@ -184,6 +178,24 @@ func retrieveDuration(calendar string, stamp map[string]interface{}, format stri
 	rawDuration, hasDuration = stamp["duration"]
 	if hasDuration {
 		switch rawDuration.(type) {
+		case []byte:
+			var tmp *big.Float
+			tmp, _, err = big.ParseFloat(string(rawDuration.([]byte)), 10, 176, big.ToNearestAway)
+			if err == nil {
+				duration = *tmp
+			} else if err.Error() == "EOF" {
+				duration = *big.NewFloat(0)
+				err = nil
+			}
+		case string:
+			var tmp *big.Float
+			tmp, _, err = big.ParseFloat(rawDuration.(string), 10, 176, big.ToNearestAway)
+			if err == nil {
+				duration = *tmp
+			} else if err.Error() == "EOF" {
+				duration = *big.NewFloat(0)
+				err = nil
+			}
 		case int:
 			duration = *big.NewFloat(float64(rawDuration.(int)))
 		case float64:
@@ -196,9 +208,6 @@ func retrieveDuration(calendar string, stamp map[string]interface{}, format stri
 		default:
 			err = errors.New("Invalid Duration Type")
 		}
-		if err != nil {
-			return
-		}
 	}
 
 	return
@@ -210,7 +219,7 @@ func (c Calends) Date(calendar, format string) (string, error) {
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar
+		err := calendars.ErrUnknownCalendar(calendar)
 		return "", err
 	}
 
@@ -232,7 +241,7 @@ func (c Calends) EndDate(calendar, format string) (string, error) {
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar
+		err := calendars.ErrUnknownCalendar(calendar)
 		return "", err
 	}
 

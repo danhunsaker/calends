@@ -5,13 +5,13 @@ Supports dates and times in the Gregorian calendar system, the current
 international standard for communicating dates and times.
 
 Supported Input Types:
- - string
- - []byte
- - time.Time (time.Duration for Offset)
+  - string
+  - []byte
+  - time.Time (time.Duration for Offset)
 
 Supported Format Strings:
- - any format supported by the time library or github.com/danhunsaker/go-datefmt
-   (or github.com/olebedev/when for Offset)
+  - any format supported by the time library or
+    github.com/danhunsaker/go-datefmt (or github.com/olebedev/when for Offset)
 
 */
 package calendars

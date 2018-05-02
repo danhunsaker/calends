@@ -96,8 +96,8 @@ func TestToInternal(t *testing.T) {
 
 	_, err = ToInternal("invalid", "", "")
 
-	if err != ErrUnknownCalendar {
-		t.Errorf("ToInternal(\"invalid\", \"\", \"\") failed - got %q, but wanted %q", err, ErrUnknownCalendar)
+	if err.Error() != ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("ToInternal(\"invalid\", \"\", \"\") failed - got %q, but wanted %q", err, ErrUnknownCalendar("invalid"))
 	}
 }
 
@@ -114,8 +114,8 @@ func TestFromInternal(t *testing.T) {
 
 	_, err = FromInternal("invalid", TAI64NAXURTime{}, "")
 
-	if err != ErrUnknownCalendar {
-		t.Errorf("FromInternal(\"invalid\", \"\", \"\") failed - got %q, but wanted %q", err, ErrUnknownCalendar)
+	if err.Error() != ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("FromInternal(\"invalid\", \"\", \"\") failed - got %q, but wanted %q", err, ErrUnknownCalendar("invalid"))
 	}
 }
 
@@ -132,8 +132,8 @@ func TestOffset(t *testing.T) {
 
 	_, err = Offset("invalid", TAI64NAXURTime{}, "")
 
-	if err != ErrUnknownCalendar {
-		t.Errorf("Offset(\"invalid\", \"\", \"\") failed - got %q, but wanted %q", err, ErrUnknownCalendar)
+	if err.Error() != ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("Offset(\"invalid\", \"\", \"\") failed - got %q, but wanted %q", err, ErrUnknownCalendar("invalid"))
 	}
 }
 

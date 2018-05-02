@@ -8,7 +8,15 @@ import (
 
 // Add creates a new Calends object a given offset after the current start
 // point.
-func (c Calends) Add(offset, calendar string) (out Calends, err error) {
+func (c Calends) Add(offset interface{}, calendar string) (out Calends, err error) {
+	if calendar == "" {
+		calendar = "unix"
+	}
+	if !calendars.Registered(calendar) {
+		err := calendars.ErrUnknownCalendar(calendar)
+		return c, err
+	}
+
 	stamp, err := calendars.Offset(calendar, c.startTime, offset)
 	if err != nil {
 		return
@@ -21,13 +29,21 @@ func (c Calends) Add(offset, calendar string) (out Calends, err error) {
 
 // Subtract creates a new Calends object a given offset before the current start
 // point.
-func (c Calends) Subtract(offset, calendar string) (Calends, error) {
-	return c.Add("-"+offset, calendar)
+func (c Calends) Subtract(offset interface{}, calendar string) (Calends, error) {
+	return c.Add(negateOffset(offset), calendar)
 }
 
 // AddFromEnd creates a new Calends object a given offset after the current end
 // point.
-func (c Calends) AddFromEnd(offset, calendar string) (out Calends, err error) {
+func (c Calends) AddFromEnd(offset interface{}, calendar string) (out Calends, err error) {
+	if calendar == "" {
+		calendar = "unix"
+	}
+	if !calendars.Registered(calendar) {
+		err := calendars.ErrUnknownCalendar(calendar)
+		return c, err
+	}
+
 	stamp, err := calendars.Offset(calendar, c.endTime, offset)
 	if err != nil {
 		return
@@ -40,20 +56,20 @@ func (c Calends) AddFromEnd(offset, calendar string) (out Calends, err error) {
 
 // SubtractFromEnd creates a new Calends object a given offset before the
 // current end point.
-func (c Calends) SubtractFromEnd(offset, calendar string) (Calends, error) {
-	return c.AddFromEnd("-"+offset, calendar)
+func (c Calends) SubtractFromEnd(offset interface{}, calendar string) (Calends, error) {
+	return c.AddFromEnd(negateOffset(offset), calendar)
 }
 
 // Next creates a new Calends object with a range spanning a given offset, and
 // starting at the current end point.
-func (c Calends) Next(offset, calendar string) (Calends, error) {
-	if offset == "" {
+func (c Calends) Next(offset interface{}, calendar string) (Calends, error) {
+	if emptyValue(offset) {
 		offset = c.duration.Text('f', 45)
 		calendar = "tai64"
 	}
 
 	if calendar == "" {
-		calendar = "tai64"
+		calendar = "unix"
 	}
 
 	newEndTime, err := calendars.Offset(calendar, c.endTime, offset)
@@ -69,17 +85,17 @@ func (c Calends) Next(offset, calendar string) (Calends, error) {
 
 // Previous creates a new Calends object with a range spanning a given offset,
 // and ending at the current start point.
-func (c Calends) Previous(offset, calendar string) (Calends, error) {
-	if offset == "" {
+func (c Calends) Previous(offset interface{}, calendar string) (Calends, error) {
+	if emptyValue(offset) {
 		offset = c.duration.Text('f', 45)
 		calendar = "tai64"
 	}
 
 	if calendar == "" {
-		calendar = "tai64"
+		calendar = "unix"
 	}
 
-	newStartTime, err := calendars.Offset(calendar, c.startTime, "-"+offset)
+	newStartTime, err := calendars.Offset(calendar, c.startTime, negateOffset(offset))
 	if err != nil {
 		return c, err
 	}
@@ -96,7 +112,7 @@ func (c Calends) SetDate(stamp interface{}, calendar, format string) (Calends, e
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar
+		err := calendars.ErrUnknownCalendar(calendar)
 		return c, err
 	}
 
@@ -121,7 +137,7 @@ func (c Calends) SetEndDate(stamp interface{}, calendar, format string) (Calends
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar
+		err := calendars.ErrUnknownCalendar(calendar)
 		return c, err
 	}
 
@@ -142,7 +158,15 @@ func (c Calends) SetEndDate(stamp interface{}, calendar, format string) (Calends
 
 // SetDuration creates a new Calends object spanning from the current start
 // point for a given duration.
-func (c Calends) SetDuration(duration, calendar string) (Calends, error) {
+func (c Calends) SetDuration(duration interface{}, calendar string) (Calends, error) {
+	if calendar == "" {
+		calendar = "unix"
+	}
+	if !calendars.Registered(calendar) {
+		err := calendars.ErrUnknownCalendar(calendar)
+		return c, err
+	}
+
 	offset, err := c.Add(duration, calendar)
 	if err != nil {
 		return c, err
@@ -153,7 +177,15 @@ func (c Calends) SetDuration(duration, calendar string) (Calends, error) {
 
 // SetDurationFromEnd creates a new Calends object spanning for a given duration
 // to the current end point.
-func (c Calends) SetDurationFromEnd(duration, calendar string) (Calends, error) {
+func (c Calends) SetDurationFromEnd(duration interface{}, calendar string) (Calends, error) {
+	if calendar == "" {
+		calendar = "unix"
+	}
+	if !calendars.Registered(calendar) {
+		err := calendars.ErrUnknownCalendar(calendar)
+		return c, err
+	}
+
 	offset, err := c.SubtractFromEnd(duration, calendar)
 	if err != nil {
 		return c, err
@@ -240,4 +272,46 @@ func (c Calends) Gap(z Calends) (Calends, error) {
 		"start": startTime,
 		"end":   endTime,
 	}, "tai64", "")
+}
+
+func emptyValue(in interface{}) (out bool) {
+	switch in := in.(type) {
+	case []byte:
+		out = emptyValue(string(in))
+	case string:
+		out = (in == "")
+	case int:
+		out = false
+	case float64:
+		out = false
+	case calendars.TAI64NAXURTime:
+		out = false
+	default:
+		out = true
+	}
+
+	if in == nil {
+		out = true
+	}
+
+	return
+}
+
+func negateOffset(in interface{}) (out interface{}) {
+	switch in := in.(type) {
+	case []byte:
+		out = negateOffset(string(in))
+	case string:
+		out = "-" + in
+	case int:
+		out = 0 - in
+	case float64:
+		out = 0.0 - in
+	case calendars.TAI64NAXURTime:
+		out = (calendars.TAI64NAXURTime{}).Sub(in)
+	default:
+		out = ""
+	}
+
+	return
 }

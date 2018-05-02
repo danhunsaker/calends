@@ -1,18 +1,31 @@
 language: go
 
+sudo: true
+
 go:
-  - 1.7.x
-  - 1.8.x
-  - 1.9.x
   - 1.10.x
+  - 1.9.x
   - tip
 
-before_install:
-  - go get -t -v ./...
+addons:
+  apt:
+    packages:
+      - gdb
+
+before_script:
+  - echo "set auto-load safe-path /" > ~/.gdbinit
+  - ulimit -c unlimited || true
+  - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
+  - sudo chmod +s $(which gdb)
 
 script:
-  - ./go.test.sh
-  - go build -o calends.so -buildmode=c-shared ./external
+  - ${TRAVIS_BUILD_DIR}/tests/go.sh
+  - |
+    cd ${TRAVIS_BUILD_DIR}/libcalends
+    go build -o libcalends.so -buildmode=c-shared .
+
+after_failure:
+  - ${TRAVIS_BUILD_DIR}/tests/core_dump_info.sh /tmp/
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

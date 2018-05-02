@@ -269,7 +269,6 @@ information given here should be valid for all of them.
   Returns a boolean value indicating whether `Calends` object `c1` covers the
   same span of time as `Calends` object `c2`.
 
-
 - `c1.IsShorter(c2)` / `c1.IsSameDuration(c2)` / `c1.IsLonger(c2)`
 
   Returns a boolean comparing the duration of `Calends` objects `c1` and `c2`.

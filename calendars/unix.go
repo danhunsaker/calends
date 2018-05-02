@@ -1,14 +1,14 @@
 // UNIX CALENDAR
 /*
 
-Supports times that are seconds since 1970-01-01 00:00:00 UTC, commonly used by
-computer systems for storing date/time values, internally.
+Supports times that are seconds since CE 1970-01-01 00:00:00 UTC, commonly used
+by computer systems for storing date/time values, internally.
 
 Supported Input Types:
   - string
   - []byte
-	- int
-	- float64
+  - int
+  - float64
   - math/big.Float
 
 Supported Format Strings:

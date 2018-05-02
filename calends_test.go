@@ -25,6 +25,8 @@ func TestCreate(t *testing.T) {
 		{[]interface{}{map[string]interface{}{"start": 0, "end": 0}, "", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": 0}, "", ""}},
 		{[]interface{}{map[string]interface{}{"duration": 0, "end": 0}, "", ""}},
+		{[]interface{}{map[string]interface{}{"start": 0, "duration": "0", "end": 0}, "", ""}},
+		{[]interface{}{map[string]interface{}{"start": 0, "duration": []byte("0"), "end": 0}, "", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": 0, "end": 0}, "", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": big.NewFloat(0), "end": 0}, "", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": *big.NewFloat(0), "end": 0}, "", ""}},
@@ -33,6 +35,8 @@ func TestCreate(t *testing.T) {
 		{[]interface{}{map[string]interface{}{"start": 0, "end": 0}, "unix", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": 0}, "unix", ""}},
 		{[]interface{}{map[string]interface{}{"duration": 0, "end": 0}, "unix", ""}},
+		{[]interface{}{map[string]interface{}{"start": 0, "duration": "0", "end": 0}, "unix", ""}},
+		{[]interface{}{map[string]interface{}{"start": 0, "duration": []byte("0"), "end": 0}, "unix", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": 0, "end": 0}, "unix", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": big.NewFloat(0), "end": 0}, "unix", ""}},
 		{[]interface{}{map[string]interface{}{"start": 0, "duration": *big.NewFloat(0), "end": 0}, "unix", ""}},
@@ -42,7 +46,7 @@ func TestCreate(t *testing.T) {
 		in   []interface{}
 		want error
 	}{
-		{[]interface{}{0, "invalid", ""}, calendars.ErrUnknownCalendar},
+		{[]interface{}{0, "invalid", ""}, calendars.ErrUnknownCalendar("invalid")},
 
 		{[]interface{}{map[string]interface{}{"start": calendars.ErrInvalidFormat}, "", ""}, calendars.ErrUnsupportedInput},
 		{[]interface{}{map[string]interface{}{"end": calendars.ErrInvalidFormat}, "", ""}, calendars.ErrUnsupportedInput},
@@ -122,10 +126,10 @@ func TestDate(t *testing.T) {
 
 	_, err = testValue(0).Date("invalid", "")
 	if err == nil {
-		t.Errorf("Date(%q) didn't give error; expected %q", []interface{}{"invalid", ""}, err)
+		t.Errorf("Date(%q) didn't give error; expected %q", []interface{}{"invalid", ""}, calendars.ErrUnknownCalendar("invalid"))
 	}
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("Date(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("Date(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.ErrUnknownCalendar("invalid"))
 	}
 }
 
@@ -155,10 +159,10 @@ func TestEndDate(t *testing.T) {
 
 	_, err = testValue(0).EndDate("invalid", "")
 	if err == nil {
-		t.Errorf("EndDate(%q) didn't give error; expected %q", []interface{}{"invalid", ""}, err)
+		t.Errorf("EndDate(%q) didn't give error; expected %q", []interface{}{"invalid", ""}, calendars.ErrUnknownCalendar("invalid"))
 	}
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("EndDate(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("EndDate(%q) gave error %q; expected %q", []interface{}{"invalid", ""}, err, calendars.ErrUnknownCalendar("invalid"))
 	}
 }
 

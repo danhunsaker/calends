@@ -24,8 +24,6 @@ are similarly adjusted only to the latest offset, until a decent approximation
 can be devised. These tables are updated periodically, and any updates will be
 reflected by subsequent releases of the Calends library.
 
-NOTE: The TAI ↔ UTC conversion feature has not yet been implemented.
-
 */
 package calendars
 

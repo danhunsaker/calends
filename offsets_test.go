@@ -8,7 +8,21 @@ import (
 )
 
 func TestAdd(t *testing.T) {
-	test, err := testValue(0).Add("86400", "tai64")
+	test, err := testValue(0).Add("86400", "")
+	if err != nil {
+		t.Errorf("Add(%#v, %#v) gives error %q", "86400", "", err)
+	}
+	if test.startTime.String() != "86400.002592000000000073695171209052205086245605468" {
+		t.Errorf("Add(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test.startTime.String(), "86400.002592000000000073695171209052205086245605468")
+	}
+	if test.duration.String() != "-86400.00259" {
+		t.Errorf("Add(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test.duration.String(), "-86400.00259")
+	}
+	if test.endTime.String() != "0" {
+		t.Errorf("Add(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test.endTime.String(), "0")
+	}
+
+	test, err = testValue(0).Add("86400", "tai64")
 	if err != nil {
 		t.Errorf("Add(%#v, %#v) gives error %q", "86400", "tai64", err)
 	}
@@ -23,8 +37,8 @@ func TestAdd(t *testing.T) {
 	}
 
 	test, err = testValue(0).Add("86400", "invalid")
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("Add(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("Add(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	test, err = testValue(0).Add("invalid", "gregorian")
@@ -34,6 +48,23 @@ func TestAdd(t *testing.T) {
 }
 
 func TestSubtract(t *testing.T) {
+	tests := []interface{}{"86400", []byte("86400"), 86400, 86400.0}
+	for _, value := range tests {
+		test, err := testValue(0).Subtract(value, "")
+		if err != nil {
+			t.Errorf("Subtract(%#v, %#v) gives error %q", value, "", err)
+		}
+		if test.startTime.String() != "-86399.997408000000000960483248491073027254849060058" {
+			t.Errorf("Subtract(%#v, %#v) has startTime of %#v\nwant %#v", value, "", test.startTime.String(), "-86399.997408000000000960483248491073027254849060058")
+		}
+		if test.duration.String() != "86399.99741" {
+			t.Errorf("Subtract(%#v, %#v) has duration of %#v\nwant %#v", value, "", test.duration.String(), "86399.99741")
+		}
+		if test.endTime.String() != "0" {
+			t.Errorf("Subtract(%#v, %#v) has endTime of %#v\nwant %#v", value, "", test.endTime.String(), "0")
+		}
+	}
+
 	test, err := testValue(0).Subtract("86400", "tai64")
 	if err != nil {
 		t.Errorf("Subtract(%#v, %#v) gives error %q", "86400", "tai64", err)
@@ -48,9 +79,37 @@ func TestSubtract(t *testing.T) {
 		t.Errorf("Subtract(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "tai64", test.endTime.String(), "0")
 	}
 
+	test, err = testValue(0).Subtract(calendars.TAI64NAXURTime{}, "tai64")
+	if err != nil {
+		t.Errorf("Subtract(%#v, %#v) gives error %q", "86400", "tai64", err)
+	}
+	if test.startTime.String() != "0" {
+		t.Errorf("Subtract(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "tai64", test.startTime.String(), "0")
+	}
+	if test.duration.String() != "0" {
+		t.Errorf("Subtract(%#v, %#v) has duration of %#v\nwant %#v", "86400", "tai64", test.duration.String(), "0")
+	}
+	if test.endTime.String() != "0" {
+		t.Errorf("Subtract(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "tai64", test.endTime.String(), "0")
+	}
+
+	test, err = testValue(0).Subtract(errors.New(""), "tai64")
+	if err != nil {
+		t.Errorf("Subtract(%#v, %#v) gives error %q", "86400", "tai64", err)
+	}
+	if test.startTime.String() != "0" {
+		t.Errorf("Subtract(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "tai64", test.startTime.String(), "0")
+	}
+	if test.duration.String() != "0" {
+		t.Errorf("Subtract(%#v, %#v) has duration of %#v\nwant %#v", "86400", "tai64", test.duration.String(), "0")
+	}
+	if test.endTime.String() != "0" {
+		t.Errorf("Subtract(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "tai64", test.endTime.String(), "0")
+	}
+
 	test, err = testValue(0).Subtract("86400", "invalid")
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("Subtract(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("Subtract(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	test, err = testValue(0).Subtract("invalid", "gregorian")
@@ -60,7 +119,21 @@ func TestSubtract(t *testing.T) {
 }
 
 func TestAddFromEnd(t *testing.T) {
-	test, err := testValue(0).AddFromEnd("86400", "tai64")
+	test, err := testValue(0).AddFromEnd("86400", "")
+	if err != nil {
+		t.Errorf("AddFromEnd(%#v, %#v) gives error %q", "86400", "", err)
+	}
+	if test.startTime.String() != "0" {
+		t.Errorf("AddFromEnd(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test.startTime.String(), "0")
+	}
+	if test.duration.String() != "86400.00259" {
+		t.Errorf("AddFromEnd(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test.duration.String(), "86400.00259")
+	}
+	if test.endTime.String() != "86400.002592000000000073695171209052205086245605468" {
+		t.Errorf("AddFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test.endTime.String(), "86400.002592000000000073695171209052205086245605468")
+	}
+
+	test, err = testValue(0).AddFromEnd("86400", "tai64")
 	if err != nil {
 		t.Errorf("AddFromEnd(%#v, %#v) gives error %q", "86400", "tai64", err)
 	}
@@ -75,8 +148,8 @@ func TestAddFromEnd(t *testing.T) {
 	}
 
 	test, err = testValue(0).AddFromEnd("86400", "invalid")
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("AddFromEnd(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("AddFromEnd(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	test, err = testValue(0).AddFromEnd("invalid", "gregorian")
@@ -86,6 +159,23 @@ func TestAddFromEnd(t *testing.T) {
 }
 
 func TestSubtractFromEnd(t *testing.T) {
+	tests := []interface{}{"86400", []byte("86400"), 86400, 86400.0}
+	for _, value := range tests {
+		test, err := testValue(0).SubtractFromEnd(value, "")
+		if err != nil {
+			t.Errorf("SubtractFromEnd(%#v, %#v) gives error %q", value, "", err)
+		}
+		if test.startTime.String() != "0" {
+			t.Errorf("SubtractFromEnd(%#v, %#v) has startTime of %#v\nwant %#v", value, "", test.startTime.String(), "0")
+		}
+		if test.duration.String() != "-86399.99741" {
+			t.Errorf("SubtractFromEnd(%#v, %#v) has duration of %#v\nwant %#v", value, "", test.duration.String(), "-86399.99741")
+		}
+		if test.endTime.String() != "-86399.997408000000000960483248491073027254849060058" {
+			t.Errorf("SubtractFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", value, "", test.endTime.String(), "-86399.997408000000000960483248491073027254849060058")
+		}
+	}
+
 	test, err := testValue(0).SubtractFromEnd("86400", "tai64")
 	if err != nil {
 		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %q", "86400", "tai64", err)
@@ -100,9 +190,37 @@ func TestSubtractFromEnd(t *testing.T) {
 		t.Errorf("SubtractFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "tai64", test.endTime.String(), "-86400")
 	}
 
+	test, err = testValue(0).SubtractFromEnd(calendars.TAI64NAXURTime{}, "tai64")
+	if err != nil {
+		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %q", "86400", "tai64", err)
+	}
+	if test.startTime.String() != "0" {
+		t.Errorf("SubtractFromEnd(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "tai64", test.startTime.String(), "0")
+	}
+	if test.duration.String() != "0" {
+		t.Errorf("SubtractFromEnd(%#v, %#v) has duration of %#v\nwant %#v", "86400", "tai64", test.duration.String(), "0")
+	}
+	if test.endTime.String() != "0" {
+		t.Errorf("SubtractFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "tai64", test.endTime.String(), "0")
+	}
+
+	test, err = testValue(0).SubtractFromEnd(errors.New(""), "tai64")
+	if err != nil {
+		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %q", "86400", "tai64", err)
+	}
+	if test.startTime.String() != "0" {
+		t.Errorf("SubtractFromEnd(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "tai64", test.startTime.String(), "0")
+	}
+	if test.duration.String() != "0" {
+		t.Errorf("SubtractFromEnd(%#v, %#v) has duration of %#v\nwant %#v", "86400", "tai64", test.duration.String(), "0")
+	}
+	if test.endTime.String() != "0" {
+		t.Errorf("SubtractFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "tai64", test.endTime.String(), "0")
+	}
+
 	test, err = testValue(0).SubtractFromEnd("86400", "invalid")
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %#v; wanted %#v", "86400", "invalid", err, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	test, err = testValue(0).SubtractFromEnd("invalid", "gregorian")
@@ -118,6 +236,11 @@ func TestNext(t *testing.T) {
 	test4, err4 := testValue(0).Next("86400", "")
 	_, err5 := testValue(0).Next("86400", "invalid")
 	_, err6 := testValue(0).Next("invalid", "gregorian")
+	test1.Next([]byte(""), "")
+	test1.Next(0, "unix")
+	test1.Next(0.0, "unix")
+	test1.Next(calendars.TAI64NAXURTime{}, "unix")
+	test1.Next(nil, "unix")
 
 	if err1 != nil {
 		t.Errorf("1:Next(%#v, %#v) gives error %q", "86400", "tai64", err1)
@@ -164,15 +287,15 @@ func TestNext(t *testing.T) {
 	if test4.startTime.String() != "0" {
 		t.Errorf("4:Next(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test4.startTime.String(), "0")
 	}
-	if test4.duration.String() != "86400" {
-		t.Errorf("4:Next(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test4.duration.String(), "86400")
+	if test4.duration.String() != "86400.00259" {
+		t.Errorf("4:Next(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test4.duration.String(), "86400.00259")
 	}
-	if test4.endTime.String() != "86400" {
-		t.Errorf("4:Next(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test4.endTime.String(), "86400")
+	if test4.endTime.String() != "86400.002592000000000073695171209052205086245605468" {
+		t.Errorf("4:Next(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test4.endTime.String(), "86400.002592000000000073695171209052205086245605468")
 	}
 
-	if err5 != calendars.ErrUnknownCalendar {
-		t.Errorf("5:Next(%#v, %#v) gives error %q; want %q", "86400", "invalid", err5, calendars.ErrUnknownCalendar)
+	if err5.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("5:Next(%#v, %#v) gives error %q; want %q", "86400", "invalid", err5, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	if err6 != calendars.ErrUnsupportedInput {
@@ -230,18 +353,18 @@ func TestPrevious(t *testing.T) {
 	if err4 != nil {
 		t.Errorf("4:Previous(%#v, %#v) gives error %q", "86400", "", err4)
 	}
-	if test4.startTime.String() != "-86400" {
-		t.Errorf("4:Previous(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test4.startTime.String(), "-86400")
+	if test4.startTime.String() != "-86399.997408000000000960483248491073027254849060058" {
+		t.Errorf("4:Previous(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test4.startTime.String(), "-86399.997408000000000960483248491073027254849060058")
 	}
-	if test4.duration.String() != "86400" {
-		t.Errorf("4:Previous(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test4.duration.String(), "86400")
+	if test4.duration.String() != "86399.99741" {
+		t.Errorf("4:Previous(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test4.duration.String(), "86399.99741")
 	}
 	if test4.endTime.String() != "0" {
 		t.Errorf("4:Previous(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test4.endTime.String(), "0")
 	}
 
-	if err5 != calendars.ErrUnknownCalendar {
-		t.Errorf("5:Previous(%#v, %#v) gives error %q; want %q", "86400", "invalid", err5, calendars.ErrUnknownCalendar)
+	if err5.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("5:Previous(%#v, %#v) gives error %q; want %q", "86400", "invalid", err5, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	if err6 != calendars.ErrUnsupportedInput {
@@ -279,8 +402,8 @@ func TestSetDate(t *testing.T) {
 	}
 
 	_, err = testValue(0).SetDate("86400", "invalid", "")
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("SetDate(%#v, %#v, %#v) gives error %q; want %q", "86400", "invalid", "", err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("SetDate(%#v, %#v, %#v) gives error %q; want %q", "86400", "invalid", "", err, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	_, err = testValue(0).SetDate("invalid", "gregorian", "")
@@ -319,8 +442,8 @@ func TestSetEndDate(t *testing.T) {
 	}
 
 	_, err = testValue(0).SetEndDate("86400", "invalid", "")
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("SetEndDate(%#v, %#v, %#v) gives error %q; want %q", "86400", "invalid", "", err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("SetEndDate(%#v, %#v, %#v) gives error %q; want %q", "86400", "invalid", "", err, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	_, err = testValue(0).SetEndDate("invalid", "gregorian", "")
@@ -330,7 +453,21 @@ func TestSetEndDate(t *testing.T) {
 }
 
 func TestSetDuration(t *testing.T) {
-	test, err := testValue(0).SetDuration("86400", "tai64")
+	test, err := testValue(0).SetDuration("86400", "")
+	if err != nil {
+		t.Errorf("SetDuration(%#v, %#v) gives error %q", "86400", "", err)
+	}
+	if test.startTime.String() != "0" {
+		t.Errorf("SetDuration(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test.startTime.String(), "0")
+	}
+	if test.duration.String() != "86400.00259" {
+		t.Errorf("SetDuration(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test.duration.String(), "86400.00259")
+	}
+	if test.endTime.String() != "86400.002592000000000073695171209052205086245605468" {
+		t.Errorf("SetDuration(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test.endTime.String(), "86400.002592000000000073695171209052205086245605468")
+	}
+
+	test, err = testValue(0).SetDuration("86400", "tai64")
 	if err != nil {
 		t.Errorf("SetDuration(%#v, %#v) gives error %q", "86400", "tai64", err)
 	}
@@ -345,8 +482,8 @@ func TestSetDuration(t *testing.T) {
 	}
 
 	_, err = testValue(0).SetDuration("86400", "invalid")
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("SetDuration(%#v, %#v) gives error %q; want %q", "86400", "invalid", err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("SetDuration(%#v, %#v) gives error %q; want %q", "86400", "invalid", err, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	_, err = testValue(0).SetDuration("invalid", "gregorian")
@@ -356,8 +493,21 @@ func TestSetDuration(t *testing.T) {
 }
 
 func TestSetDurationFromEnd(t *testing.T) {
-	test, err := testValue(0).SetDurationFromEnd("86400", "tai64")
+	test, err := testValue(0).SetDurationFromEnd("86400", "")
+	if err != nil {
+		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q", "86400", "", err)
+	}
+	if test.startTime.String() != "-86399.997408000000000960483248491073027254849060058" {
+		t.Errorf("SetDurationFromEnd(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test.startTime.String(), "-86399.997408000000000960483248491073027254849060058")
+	}
+	if test.duration.String() != "86399.99741" {
+		t.Errorf("SetDurationFromEnd(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test.duration.String(), "86399.99741")
+	}
+	if test.endTime.String() != "0" {
+		t.Errorf("SetDurationFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test.endTime.String(), "0")
+	}
 
+	test, err = testValue(0).SetDurationFromEnd("86400", "tai64")
 	if err != nil {
 		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q", "86400", "tai64", err)
 	}
@@ -372,8 +522,8 @@ func TestSetDurationFromEnd(t *testing.T) {
 	}
 
 	_, err = testValue(0).SetDurationFromEnd("86400", "invalid")
-	if err != calendars.ErrUnknownCalendar {
-		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q; want %q", "86400", "invalid", err, calendars.ErrUnknownCalendar)
+	if err.Error() != calendars.ErrUnknownCalendar("invalid").Error() {
+		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q; want %q", "86400", "invalid", err, calendars.ErrUnknownCalendar("invalid"))
 	}
 
 	_, err = testValue(0).SetDurationFromEnd("invalid", "gregorian")

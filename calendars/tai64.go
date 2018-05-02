@@ -1,11 +1,12 @@
 // TAI64 CALENDAR
 /*
 
-Supports times that are seconds since 1970-01-01 00:00:00 TAI (plus 2**62, when
-in hexadecimal), as defined at https://cr.yp.to/libtai/tai64.html (though this
-library includes extensions to the formats described there). These values are
-also used internally, so this calendar system can be used to directly expose the
-underlying internal values in a manner that allows them to be used elsewhere.
+Supports times that are seconds since CE 1970-01-01 00:00:00 TAI (plus 2**62,
+when in hexadecimal), as defined at https://cr.yp.to/libtai/tai64.html (though
+this library includes extensions to the formats described there). These values
+are also used internally, so this calendar system can be used to directly expose
+the underlying internal values in a manner that allows them to be used
+elsewhere.
 
 Supported Input Types:
   - string
@@ -15,12 +16,12 @@ Supported Input Types:
 
 Supported Format Strings:
   - decimal     - decimal; full resolution
-  - tai64       - hexadecmial; just seconds
-  - tai64n      - hexadecmial; with nanoseconds
-  - tai64na     - hexadecmial; with attoseconds
-  - tai64nax    - hexadecmial; with xictoseconds
-  - tai64naxu   - hexadecmial; with uctoseconds
-  - tai64naxur  - hexadecmial; with roctoseconds
+  - tai64       - hexadecimal; just seconds
+  - tai64n      - hexadecimal; with nanoseconds
+  - tai64na     - hexadecimal; with attoseconds
+  - tai64nax    - hexadecimal; with xictoseconds
+  - tai64naxu   - hexadecimal; with uctoseconds
+  - tai64naxur  - hexadecimal; with roctoseconds
 
 */
 package calendars
