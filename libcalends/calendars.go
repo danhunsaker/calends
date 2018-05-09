@@ -57,6 +57,7 @@ import "C"
 
 import (
 	"math/big"
+	"strings"
 	"unsafe"
 
 	"github.com/danhunsaker/calends/calendars"
@@ -84,9 +85,19 @@ func Calends_calendar_register(
 	)
 }
 
+//export Calends_calendar_unregister
+func Calends_calendar_unregister(name *C.char) {
+	calendars.Unregister(C.GoString(name))
+}
+
 //export Calends_calendar_registered
 func Calends_calendar_registered(calendar *C.char) bool {
 	return calendars.Registered(C.GoString(calendar))
+}
+
+//export Calends_calendar_list_registered
+func Calends_calendar_list_registered() *C.char {
+	return C.CString(strings.Join(calendars.ListRegistered(), "\n"))
 }
 
 //export TAI64Time_add

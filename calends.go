@@ -41,7 +41,7 @@ type Calends struct {
 }
 
 // Version of the library
-var Version string = "0.0.3"
+var Version = "0.0.3"
 
 // Create is the mechanism for constructing new Calends objects.
 /*

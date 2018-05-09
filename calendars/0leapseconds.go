@@ -130,16 +130,16 @@ func init() {
 // UTCtoTAI removes the UTC leap second offset from a TAI64NAXURTime value.
 func UTCtoTAI(utc TAI64NAXURTime) (tai TAI64NAXURTime) {
 	// Calculate year, month, day
-	oldYear, oldMonth, oldDay := time.Unix(utc.Seconds, int64(utc.Nano)).Date()
+	oldYear, oldMonth, oldDay := time.Unix(utc.Seconds, int64(utc.Nano)).UTC().Date()
 	// Remove the leap second offset
 	tai = utc.Sub(getTAIOffset(oldYear, oldMonth, oldDay))
 
 	// Ensure we used the correct offset
-	newYear, newMonth, newDay := time.Unix(tai.Seconds, int64(tai.Nano)).Date()
+	newYear, newMonth, newDay := time.Unix(tai.Seconds, int64(tai.Nano)).UTC().Date()
 	for newYear != oldYear || newMonth != oldMonth || newDay != oldDay {
 		tai = utc.Sub(getTAIOffset(newYear, newMonth, newDay))
 		oldYear, oldMonth, oldDay = newYear, newMonth, newDay
-		newYear, newMonth, newDay = time.Unix(tai.Seconds, int64(tai.Nano)).Date()
+		newYear, newMonth, newDay = time.Unix(tai.Seconds, int64(tai.Nano)).UTC().Date()
 	}
 
 	return
@@ -148,7 +148,7 @@ func UTCtoTAI(utc TAI64NAXURTime) (tai TAI64NAXURTime) {
 // TAItoUTC adds the UTC leap second offset to a TAI64NAXURTime value.
 func TAItoUTC(tai TAI64NAXURTime) (utc TAI64NAXURTime) {
 	// Calculate year, month, day
-	year, month, day := time.Unix(tai.Seconds, int64(tai.Nano)).Date()
+	year, month, day := time.Unix(tai.Seconds, int64(tai.Nano)).UTC().Date()
 	// Add the leap second offset
 	utc = tai.Add(getTAIOffset(year, month, day))
 

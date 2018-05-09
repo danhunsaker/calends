@@ -15,3 +15,16 @@
 
 /calends
 /coverage.htm
+
+.temp/
+compile.log
+compile-errors.log
+.libs/
+autom4te.cache/
+build/
+.deps
+*/Makefile
+*/Makefile.*
+core*
+!core*.sh
+*~

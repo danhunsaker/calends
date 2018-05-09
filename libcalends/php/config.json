@@ -1,0 +1,67 @@
+{
+    "warnings": {
+        "unused-variable": true,
+        "unused-variable-external": false,
+        "possible-wrong-parameter": true,
+        "possible-wrong-parameter-undefined": false,
+        "nonexistent-function": true,
+        "nonexistent-class": true,
+        "non-valid-isset": true,
+        "non-array-update": true,
+        "non-valid-objectupdate": true,
+        "non-valid-fetch": true,
+        "invalid-array-index": true,
+        "non-array-append": true,
+        "invalid-return-type": true,
+        "unreachable-code": true,
+        "nonexistent-constant": true,
+        "not-supported-magic-constant": true,
+        "non-valid-decrement": true,
+        "non-valid-increment": true,
+        "non-valid-clone": true,
+        "non-valid-new": true,
+        "non-array-access": true,
+        "invalid-reference": true,
+        "invalid-typeof-comparison": true,
+        "conditional-initialization": true
+    },
+    "optimizations": {
+        "static-type-inference": true,
+        "static-type-inference-second-pass": true,
+        "local-context-pass": true,
+        "constant-folding": true,
+        "static-constant-class-folding": true,
+        "call-gatherer-pass": true,
+        "check-invalid-reads": false,
+        "internal-call-transformation": false
+    },
+    "namespace": "calends",
+    "name": "calends",
+    "description": "A PHP extension for handling dates and times across arbitrary calendar systems",
+    "author": "Dan Hunsaker <dan.hunsaker+calends@gmail.com>",
+    "version": "0.0.3",
+    "extra-cflags": "-I$(readlink -f $(pwd)/../..)",
+    "extra-libs": "-L$(readlink -f $(pwd)/../..) -lcalends",
+    "optimizer-dirs": [
+      "opt"
+    ],
+    "extra-sources": [
+      "wrap_libcalends.c"
+    ],
+    "initializers": {
+      "module": [
+        {
+          "include": "wrap_libcalends.h",
+          "code": "Calends_register_panic_handler(ext_panic_handler)"
+        }
+      ]
+    },
+    "destructors": {
+      "request": [
+        {
+          "include": "wrap_libcalends.h",
+          "code": "ext_unregister_all_calendars()"
+        }
+      ]
+    }
+}

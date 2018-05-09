@@ -2,6 +2,7 @@ package calendars
 
 import (
 	"errors"
+	"strings"
 	"testing"
 )
 
@@ -56,6 +57,21 @@ func TestRegisterElements(t *testing.T) {
 	}
 }
 
+func TestUnregister(t *testing.T) {
+	instance := testCalendarClass{}
+	RegisterClass("testCalendarClass", instance, instance.DefaultFormat)
+
+	if !Registered("testCalendarClass") {
+		t.Errorf("RegisterClass(%#v, %#v) failed", "testCalendarClass", instance)
+	}
+
+	Unregister("testCalendarClass")
+
+	if Registered("testCalendarClass") {
+		t.Errorf("Unregister(%#v) failed", "testCalendarClass")
+	}
+}
+
 func TestRegistered(t *testing.T) {
 	if Registered("testCalendar") {
 		t.Errorf("Registered(testCalendar) failed - the calendar should not be registered before the test starts")
@@ -67,6 +83,29 @@ func TestRegistered(t *testing.T) {
 	if !Registered("testCalendar") {
 		t.Errorf("Registered(testCalendar) failed - the calendar should be registered before the test ends")
 	}
+}
+
+func TestListRegistered(t *testing.T) {
+	Unregister("testCalendar")
+	Unregister("testCalendarClass")
+	Unregister("testCalendarElements")
+
+	got := ListRegistered()
+	want := []string{"Gregorian", "Jdc", "Stardate", "Tai64", "Unix"}
+	if strings.Join(got, ":") != strings.Join(want, ":") {
+		t.Errorf("ListRegistered() failed - the calendar list was incorrect:\n\twant: %v\n\t got: %v", want, got)
+	}
+
+	instance := testCalendarClass{"test"}
+	RegisterClass("teSt CaLenDar", instance, instance.DefaultFormat)
+
+	got = ListRegistered()
+	want = []string{"Gregorian", "Jdc", "Stardate", "Tai64", "TestCalendar", "Unix"}
+	if strings.Join(got, ":") != strings.Join(want, ":") {
+		t.Errorf("ListRegistered() failed - the calendar list was incorrect:\n\twant: %v\n\t got: %v", want, got)
+	}
+
+	Unregister("test calendar")
 }
 
 func TestDefaultFormat(t *testing.T) {

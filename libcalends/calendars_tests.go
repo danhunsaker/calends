@@ -86,6 +86,16 @@ func testCalends_calendar_registered(t *testing.T) {
 	}
 }
 
+func testCalends_calendar_list_registered(t *testing.T) {
+	t.Helper()
+
+	ret := Calends_calendar_list_registered()
+	want := "Gregorian\nJdc\nStardate\nTai64\nUnix"
+	if C.GoString(ret) != want {
+		t.Errorf("Calends_calendar_list_registered() returned %#v; wanted %#v", C.GoString(ret), want)
+	}
+}
+
 func testCalends_calendar_register(t *testing.T) {
 	t.Helper()
 
@@ -166,6 +176,41 @@ func testCalends_calendar_register(t *testing.T) {
 	time, _ = working.Add(taiCToGo(C.TAI64Time{0, 0, 0, 0, 0, 0, 0}), "test")
 	if time.String() != wantTime.String() {
 		t.Errorf("Calends{%#v}.Add(%#v, %#v) returned %#v; wanted %#v", calRet, taiCToGo(C.TAI64Time{0, 0, 0, 0, 0, 0, 0}), "test", time, wantTime)
+	}
+}
+
+func testCalends_calendar_unregister(t *testing.T) {
+	t.Helper()
+
+	if !Calends_calendar_registered(C.CString("test")) {
+		Calends_calendar_register(
+			C.CString("test"), C.CString("default"),
+			C.Calends_calendar_to_internal_string(C.test_Calends_calendar_to_internal_string),
+			C.Calends_calendar_to_internal_long_long(C.test_Calends_calendar_to_internal_long_long),
+			C.Calends_calendar_to_internal_double(C.test_Calends_calendar_to_internal_double),
+			C.Calends_calendar_to_internal_tai(C.test_Calends_calendar_to_internal_tai),
+			C.Calends_calendar_from_internal(C.test_Calends_calendar_from_internal),
+			C.Calends_calendar_offset_string(C.test_Calends_calendar_offset_string),
+			C.Calends_calendar_offset_long_long(C.test_Calends_calendar_offset_long_long),
+			C.Calends_calendar_offset_double(C.test_Calends_calendar_offset_double),
+			C.Calends_calendar_offset_tai(C.test_Calends_calendar_offset_tai),
+		)
+	}
+
+	in := "test"
+	ret := Calends_calendar_registered(C.CString(in))
+	want := true
+	if bool(ret) != want {
+		t.Errorf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
+	}
+
+	Calends_calendar_unregister(C.CString("test"))
+
+	in = "test"
+	ret = Calends_calendar_registered(C.CString(in))
+	want = false
+	if bool(ret) != want {
+		t.Errorf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
 	}
 }
 

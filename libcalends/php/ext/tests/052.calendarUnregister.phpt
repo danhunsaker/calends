@@ -1,0 +1,38 @@
+--TEST--
+Calends\Calends::calendarUnregister() Basic test
+--SKIPIF--
+<?php
+if (!extension_loaded('calends')) {
+	echo 'skip';
+}
+?>
+--FILE--
+<?php
+	var_dump(Calends\Calends::calendarRegistered('test'));
+
+	class TestCalendar implements Calends\CalendarObjectInterface {
+		function toInternal($date, string $format): Calends\TAITime {
+			return new Calends\TAITime();
+		}
+
+		function fromInternal(Calends\TAITime $stamp, string $format): string {
+			return "{$stamp->toString()}::{$format}";
+		}
+
+		function offset(Calends\TAITime $stamp, $offset): Calends\TAITime {
+			return $stamp;
+		}
+	}
+
+	Calends\Calends::calendarRegister('test', 'default', new TestCalendar);
+
+	var_dump(Calends\Calends::calendarRegistered('test'));
+
+	Calends\Calends::calendarUnregister('test');
+
+	var_dump(Calends\Calends::calendarRegistered('test'));
+?>
+--EXPECT--
+bool(false)
+bool(true)
+bool(false)

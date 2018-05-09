@@ -21,35 +21,35 @@ var SHARDS = uint64(64)
 type ConcurrentMap []*ConcurrentMapShard
 
 type ConcurrentMapShard struct {
-  items map[uint64]interface{}
-  sync.RWMutex
+	items map[uint64]interface{}
+	sync.RWMutex
 }
 
 func NewConcurrentMap() ConcurrentMap {
-  m := make(ConcurrentMap, SHARDS)
-  for i := uint64(0); i < SHARDS; i++ {
-      m[i] = &ConcurrentMapShard{items: make(map[uint64]interface{})}
-  }
-  return m
+	m := make(ConcurrentMap, SHARDS)
+	for i := uint64(0); i < SHARDS; i++ {
+		m[i] = &ConcurrentMapShard{items: make(map[uint64]interface{})}
+	}
+	return m
 }
 
 func (m ConcurrentMap) getShard(key uint64) *ConcurrentMapShard {
-  return m[key%SHARDS]
+	return m[key%SHARDS]
 }
 
 func (m ConcurrentMap) Store(key uint64, value interface{}) {
-  shard := m.getShard(key)
-  shard.Lock()
-  shard.items[key] = value
-  shard.Unlock()
+	shard := m.getShard(key)
+	shard.Lock()
+	shard.items[key] = value
+	shard.Unlock()
 }
 
 func (m ConcurrentMap) Load(key uint64) (interface{}, bool) {
-  shard := m.getShard(key)
-  shard.RLock()
-  val, ok := shard.items[key]
-  shard.RUnlock()
-  return val, ok
+	shard := m.getShard(key)
+	shard.RLock()
+	val, ok := shard.items[key]
+	shard.RUnlock()
+	return val, ok
 }
 
 func (m ConcurrentMap) Length() (out uint64) {
@@ -73,18 +73,18 @@ func (m ConcurrentMap) All() (out []interface{}) {
 }
 
 func (m ConcurrentMap) Delete(key uint64) {
-  shard := m.getShard(key)
-  shard.Lock()
-  delete(shard.items, key)
-  shard.Unlock()
+	shard := m.getShard(key)
+	shard.Lock()
+	delete(shard.items, key)
+	shard.Unlock()
 }
 
 type IdGenerator struct {
-  id uint64
+	id uint64
 }
 
 func (generator *IdGenerator) Id() uint64 {
-  return atomic.AddUint64(&generator.id, 1)
+	return atomic.AddUint64(&generator.id, 1)
 }
 
 var panicHandlers ConcurrentMap

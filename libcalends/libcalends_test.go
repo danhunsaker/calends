@@ -323,9 +323,17 @@ func TestCalends_calendar_registered(t *testing.T) {
 	defer testingPanicCatcher(t)
 	testCalends_calendar_registered(t)
 }
+func TestCalends_calendar_list_registered(t *testing.T) {
+	defer testingPanicCatcher(t)
+	testCalends_calendar_list_registered(t)
+}
 func TestCalends_calendar_register(t *testing.T) {
 	defer testingPanicCatcher(t)
 	testCalends_calendar_register(t)
+}
+func TestCalends_calendar_unregister(t *testing.T) {
+	defer testingPanicCatcher(t)
+	testCalends_calendar_unregister(t)
 }
 func TestTAI64Time_add(t *testing.T) {
 	defer testingPanicCatcher(t)

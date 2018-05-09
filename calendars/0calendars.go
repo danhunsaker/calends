@@ -17,6 +17,7 @@ package calendars
 import (
 	"errors"
 	// "fmt"
+	"sort"
 	"strings"
 )
 
@@ -45,6 +46,8 @@ var (
 	ErrInvalidFormat    = errors.New("Invalid Format")
 )
 
+// ErrUnknownCalendar generates a "calendar not registered" error including the
+// calendar's actual name in the error message
 func ErrUnknownCalendar(calendar string) error {
 	return errors.New("Unknown Calendar: " + calendar)
 }
@@ -84,10 +87,29 @@ func RegisterElements(
 	}
 }
 
+// Unregister removes a calendar system from the callback list.
+func Unregister(name string) {
+	if Registered(name) {
+		delete(registeredCalendars, canonCalendarName(name))
+	}
+}
+
 // Registered returns whether or not a calendar system has been registered, yet.
 func Registered(calendar string) bool {
 	_, set := registeredCalendars[canonCalendarName(calendar)]
 	return set
+}
+
+// ListRegistered returns the list of calendar systems currently registered.
+func ListRegistered() []string {
+	var out []string
+
+	for name := range registeredCalendars {
+		out = append(out, name)
+	}
+	sort.Strings(out)
+
+	return out
 }
 
 // DefaultFormat returns the associated value from a registered calendar system.

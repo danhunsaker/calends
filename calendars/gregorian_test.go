@@ -11,7 +11,7 @@ func TestGregorianToInternal(t *testing.T) {
 		{"in": []interface{}{"1970-01-01 00:00:01 UTC", "2006-01-02 15:04:05 MST"}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
 		{"in": []interface{}{"1970-01-01 00:00:01 UTC", "%Y-%m-%d %H:%M:%S %Z"}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
 		{"in": []interface{}{[]byte("Thu, 01 Jan 1970 00:00:01 UTC"), ""}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
-		{"in": []interface{}{time.Unix(1, 0), ""}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
+		{"in": []interface{}{time.Unix(1, 0).UTC(), ""}, "want": []interface{}{TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598"), nil}},
 
 		{"in": []interface{}{1, ""}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},
 		{"in": []interface{}{1., ""}, "want": []interface{}{TAI64NAXURTime{}, ErrUnsupportedInput}},

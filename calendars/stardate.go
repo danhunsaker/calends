@@ -336,9 +336,8 @@ func stardateOffset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, 
 	_, err = fmt.Sscanf(mod, "%s %s", &date, &format)
 	if err != nil && err.Error() != "EOF" {
 		return
-	} else {
-		err = nil
 	}
+	err = nil
 
 	adjust, err = stardateToInternal(date, format)
 	if err != nil {
@@ -399,7 +398,7 @@ func stardateJDCToMain(jdc big.Float) string {
 		issue, _ = tmp.Quo(stardate, big.NewFloat(10000.0)).Int64()
 		stardate.Sub(stardate, big.NewFloat(float64(10000*issue)))
 		if stardate.Cmp(big.NewFloat(0)) < 0 {
-			issue -= 1
+			issue--
 			stardate.Add(stardate, big.NewFloat(10000))
 		}
 		format = "[%d]%04.6g"
@@ -479,9 +478,9 @@ func stardatePughToJDC(stardate string, fixed bool) big.Float {
 
 	if fixed {
 		return *new(big.Float).Add(stardatePughEpoch, new(big.Float).Mul(new(big.Float).Add(new(big.Float).SetInt64(prefix), new(big.Float).Quo(suffix, big.NewFloat(1000.0))), big.NewFloat(365.2425)))
-	} else {
-		return yearfToJDC(*new(big.Float).Add(new(big.Float).Add(new(big.Float).SetInt64(prefix), big.NewFloat(2323.0)), new(big.Float).Quo(suffix, big.NewFloat(1000.0))))
 	}
+
+	return yearfToJDC(*new(big.Float).Add(new(big.Float).Add(new(big.Float).SetInt64(prefix), big.NewFloat(2323.0)), new(big.Float).Quo(suffix, big.NewFloat(1000.0))))
 }
 
 func stardateJDCToPugh(jdc big.Float, fixed bool) string {

@@ -66,7 +66,7 @@ func init() {
 		},
 		// fromInternal
 		func(stamp TAI64NAXURTime, format string) (date string, err error) {
-			tmp := time.Unix(stamp.Seconds, int64(stamp.Nano))
+			tmp := time.Unix(stamp.Seconds, int64(stamp.Nano)).UTC()
 			if strings.ContainsRune(format, '%') {
 				date, err = datefmt.Strftime(format, tmp)
 			} else {
@@ -82,7 +82,7 @@ func init() {
 			switch offset.(type) {
 			case time.Duration:
 				dur := offset.(time.Duration)
-				r := time.Unix(in.Seconds, int64(in.Nano)).Add(dur)
+				r := time.Unix(in.Seconds, int64(in.Nano)).UTC().Add(dur)
 				out.Seconds = r.Unix()
 				out.Nano = uint32(r.Nanosecond())
 				return
@@ -101,7 +101,7 @@ func init() {
 			w.Add(when_en.All...)
 			w.Add(when_common.All...)
 
-			r, err := w.Parse(str, time.Unix(in.Seconds, int64(in.Nano)))
+			r, err := w.Parse(str, time.Unix(in.Seconds, int64(in.Nano)).UTC())
 			if err != nil {
 				return
 			}

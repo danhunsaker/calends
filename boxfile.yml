@@ -1,0 +1,40 @@
+run.config:
+  engine: php#option/no-default-cache-dirs
+  engine.config:
+    runtime: php-7.1
+    extensions:
+      - xml
+      - zephir_parser
+  extra_packages:
+    - go
+    - autoconf
+    - re2c
+  cache_dirs:
+    - .gopath
+  extra_path_dirs:
+    - .gopath/bin
+  cwd: /app/.gopath/src/github.com/danhunsaker/calends
+  extra_steps:
+    - |
+      # Set up Go stuff
+      export GOPATH=/app/.gopath
+      echo /app/.gopath > /data/etc/env.d/GOPATH
+      mkdir -p /app/.gopath/{bin,src/github.com/danhunsaker}
+      ln -sfT /app /app/.gopath/src/github.com/danhunsaker/calends
+      cd /app/.gopath/src/github.com/danhunsaker/calends
+      go get -t -v ./...
+    - |
+      # Install Zephir
+      cd /data
+      if [ ! -d zephir ]
+      then
+        git clone https://github.com/phalcon/zephir
+        cd zephir
+      else
+        cd zephir
+        git pull
+      fi
+      sed "s#%ZEPHIRDIR%#$(pwd)#g" bin/zephir > bin/zephir-cmd
+      chmod 755 bin/zephir-cmd
+      cp bin/zephir-cmd /data/bin/zephir
+      rm bin/zephir-cmd
