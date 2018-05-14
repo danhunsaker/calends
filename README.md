@@ -70,7 +70,7 @@ A library for handling dates and times across arbitrary calendar systems
 
   - [ ] **Discordian**: ...
 
-  - [ ] **Stardate**: Yes, the ones from Star Trek&trade;; several variants exist
+  - [x] **Stardate**: Yes, the ones from Star Trek&trade;; several variants exist
 
 - [x] Encodes both time spans (`start != end`, `duration != 0`) and instants
   (`start == end`, `duration == 0`) in a single interface.
@@ -359,6 +359,44 @@ listed below. Formats in **bold** are the default format for that calendar.
   - Offsets
     - number of days, as integer or float, via numeric or string types
       - can include fractional days to indicate time
+
+- `stardate`
+  - Formats
+    - **`main` - A combined variant, which supports both TOS and TNG style
+      stardates. It does this by subdividing the system into short eras called
+      "issues", and letting the issue number become negative instead of the
+      stardate itself, as needed. This is arguably the most widely-used system,
+      being the one Google uses in their Calendar and other projects. Devised by
+      Andrew Main.**
+    - `kennedy` - The other combined variant, which uses a single continuously-
+      increasing value instead of `main`'s "issues". Devised by Richie Kennedy.
+    - `pugh90s` - A TNG-focused variant devised by Steve Pugh. The fractional
+      component of negative stardates is reversed, such that `-15129.99999` is
+      followed by `-15128.00000`.
+    - `pughfixed` - A revision of `pugh90s` which uses a fixed year length.
+    - `schmidt` - Another TNG-focused variant devised by Andreas Schmidt and
+      Graham Kennedy. Virtually identical to `pugh90s`, but the fractional
+      component increases normally for negative stardates.
+    - `guide-equiv`, `guide-tng`, `guide-tos` - The current variants described
+      on the TrekGuide page covering stardates. `guide-equiv` provides a
+      stardate intended for out-of-universe dates, while `guide-tng` and
+      `guide-tos` both provide stardates for their respective eras of the
+      franchise.
+    - `guide-oldtng`, `guide-oldtos` - Older variants pulled from archived
+      versions of the TrekGuide page. (NOTE: `guide-oldtos` is not currently
+      implemented.)
+    - `aldrich` - A simplified variant for stardates that end up being very
+      close to `schmidt`'s. Devised by John C. Aldrich.
+    - `red-dragon` - The variant used in the Red Dragon Inn's stardate
+      calculator, which is intended solely for use with its own roleplaying
+      forums and related activities.
+    - `sto-hynes`, `sto-academy`, `sto-tom`, `sto-anthodev` - A group of
+      variants all aimed at calculating stardates for use within Star
+      Trek&trade; Online. The most accurate is probably `sto-hynes`, but this
+      assumption is untested.
+  - Offsets
+    - Must be provided as `"{stardate} {variant}"`
+      (or `"{variant} {stardate}"`).
 
 ## Contributing
 
