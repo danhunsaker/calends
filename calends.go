@@ -305,7 +305,7 @@ func (c *Calends) UnmarshalText(text []byte) error {
 		"end":   endTime,
 	}, "tai64", "tai64naxur")
 
-	c = &tmp
+	*c = tmp
 
 	return err
 }
@@ -338,17 +338,17 @@ func (c *Calends) UnmarshalJSON(text []byte) error {
 	if err == nil {
 		err = startTime.UnmarshalText([]byte(parsed["start"]))
 		if err != nil {
-			return errors.New("(*Calends).UnmarshalJSON [convert start time " + parsed["start"] + "]: " + err.Error())
+			return errors.New("JSON decode failure while parsing start time [" + parsed["start"] + "]: " + err.Error())
 		}
 
 		err = endTime.UnmarshalText([]byte(parsed["end"]))
 		if err != nil {
-			return errors.New("(*Calends).UnmarshalJSON [convert end time " + parsed["end"] + "]: " + err.Error())
+			return errors.New("JSON decode failure while parsing end time [" + parsed["end"] + "]: " + err.Error())
 		}
 	} else {
 		err = startTime.UnmarshalText([]byte(strings.Trim(string(text), `"`)))
 		if err != nil {
-			return errors.New("(*Calends).UnmarshalJSON [convert time " + strings.Trim(string(text), `"`) + "]: " + err.Error())
+			return errors.New("JSON decode failure while parsing time [" + strings.Trim(string(text), `"`) + "]: " + err.Error())
 		}
 
 		endTime = startTime
@@ -362,7 +362,7 @@ func (c *Calends) UnmarshalJSON(text []byte) error {
 	*c = temp
 
 	if err != nil {
-		err = errors.New("(*Calends).UnmarshalJSON [set values]: " + err.Error())
+		err = errors.New("JSON decode failure while setting values: " + err.Error())
 	}
 
 	return err

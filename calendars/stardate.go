@@ -94,6 +94,7 @@ Supported Format Strings:
    this one was attributed to Major Tom, and hosted as a Wolfram
    Alpha widget.
   - sto-anthodev - Another STO variant, hosted on GitHub.
+
 */
 package calendars
 

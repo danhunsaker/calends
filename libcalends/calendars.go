@@ -167,14 +167,15 @@ func TAI64Time_decode_text(in *C.char) C.TAI64Time {
 }
 
 //export TAI64Time_encode_binary
-func TAI64Time_encode_binary(t C.TAI64Time) unsafe.Pointer {
+func TAI64Time_encode_binary(t C.TAI64Time, length *C.int) unsafe.Pointer {
 	defer handlePanic()
 	base := taiCToGo(t)
-	out, err := base.MarshalBinary()
+	byteStream, err := base.MarshalBinary()
 	if err != nil {
 		panic(err)
 	}
-	return C.CBytes(out)
+	*length = C.int(len(byteStream))
+	return C.CBytes(byteStream)
 }
 
 //export TAI64Time_decode_binary

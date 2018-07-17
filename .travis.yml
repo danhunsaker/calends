@@ -97,7 +97,7 @@ after_success:
       cd ${TRAVIS_BUILD_DIR}
       ./build-all
       go get github.com/aktau/github-release
-      github-release info --user danhunsaker --repo calends --tag ${TRAVIS_TAG} ||
+      github-release info --user danhunsaker --repo calends --tag ${TRAVIS_TAG} || \
         github-release release --user danhunsaker --repo calends --tag ${TRAVIS_TAG} --draft
       for archive in $(find dist/ -iname '*.tgz')
       do

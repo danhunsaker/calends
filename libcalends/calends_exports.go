@@ -129,6 +129,7 @@ func Calends_end_date(p C.ulonglong, calendar, format *C.char) *C.char {
 
 //export Calends_string
 func Calends_string(p C.ulonglong) *C.char {
+	defer handlePanic()
 	c := instGet(p)
 	return C.CString(c.String())
 }

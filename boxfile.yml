@@ -3,12 +3,14 @@ run.config:
   engine.config:
     runtime: php-7.1
     extensions:
+      - json
       - xml
       - zephir_parser
   extra_packages:
     - go
     - autoconf
     - re2c
+    - py27-pip
   cache_dirs:
     - .gopath
   extra_path_dirs:
@@ -23,6 +25,10 @@ run.config:
       ln -sfT /app /app/.gopath/src/github.com/danhunsaker/calends
       cd /app/.gopath/src/github.com/danhunsaker/calends
       go get -t -v ./...
+    - |
+      # Set up Sphinx documentation support
+      pip install --upgrade pip
+      pip install -I -r requirements.txt
     - |
       # Install Zephir
       cd /data

@@ -40,6 +40,11 @@
     "description": "A PHP extension for handling dates and times across arbitrary calendar systems",
     "author": "Dan Hunsaker <dan.hunsaker+calends@gmail.com>",
     "version": "0.0.3",
+    "requires": {
+      "extensions": [
+        "json"
+      ]
+    },
     "extra-cflags": "-I$(readlink -f $(pwd)/../..)",
     "extra-libs": "-L$(readlink -f $(pwd)/../..) -lcalends",
     "optimizer-dirs": [

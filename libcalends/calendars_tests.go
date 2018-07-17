@@ -377,18 +377,19 @@ func testTAI64Time_decode_text(t *testing.T) {
 func testTAI64Time_encode_binary(t *testing.T) {
 	t.Helper()
 
+	var length C.int
 	in := C.TAI64Time{0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
-	ret := TAI64Time_encode_binary(in)
+	ret := TAI64Time_encode_binary(in, &length)
 	want := "\x40\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
-	if string(C.GoBytes(ret, 28)) != want {
-		t.Errorf("TAI64Time_encode_binary(%#v) returned %#v; wanted %#v", in, string(C.GoBytes(ret, 28)), want)
+	if string(C.GoBytes(ret, length)) != want {
+		t.Errorf("TAI64Time_encode_binary(%#v, &length) returned %d:%#v; wanted 28:%#v", in, int(length), string(C.GoBytes(ret, length)), want)
 	}
 
 	in = C.TAI64Time{10, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0}
-	ret = TAI64Time_encode_binary(in)
+	ret = TAI64Time_encode_binary(in, &length)
 	want = "\x40\x00\x00\x00\x00\x00\x00\x0A\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
-	if string(C.GoBytes(ret, 28)) != want {
-		t.Errorf("TAI64Time_encode_binary(%#v) returned %#v; wanted %#v", in, string(C.GoBytes(ret, 28)), want)
+	if string(C.GoBytes(ret, length)) != want {
+		t.Errorf("TAI64Time_encode_binary(%#v, &length) returned %d:%#v; wanted 28:%#v", in, int(length), string(C.GoBytes(ret, length)), want)
 	}
 }
 

@@ -1,6 +1,6 @@
 namespace Calends;
 
-class Calends implements \Serializable//, \JsonSerializable
+class Calends implements \Serializable, \JsonSerializable
 {
   private goId = 0.0;
 
@@ -43,10 +43,27 @@ class Calends implements \Serializable//, \JsonSerializable
     let this->goId = result;
   }
 
-  // public function jsonSerialize() -> string
-  // {
-  //   return this->serialize();
-  // }
+  public function jsonSerialize() -> var
+  {
+    var out;
+
+    let out = json_decode(Calends_encode_json(this->goId), true);
+
+    return out;
+  }
+
+  public static function fromJson(string encoded) -> <Calends>
+  {
+    double result;
+    var out;
+    let out = new Calends;
+
+    let result = Calends_decode_json(encoded);
+
+    let out->goId = result;
+
+    return out;
+  }
 
   public static function create(var date = null, string calendar = null, string format = null) -> <Calends>
   {
@@ -166,24 +183,6 @@ class Calends implements \Serializable//, \JsonSerializable
     let out = Calends_end_date(this->goId, calendar, format);
 
     return out;
-  }
-
-  public function json(string encoded = null) -> string|null
-  {
-    if empty encoded {
-      string out;
-
-      let out = Calends_encode_json(this->goId);
-
-      return out;
-    } else {
-      double result;
-
-      let result = Calends_decode_json(encoded);
-
-      let this->goId = result;
-    }
-    return;
   }
 
   public function difference(<Calends> z, string mode = null) -> string
