@@ -11,7 +11,7 @@ Supported Input Types:
 
 Supported Format Strings:
   - any format supported by the time library or
-    github.com/danhunsaker/go-datefmt (or github.com/olebedev/when for Offset)
+    github.com/knz/strtime (or github.com/olebedev/when for Offset)
 
 */
 package calendars
@@ -21,7 +21,7 @@ import (
 	"strings"
 	"time"
 
-	datefmt "github.com/danhunsaker/go-datefmt"
+	"github.com/knz/strtime"
 	when "github.com/olebedev/when"
 	when_common "github.com/olebedev/when/rules/common"
 	when_en "github.com/olebedev/when/rules/en"
@@ -50,7 +50,7 @@ func init() {
 
 			if str != "" {
 				if strings.ContainsRune(format, '%') {
-					in, err = datefmt.Strptime(format, str)
+					in, err = strtime.Strptime(str, format)
 				} else {
 					in, err = time.Parse(format, str)
 				}
@@ -68,7 +68,7 @@ func init() {
 		func(stamp TAI64NAXURTime, format string) (date string, err error) {
 			tmp := time.Unix(stamp.Seconds, int64(stamp.Nano)).UTC()
 			if strings.ContainsRune(format, '%') {
-				date, err = datefmt.Strftime(format, tmp)
+				date, err = strtime.Strftime(tmp, format)
 			} else {
 				date = tmp.Format(format)
 			}

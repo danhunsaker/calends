@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+set -e
+
+GOPATH=$(go env GOPATH)
+TARGETS=${TARGETS:-linux/386,linux/amd64,linux/arm-5,linux/arm-6,linux/arm-7,linux/arm64,windows-4.0/*,windows-6.0/*,windows-6.1/*,windows-6.3/*,windows-10.0/*}
+
+v=$(grep 'Version =' calends.go | awk '{ print $4 }')
+VERSION=$(echo v${v//\"/})
+unset v
+
+go get github.com/karalabe/xgo
+${GOPATH}/bin/xgo -buildmode=c-shared -dest=$(pwd)/dist/ -out=libcalends-${VERSION} -targets=${TARGETS} github.com/danhunsaker/calends/libcalends
+
+for h in $(find dist/ -iname '*.h')
+do
+  dir=${h/.h/}
+  mkdir -p ${dir}
+  mv ${dir}.h ${dir}/libcalends.h
+  # Linux
+  [ -e ${dir}.so ] && mv ${dir}.so ${dir}/libcalends.so
+  # Darwin
+  [ -e ${dir}.dylib ] && mv ${dir}.dylib ${dir}/libcalends.dylib
+  # Windows
+  [ -e ${dir}.dll ] && mv ${dir}.dll ${dir}/libcalends.dll
+  tar czf ${dir}.tgz -C ${dir} .
+  rm -rf ${dir}
+done

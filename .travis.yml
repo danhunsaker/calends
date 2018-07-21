@@ -90,3 +90,22 @@ after_failure:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - |
+    if [[ -n ${TRAVIS_TAG} && ${TRAVIS_GO_VERSION} = '1.10.x' ]]
+    then
+      set -e
+      cd ${TRAVIS_BUILD_DIR}
+      ./build-all
+      go get github.com/aktau/github-release
+      github-release info --user danhunsaker --repo calends --tag ${TRAVIS_TAG} ||
+        github-release release --user danhunsaker --repo calends --tag ${TRAVIS_TAG} --draft
+      for archive in $(find dist/ -iname '*.tgz')
+      do
+        github-release upload \
+          --user danhunsaker \
+          --repo calends \
+          --tag ${TRAVIS_TAG} \
+          --name "${archive#dist/}" \
+          --file "${archive}"
+      done
+    fi
