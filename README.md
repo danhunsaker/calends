@@ -75,6 +75,10 @@ Pull requests are always welcome! That said, please be open to discussing the PR
 content, and possibly revising it if requested. Not all requests can be merged,
 and not all changes are desired.
 
+Or, you can contribute some money, instead! Check out [my
+Patreon](https://www.patreon.com/DanHunsaker) for options, there. Other options
+will likely be added for one-time donations in the future.
+
 ## Security Reporting
 
 Report all security-related issues to [dan (dot) hunsaker (plus) calends (at)
