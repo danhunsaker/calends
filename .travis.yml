@@ -84,6 +84,9 @@ script:
   - |
     cd ${TRAVIS_BUILD_DIR}/libcalends
     go build -o libcalends.so -buildmode=c-shared .
+  - |
+    cd ${TRAVIS_BUILD_DIR}/cli
+    go build -o calends .
 
 after_failure:
   - ${TRAVIS_BUILD_DIR}/tests/core_dump_info.sh /tmp/
@@ -99,13 +102,13 @@ after_success:
       go get github.com/aktau/github-release
       github-release info --user danhunsaker --repo calends --tag ${TRAVIS_TAG} || \
         github-release release --user danhunsaker --repo calends --tag ${TRAVIS_TAG} --draft
-      for archive in $(find dist/ -iname '*.tgz')
+      for archive in $(find dist/ -type f -name '*.tgz' -o -type f -name 'calends-*')
       do
         github-release upload \
           --user danhunsaker \
           --repo calends \
           --tag ${TRAVIS_TAG} \
-          --name "${archive#dist/}" \
+          --name "$(echo ${archive} | sed 's:dist/(bin/)?::;s/windows/win/;s/win-4.0/win-nt/;s/win-6.0/win-vista/;s/win-6.1/win-7/;s/win-6.3/win-8.1/;s/win-10.0/win-10/;s/darwin/mac-os/')" \
           --file "${archive}"
       done
     fi

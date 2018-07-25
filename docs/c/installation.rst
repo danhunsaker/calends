@@ -18,7 +18,10 @@ architecture!
 Source Install
 --------------
 
-To install from source, you'll need Golang installed to use its compiler. Clone the repository, build ``libcalends``, then copy the resulting ``.so``/``.dll`` and ``.h`` files to wherever your C/C++ compiler expects to find them.
+To install from source, you'll need Golang 1.9+ installed to use its compiler.
+Clone the repository, build ``libcalends``, then copy the resulting
+``.so``/``.dll`` and ``.h`` files to wherever your C/C++ compiler expects to
+find them.
 
 .. code-block:: bash
 
@@ -27,6 +30,7 @@ To install from source, you'll need Golang installed to use its compiler. Clone 
    cd $GOPATH/src/github.com/danhunsaker
    git clone https://github.com/danhunsaker/calends
    cd calends/libcalends
+   go get ../...
    go build -v -i -buildmode=c-shared -o libcalends.so
 
 Adjust the above example commands as needed for your actual development OS.

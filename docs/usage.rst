@@ -14,6 +14,7 @@ bit further to see how to do everything you need!
 .. toctree::
    :maxdepth: 2
 
+   Command Line <cli/usage.rst>
    Golang <go/usage.rst>
    C/C++ <c/usage.rst>
    PHP <php/usage.rst>

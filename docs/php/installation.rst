@@ -36,6 +36,7 @@ Once those are installed, clone the repository, build ``libcalends``, then run
    cd $GOPATH/src/github.com/danhunsaker
    git clone https://github.com/danhunsaker/calends
    cd calends/libcalends
+   go get ../...
    go build -v -i -buildmode=c-shared -o libcalends.so
    cd php
    zephir install

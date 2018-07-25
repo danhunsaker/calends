@@ -11,8 +11,9 @@ unset v
 
 go get github.com/karalabe/xgo
 ${GOPATH}/bin/xgo -buildmode=c-shared -dest=$(pwd)/dist/ -out=libcalends-${VERSION} -targets=${TARGETS} github.com/danhunsaker/calends/libcalends
+${GOPATH}/bin/xgo -dest=$(pwd)/dist/bin/ -out=calends-${VERSION} -targets="*/*,${TARGETS}" github.com/danhunsaker/calends/cli
 
-for h in $(find dist/ -iname '*.h')
+for h in $(find dist/ -name '*.h')
 do
   dir=${h/.h/}
   mkdir -p ${dir}

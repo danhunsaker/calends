@@ -27,5 +27,6 @@ build/
 */Makefile.*
 core*
 !core*.sh
+!core*.go
 *~
 .build/

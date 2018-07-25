@@ -12,6 +12,7 @@ around the compiled shared library. Select your language to take a deeper look.
 .. toctree::
    :maxdepth: 2
 
+   Command Line <cli/installation.rst>
    Golang <go/installation.rst>
    C/C++ <c/installation.rst>
    PHP <php/installation.rst>
