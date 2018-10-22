@@ -32,8 +32,8 @@ class CalendsCompareOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output($symbolVariable->getRealName() . ' = ext_Calends_compare(' . implode($resolvedParams, ', ') . ');');
+
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_Calends_compare(" . implode($resolvedParams, ', ') . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

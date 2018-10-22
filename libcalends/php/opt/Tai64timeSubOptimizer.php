@@ -32,8 +32,8 @@ class TAI64TimeSubOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output($symbolVariable->getRealName() . ' = ext_TAI64Time_sub(' . implode($resolvedParams, ', ') . ');');
+
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_TAI64Time_sub(" . implode($resolvedParams, ', ') . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

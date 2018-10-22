@@ -32,8 +32,8 @@ class TAI64TimeHexStringOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output($symbolVariable->getRealName() . ' = ext_TAI64Time_hex_string(' . implode($resolvedParams, ', ') . ');');
+
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_TAI64Time_hex_string(" . implode($resolvedParams, ', ') . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

@@ -32,8 +32,8 @@ class TAI64TimeTAIToUTCOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output($symbolVariable->getRealName() . ' = ext_TAI64Time_tai_to_utc(' . implode($resolvedParams, ', ') . ');');
+
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_TAI64Time_tai_to_utc(" . implode($resolvedParams, ', ') . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

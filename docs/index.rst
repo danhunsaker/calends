@@ -50,48 +50,48 @@ Appendix
 
 .. only:: not epub
 
-   .. |Software License| image:: https://img.shields.io/github/license/danhunsaker/calends.svg?style=for-the-badge
+   .. |Software License| image:: https://img.shields.io/github/license/danhunsaker/calends.png?style=for-the-badge
       :target: LICENSE
       :alt: Software License
-   .. |Main Docs| image:: https://img.shields.io/readthedocs/calends.svg?label=main+docs&style=for-the-badge
+   .. |Main Docs| image:: https://img.shields.io/readthedocs/calends.png?label=main+docs&style=for-the-badge
       :target: https://calends.readthedocs.io/
       :alt: Main Docs
-   .. |GoDoc Reference| image:: https://img.shields.io/badge/GoDoc-reference-brightgreen.svg?style=flat-square
+   .. |GoDoc Reference| image:: https://img.shields.io/badge/GoDoc-reference-brightgreen.png?style=flat-square
       :target: https://godoc.org/github.com/danhunsaker/calends
       :alt: GoDoc Reference
-   .. |Gitter Chat| image:: https://img.shields.io/gitter/room/danhunsaker/calends.svg?style=flat-square
+   .. |Gitter Chat| image:: https://img.shields.io/gitter/room/danhunsaker/calends.png?style=flat-square
       :target: https://gitter.im/danhunsaker/calends
       :alt: Gitter Chat
-   .. |Total Downloads| image:: https://img.shields.io/github/downloads/danhunsaker/calends/total.svg?style=flat-square
+   .. |Total Downloads| image:: https://img.shields.io/github/downloads/danhunsaker/calends/total.png?style=flat-square
       :target: https://github.com/danhunsaker/calends/releases
       :alt: Total Downloads
-   .. |Latest Stable Version| image:: https://img.shields.io/github/release/danhunsaker/calends.svg?style=for-the-badge
+   .. |Latest Stable Version| image:: https://img.shields.io/github/release/danhunsaker/calends.png?style=for-the-badge
       :target: https://github.com/danhunsaker/calends/releases
       :alt: Latest Stable Version
-   .. |GitHub Release Date| image:: https://img.shields.io/github/release-date/danhunsaker/calends.svg?style=for-the-badge
+   .. |GitHub Release Date| image:: https://img.shields.io/github/release-date/danhunsaker/calends.png?style=for-the-badge
       :target: https://github.com/danhunsaker/calends
       :alt: GitHub Release Date
-   .. |Github commits (since latest release)| image:: https://img.shields.io/github/commits-since/danhunsaker/calends/latest.svg?style=flat-square
+   .. |Github commits (since latest release)| image:: https://img.shields.io/github/commits-since/danhunsaker/calends/latest.png?style=flat-square
       :target: https://github.com/danhunsaker/calends
       :alt: Github commits (since latest release)
-   .. |GitHub last commit| image:: https://img.shields.io/github/last-commit/danhunsaker/calends.svg?style=flat-square
+   .. |GitHub last commit| image:: https://img.shields.io/github/last-commit/danhunsaker/calends.png?style=flat-square
       :target: https://github.com/danhunsaker/calends
       :alt: GitHub last commit
-   .. |Maintenance Status| image:: https://img.shields.io/maintenance/yes/2018.svg?style=flat-square
+   .. |Maintenance Status| image:: https://img.shields.io/maintenance/yes/2018.png?style=flat-square
       :target: https://github.com/danhunsaker/calends
       :alt: Maintenance Status
-   .. |Travis Build Status| image:: https://img.shields.io/travis/danhunsaker/calends.svg?style=flat-square
+   .. |Travis Build Status| image:: https://img.shields.io/travis/danhunsaker/calends.png?style=flat-square
       :target: https://travis-ci.org/danhunsaker/calends
       :alt: Travis Build Status
-   .. |Codecov coverage| image:: https://img.shields.io/codecov/c/github/danhunsaker/calends.svg?style=flat-square
+   .. |Codecov coverage| image:: https://img.shields.io/codecov/c/github/danhunsaker/calends.png?style=flat-square
       :target: https://codecov.io/gh/danhunsaker/calends
       :alt: Codecov coverage
-   .. |Scrutinizer Code Quality| image:: https://img.shields.io/scrutinizer/g/danhunsaker/calends.svg?style=flat-square
+   .. |Scrutinizer Code Quality| image:: https://img.shields.io/scrutinizer/g/danhunsaker/calends.png?style=flat-square
       :target: https://scrutinizer-ci.com/g/danhunsaker/calends/
       :alt: Scrutinizer Code Quality
    .. |Go Report Card| image:: https://goreportcard.com/badge/github.com/danhunsaker/calends?style=flat-square
       :target: https://goreportcard.com/report/github.com/danhunsaker/calends
       :alt: Go Report Card
-   .. |Libraries.io Dependency Check| image:: https://img.shields.io/librariesio/github/danhunsaker/calends.svg?style=flat-square
+   .. |Libraries.io Dependency Check| image:: https://img.shields.io/librariesio/github/danhunsaker/calends.png?style=flat-square
       :target: https://libraries.io/github/danhunsaker/calends
       :alt: Libraries.io Dependency Check

@@ -1,10 +1,20 @@
 run.config:
   engine: php#option/no-default-cache-dirs
   engine.config:
-    runtime: php-7.1
+    runtime: php-7.0
     extensions:
+      - ctype
+      - gmp
       - json
+      - mbstring
+      - pdo
+      - pdo_sqlite
+      - zip
       - xml
+      - dom
+      - simplexml
+      - xmlwriter
+      - tokenizer
       - zephir_parser
   extra_packages:
     - go
@@ -31,7 +41,7 @@ run.config:
       pip install -I -r requirements.txt
     - |
       # Install Zephir
-      cd /data
+      cd /app/.gopath
       if [ ! -d zephir ]
       then
         git clone https://github.com/phalcon/zephir
@@ -40,7 +50,6 @@ run.config:
         cd zephir
         git pull
       fi
-      sed "s#%ZEPHIRDIR%#$(pwd)#g" bin/zephir > bin/zephir-cmd
-      chmod 755 bin/zephir-cmd
-      cp bin/zephir-cmd /data/bin/zephir
-      rm bin/zephir-cmd
+      composer install
+      sed "s#%ZEPHIRDIR%#$(pwd)#g" bin/zephir > /data/bin/zephir
+      chmod 0755 /data/bin/zephir

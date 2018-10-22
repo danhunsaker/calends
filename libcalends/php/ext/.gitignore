@@ -55,3 +55,4 @@ tests/**.log
 tests/*.sh
 tests/**.sh
 kernel/
+*.loT

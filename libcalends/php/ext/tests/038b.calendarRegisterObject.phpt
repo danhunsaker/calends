@@ -1,5 +1,5 @@
 --TEST--
-Calends\Calends::calendarRegister() Basic test
+Calends\Calends::calendarRegister() Basic Object test
 --SKIPIF--
 <?php
 if (!extension_loaded('calends')) {
@@ -10,21 +10,21 @@ if (!extension_loaded('calends')) {
 <?php
 	var_dump(Calends\Calends::calendarRegistered('test'));
 
-	class TestCalendar implements Calends\CalendarInterface {
-		static function toInternal($date, string $format): Calends\TAITime {
+	class TestCalendar implements Calends\CalendarObjectInterface {
+		function toInternal($date, string $format): Calends\TAITime {
 			return new Calends\TAITime();
 		}
 
-		static function fromInternal(Calends\TAITime $stamp, string $format): string {
+		function fromInternal(Calends\TAITime $stamp, string $format): string {
 			return "{$stamp->toString()}::{$format}";
 		}
 
-		static function offset(Calends\TAITime $stamp, $offset): Calends\TAITime {
+		function offset(Calends\TAITime $stamp, $offset): Calends\TAITime {
 			return $stamp;
 		}
 	}
 
-	Calends\Calends::calendarRegister('test', 'default', TestCalendar::class);
+	Calends\Calends::calendarRegister('test', 'default', new TestCalendar);
 
 	var_dump(Calends\Calends::calendarRegistered('test'));
 	var_dump(Calends\Calends::calendarListRegistered());

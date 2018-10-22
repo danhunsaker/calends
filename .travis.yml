@@ -3,6 +3,7 @@ language: go
 sudo: true
 
 go:
+  - 1.11.x
   - 1.10.x
   - 1.9.x
   - tip
@@ -17,13 +18,15 @@ addons:
 matrix:
   allow_failures:
     - language: php
+      php: '7.3'
+    - language: php
       php: '7.0'
     - language: php
-      php: 'nightly'
+      php: 'master'
   include:
     - &phpDefaults
       language: php
-      php: '7.2'
+      php: '7.3'
       before_install:
         - export ZEPHIR_VERSION="development"
         - export ZEPHIR_PARSER_VERSION="v1.1.2"
@@ -33,13 +36,14 @@ matrix:
       install:
         - git clone --depth=1 -v https://github.com/phalcon/zephir -b ${ZEPHIR_VERSION}
         - cd zephir
-        - bash ./unit-tests/ci/install-re2c $RE2C_VERSION
-        - bash ./unit-tests/ci/install_zephir_parser.sh
+        - bash ./unit-tests/ci/install-re2c.sh $RE2C_VERSION
+        - bash ./unit-tests/ci/install-zephir-parser.sh
+        - composer install
         - ./install -c
         - cd ..
       before_script:
         - |
-          GIMME_OUTPUT="$(gimme 1.10 | tee -a ${HOME}/.bashrc)" && eval "$GIMME_OUTPUT"
+          GIMME_OUTPUT="$(gimme 1.11 | tee -a ${HOME}/.bashrc)" && eval "$GIMME_OUTPUT"
           export GOPATH=${HOME}/gopath
           export PATH=${GOPATH}/bin:$PATH
           mkdir -p ${GOPATH}/src/github.com/danhunsaker/calends
@@ -47,13 +51,13 @@ matrix:
           export TRAVIS_BUILD_DIR=${GOPATH}/src/github.com/danhunsaker/calends
         - |
           cd ${TRAVIS_BUILD_DIR}
-          go get -t -v ./...
+          go get -v -t ./...
         - |
           cd ${TRAVIS_BUILD_DIR}/libcalends
-          go build -o libcalends.so -buildmode=c-shared .
+          go build -v -o libcalends.so -buildmode=c-shared .
         - |
           cd ${TRAVIS_BUILD_DIR}/libcalends/php
-          zephir builddev -v
+          zephir builddev -v || (cat compile-errors.log; false)
         - echo "set auto-load safe-path /" > ~/.gdbinit
         - ulimit -c unlimited || true
         - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
@@ -65,13 +69,16 @@ matrix:
         - ${TRAVIS_BUILD_DIR}/tests/failed_test_info.sh
 
     - << : *phpDefaults
+      php: '7.2'
+
+    - << : *phpDefaults
       php: '7.1'
 
     - << : *phpDefaults
       php: '7.0'
 
     - << : *phpDefaults
-      php: 'nightly'
+      php: 'master'
 
 before_script:
   - echo "set auto-load safe-path /" > ~/.gdbinit
@@ -94,7 +101,7 @@ after_failure:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - |
-    if [[ -n ${TRAVIS_TAG} && ${TRAVIS_GO_VERSION} = '1.10.x' ]]
+    if [[ -n ${TRAVIS_TAG} && ${TRAVIS_GO_VERSION} = '1.11.x' ]]
     then
       set -e
       cd ${TRAVIS_BUILD_DIR}

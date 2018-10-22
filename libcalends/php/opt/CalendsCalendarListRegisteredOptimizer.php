@@ -30,8 +30,8 @@ class CalendsCalendarListRegisteredOptimizer extends OptimizerAbstract
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output($symbolVariable->getRealName() . ' = ext_Calends_calendar_list_registered();');
+
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_Calends_calendar_list_registered();");
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
