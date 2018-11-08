@@ -965,7 +965,7 @@ void ext_Calends_release(zval *p_param) {
 TAI64Time ext_Calends_calendar_to_internal_string(char* name_param, char* date_param, char* format_param) {
   TAI64Time out;
   zval out_zval, name, date, format;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
 
   ZVAL_UNDEF(&out_zval);
@@ -975,6 +975,7 @@ TAI64Time ext_Calends_calendar_to_internal_string(char* name_param, char* date_p
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -983,10 +984,13 @@ TAI64Time ext_Calends_calendar_to_internal_string(char* name_param, char* date_p
   ZVAL_STRING(&format, format_param);
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 5 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("toInternal"), PH_NOISY, "calends/calendarinterface.zep", 5 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 5 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("toInternal"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 5 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &date, &format);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &date);
+  zephir_array_fast_append(&args, &format);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
 	out = Z_TAITIME(out_zval);
   ZEPHIR_MM_RESTORE();
@@ -996,8 +1000,9 @@ TAI64Time ext_Calends_calendar_to_internal_string(char* name_param, char* date_p
 TAI64Time ext_Calends_calendar_to_internal_long_long(char* name_param, long long int date_param, char* format_param) {
   TAI64Time out;
   zval out_zval, name, date, format;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
+
   ZVAL_UNDEF(&out_zval);
   ZVAL_UNDEF(&name);
   ZVAL_UNDEF(&date);
@@ -1005,6 +1010,7 @@ TAI64Time ext_Calends_calendar_to_internal_long_long(char* name_param, long long
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -1013,10 +1019,13 @@ TAI64Time ext_Calends_calendar_to_internal_long_long(char* name_param, long long
   ZVAL_STRING(&format, format_param);
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 5 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("toInternal"), PH_NOISY, "calends/calendarinterface.zep", 5 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 5 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("toInternal"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 5 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &date, &format);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &date);
+  zephir_array_fast_append(&args, &format);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
 	out = Z_TAITIME(out_zval);
   ZEPHIR_MM_RESTORE();
@@ -1026,7 +1035,7 @@ TAI64Time ext_Calends_calendar_to_internal_long_long(char* name_param, long long
 TAI64Time ext_Calends_calendar_to_internal_double(char* name_param, double date_param, char* format_param) {
   TAI64Time out;
   zval out_zval, name, date, format;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
 
   ZVAL_UNDEF(&out_zval);
@@ -1036,6 +1045,7 @@ TAI64Time ext_Calends_calendar_to_internal_double(char* name_param, double date_
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -1044,10 +1054,13 @@ TAI64Time ext_Calends_calendar_to_internal_double(char* name_param, double date_
   ZVAL_STRING(&format, format_param);
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 5 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("toInternal"), PH_NOISY, "calends/calendarinterface.zep", 5 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 5 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("toInternal"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 5 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &date, &format);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &date);
+  zephir_array_fast_append(&args, &format);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
 	out = Z_TAITIME(out_zval);
   ZEPHIR_MM_RESTORE();
@@ -1057,8 +1070,9 @@ TAI64Time ext_Calends_calendar_to_internal_double(char* name_param, double date_
 TAI64Time ext_Calends_calendar_to_internal_tai(char* name_param, TAI64Time date_param) {
   TAI64Time out;
   zval out_zval, name, date, format;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
+
   ZVAL_UNDEF(&out_zval);
   ZVAL_UNDEF(&name);
   ZVAL_UNDEF(&date);
@@ -1066,6 +1080,7 @@ TAI64Time ext_Calends_calendar_to_internal_tai(char* name_param, TAI64Time date_
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -1074,10 +1089,13 @@ TAI64Time ext_Calends_calendar_to_internal_tai(char* name_param, TAI64Time date_
   ZVAL_STRING(&format, "");
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 5 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("toInternal"), PH_NOISY, "calends/calendarinterface.zep", 5 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 5 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("toInternal"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 5 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &date, &format);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &date);
+  zephir_array_fast_append(&args, &format);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
 	out = Z_TAITIME(out_zval);
   ZEPHIR_MM_RESTORE();
@@ -1087,7 +1105,7 @@ TAI64Time ext_Calends_calendar_to_internal_tai(char* name_param, TAI64Time date_
 char* ext_Calends_calendar_from_internal(char* name_param, TAI64Time stamp_param, char* format_param) {
   char *out;
   zval out_zval, name, stamp, format;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
 
   ZVAL_UNDEF(&out_zval);
@@ -1097,6 +1115,7 @@ char* ext_Calends_calendar_from_internal(char* name_param, TAI64Time stamp_param
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -1105,10 +1124,13 @@ char* ext_Calends_calendar_from_internal(char* name_param, TAI64Time stamp_param
   ZVAL_STRING(&format, format_param);
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 7 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("fromInternal"), PH_NOISY, "calends/calendarinterface.zep", 7 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 7 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("fromInternal"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 7 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &stamp, &format);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &stamp);
+  zephir_array_fast_append(&args, &format);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
 	out = ZSTR_VAL(Z_STR(out_zval));
   ZEPHIR_MM_RESTORE();
@@ -1118,7 +1140,7 @@ char* ext_Calends_calendar_from_internal(char* name_param, TAI64Time stamp_param
 TAI64Time ext_Calends_calendar_offset_string(char* name_param, TAI64Time stamp_param, char* offset_param) {
   TAI64Time out;
   zval out_zval, name, stamp, offset;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
 
   ZVAL_UNDEF(&out_zval);
@@ -1128,6 +1150,7 @@ TAI64Time ext_Calends_calendar_offset_string(char* name_param, TAI64Time stamp_p
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -1136,10 +1159,13 @@ TAI64Time ext_Calends_calendar_offset_string(char* name_param, TAI64Time stamp_p
   ZVAL_STRING(&offset, offset_param);
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 9 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("offset"), PH_NOISY, "calends/calendarinterface.zep", 9 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 9 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("offset"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 9 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &stamp, &offset);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &stamp);
+  zephir_array_fast_append(&args, &offset);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
 	out = Z_TAITIME(out_zval);
   ZEPHIR_MM_RESTORE();
@@ -1149,7 +1175,7 @@ TAI64Time ext_Calends_calendar_offset_string(char* name_param, TAI64Time stamp_p
 TAI64Time ext_Calends_calendar_offset_long_long(char* name_param, TAI64Time stamp_param, long long int offset_param) {
   TAI64Time out;
   zval out_zval, name, stamp, offset;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
 
   ZVAL_UNDEF(&out_zval);
@@ -1159,6 +1185,7 @@ TAI64Time ext_Calends_calendar_offset_long_long(char* name_param, TAI64Time stam
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -1167,10 +1194,13 @@ TAI64Time ext_Calends_calendar_offset_long_long(char* name_param, TAI64Time stam
   ZVAL_DOUBLE(&offset, offset_param);
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 9 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("offset"), PH_NOISY, "calends/calendarinterface.zep", 9 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 9 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("offset"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 9 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &stamp, &offset);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &stamp);
+  zephir_array_fast_append(&args, &offset);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
 	out = Z_TAITIME(out_zval);
   ZEPHIR_MM_RESTORE();
@@ -1180,7 +1210,7 @@ TAI64Time ext_Calends_calendar_offset_long_long(char* name_param, TAI64Time stam
 TAI64Time ext_Calends_calendar_offset_double(char* name_param, TAI64Time stamp_param, double offset_param) {
   TAI64Time out;
   zval out_zval, name, stamp, offset;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
 
   ZVAL_UNDEF(&out_zval);
@@ -1190,6 +1220,7 @@ TAI64Time ext_Calends_calendar_offset_double(char* name_param, TAI64Time stamp_p
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -1198,10 +1229,13 @@ TAI64Time ext_Calends_calendar_offset_double(char* name_param, TAI64Time stamp_p
   ZVAL_DOUBLE(&offset, offset_param);
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 9 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("offset"), PH_NOISY, "calends/calendarinterface.zep", 9 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 9 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("offset"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 9 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &stamp, &offset);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &stamp);
+  zephir_array_fast_append(&args, &offset);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
 	out = Z_TAITIME(out_zval);
   ZEPHIR_MM_RESTORE();
@@ -1211,7 +1245,7 @@ TAI64Time ext_Calends_calendar_offset_double(char* name_param, TAI64Time stamp_p
 TAI64Time ext_Calends_calendar_offset_tai(char* name_param, TAI64Time stamp_param, TAI64Time offset_param) {
   TAI64Time out;
   zval out_zval, name, stamp, offset;
-  zval calendar_list, func_list, func;
+  zval calendar_list, func_list, func, args;
   zend_long ZEPHIR_LAST_CALL_STATUS;
 
   ZVAL_UNDEF(&out_zval);
@@ -1221,6 +1255,7 @@ TAI64Time ext_Calends_calendar_offset_tai(char* name_param, TAI64Time stamp_para
   ZVAL_UNDEF(&calendar_list);
   ZVAL_UNDEF(&func_list);
   ZVAL_UNDEF(&func);
+  ZVAL_UNDEF(&args);
 
   ZEPHIR_MM_GROW();
 
@@ -1229,10 +1264,13 @@ TAI64Time ext_Calends_calendar_offset_tai(char* name_param, TAI64Time stamp_para
   ZVAL_TAITIME(&offset, offset_param);
 
   zephir_read_static_property_ce(&calendar_list, calends_calends_ce, SL("calendars"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendarinterface.zep", 9 TSRMLS_CC);
-	zephir_array_fetch_string(&func, &func_list, SL("offset"), PH_NOISY, "calends/calendarinterface.zep", 9 TSRMLS_CC);
+	zephir_array_fetch(&func_list, &calendar_list, &name, PH_NOISY, "calends/calendar[object]interface.zep{calendar}", 9 TSRMLS_CC);
+	zephir_array_fetch_string(&func, &func_list, SL("offset"), PH_NOISY, "calends/calendar[object]interface.zep{method}", 9 TSRMLS_CC);
 
-  ZEPHIR_CALL_ZVAL_FUNCTION(&out_zval, &func, NULL, 0, &stamp, &offset);
+  zephir_create_array(&args, 0, 0);
+  zephir_array_fast_append(&args, &stamp);
+  zephir_array_fast_append(&args, &offset);
+  ZEPHIR_CALL_USER_FUNC_ARRAY(&out_zval, &func, &args);
 
   out = Z_TAITIME(out_zval);
   ZEPHIR_MM_RESTORE();

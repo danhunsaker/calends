@@ -18,8 +18,6 @@ addons:
 matrix:
   allow_failures:
     - language: php
-      php: '7.3'
-    - language: php
       php: '7.0'
     - language: php
       php: 'master'
@@ -29,7 +27,7 @@ matrix:
       php: '7.3'
       before_install:
         - export ZEPHIR_VERSION="development"
-        - export ZEPHIR_PARSER_VERSION="v1.1.2"
+        - export ZEPHIR_PARSER_VERSION="v1.1.3"
         - export RE2C_VERSION=1.0.3
         - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
         - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
