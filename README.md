@@ -1,6 +1,7 @@
 # Calends
 
 [![Software License](https://img.shields.io/github/license/danhunsaker/calends.svg?style=for-the-badge)](LICENSE)
+[![Liberapay receiving](https://img.shields.io/liberapay/receives/danhunsaker.svg?style=flat-square)](https://liberapay.com/danhunsaker/)
 [![Main Docs](https://img.shields.io/readthedocs/calends.svg?label=main+docs&style=for-the-badge)](https://calends.readthedocs.io/)
 [![GoDoc Reference](https://img.shields.io/badge/GoDoc-reference-brightgreen.svg?style=flat-square)](https://godoc.org/github.com/danhunsaker/calends)
 [![Gitter Chat](https://img.shields.io/gitter/room/danhunsaker/calends.svg?style=flat-square)](https://gitter.im/danhunsaker/calends)

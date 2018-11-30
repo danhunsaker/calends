@@ -1,0 +1,5 @@
+files:
+  - source: /docs/**/*.rst
+    ignore:
+      - /docs/translations
+    translation: /docs/translations/%locale%/**/%original_file_name%
