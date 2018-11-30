@@ -3,29 +3,29 @@
 .. index::
    pair: installation; C/C++
 
-Installing Calends for C/C++
+Calends jom C/C++
 ============================
 
-Binary Install
+binary jom
 --------------
 
-For use with C/C++, simply grab the latest version of ``libcalends`` from the
-`GitHub Releases page <https://github.com/danhunsaker/calends/releases>`_, and
-extract its contents wherever your compiler expects to find ``.h`` and
-``.so``/``.dll`` files. Be sure to grab the correct version for your
+Qo'noS lo' C/C++, simply latest version ``libcalends`` grab vo'
+github Releases page <https://github.com/danhunsaker/calends/releases>_, 'ej
+'a ghIH extract wherever ``.h`` tu' pIH compiler je
+``.so``/``.dll`` teywI'. be lugh version grab
 architecture!
 
-Source Install
+Hal jom
 --------------
 
-To install from source, you'll need Golang 1.9+ installed to use its compiler.
-Clone the repository, build ``libcalends``, then copy the resulting
-``.so``/``.dll`` and ``.h`` files to wherever your C/C++ compiler expects to
-find them.
+jom vo' Hal, golang 1.9 + compiler lo' jom bImejnIS.
+repository clone, ``libcalends`` qach, vaj ghot'e' copy
+teywI' ``.so``/``.dll``, ``.h`` 'ej wherever pIH C/C++ compiler
+chaH vItu'.
 
 .. code-block:: bash
 
-   # Sample Linux steps:
+   # vIlopQo' jay' sample linux mIw:
    mkdir -p $GOPATH/src/github.com/danhunsaker
    cd $GOPATH/src/github.com/danhunsaker
    git clone https://github.com/danhunsaker/calends
@@ -33,4 +33,4 @@ find them.
    go get ../...
    go build -v -i -buildmode=c-shared -o libcalends.so
 
-Adjust the above example commands as needed for your actual development OS.
+wovbe' example ra' lIS Hoch nIS actual development os.
