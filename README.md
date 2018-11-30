@@ -1,7 +1,6 @@
 # Calends
 
 [![Software License](https://img.shields.io/github/license/danhunsaker/calends.svg?style=for-the-badge)](LICENSE)
-[![Liberapay receiving](https://img.shields.io/liberapay/receives/danhunsaker.svg?style=flat-square)](https://liberapay.com/danhunsaker/)
 [![Main Docs](https://img.shields.io/readthedocs/calends.svg?label=main+docs&style=for-the-badge)](https://calends.readthedocs.io/)
 [![GoDoc Reference](https://img.shields.io/badge/GoDoc-reference-brightgreen.svg?style=flat-square)](https://godoc.org/github.com/danhunsaker/calends)
 [![Gitter Chat](https://img.shields.io/gitter/room/danhunsaker/calends.svg?style=flat-square)](https://gitter.im/danhunsaker/calends)
@@ -18,6 +17,9 @@
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/danhunsaker/calends.svg?style=flat-square)](https://scrutinizer-ci.com/g/danhunsaker/calends/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/danhunsaker/calends?style=flat-square)](https://goreportcard.com/report/github.com/danhunsaker/calends)
 ￼[![Libraries.io Dependency Check](https://img.shields.io/librariesio/github/danhunsaker/calends.svg?style=flat-square)](https://libraries.io/github/danhunsaker/calends)
+
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/calends/localized.svg)](https://crowdin.com/project/calends)
+[![Liberapay receiving](https://img.shields.io/liberapay/receives/danhunsaker.svg?style=flat-square)](https://liberapay.com/danhunsaker/)
 
 A library for handling dates and times across arbitrary calendar systems
 

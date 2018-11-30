@@ -38,7 +38,7 @@ run.config:
     - |
       # Set up Sphinx documentation support
       pip install --upgrade pip
-      pip install -I -r requirements.txt
+      pip install -I -r doc-requirements.txt
     - |
       # Install Zephir
       cd /app/.gopath
