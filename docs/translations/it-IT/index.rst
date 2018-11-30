@@ -17,6 +17,8 @@ Calends: Documented
    |Maintenance Status| |Travis Build Status| |Codecov coverage|
    |Scrutinizer Code Quality| |Go Report Card| |Libraries.io Dependency Check|
 
+   |Crowdin| |Liberapay receiving|
+
 Calends is a library for handling dates and times across arbitrary calendar
 systems. It has a number of features essential to handling dates and times in
 any supported system, as well as the ability to add support for more systems
@@ -95,3 +97,9 @@ Appendix
    .. |Libraries.io Dependency Check| image:: https://img.shields.io/librariesio/github/danhunsaker/calends.png?style=flat-square
       :target: https://libraries.io/github/danhunsaker/calends
       :alt: Libraries.io Dependency Check
+   .. |Crowdin| image:: https://d322cqt584bo4o.cloudfront.net/calends/localized.svg
+      :target: https://crowdin.com/project/calends
+      :alt: Crowdin Translations Status
+   .. |Liberapay receiving| image:: https://img.shields.io/liberapay/receives/danhunsaker.svg?style=flat-square
+      :target: https://liberapay.com/danhunsaker/
+      :alt: Liberapay Donations (Receiving)
