@@ -1,9 +1,9 @@
 .. _custom-calendars-c:
 
 .. index::
-   pair: custom calendars; C/C++
+   pair: tIgh 'ISjaH; C/C++
 
-Custom Calendars in C/C++
+tIgh 'ISjaH qaStaHvIS C/C++
 =========================
 
 Adding new calendars to Calends is a fairly straightforward process. Implement a
