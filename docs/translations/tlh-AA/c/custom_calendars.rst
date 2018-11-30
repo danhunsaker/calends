@@ -12,7 +12,7 @@ handful of functions, and then simply pass them to the registration function.
 Define
 ------
 
-The functions in question look like this:
+'eH Qap je yu' rur ghu'vam:
 
 .. c:function:: TAI64Time Calends_calendar_to_internal_string(char* calendar, char* date, char* format)
                 TAI64Time Calends_calendar_to_internal_long_long(char* calendar, long long int date, char* format)
