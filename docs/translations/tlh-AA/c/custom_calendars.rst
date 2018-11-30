@@ -1,7 +1,7 @@
 .. _custom-calendars-c:
 
 .. index::
-   pair: tIgh 'ISjaH; C/C++
+   pair: custom calendars; C/C++
 
 tIgh 'ISjaH qaStaHvIS C/C++
 =========================
