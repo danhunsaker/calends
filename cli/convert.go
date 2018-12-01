@@ -11,7 +11,7 @@ import (
 
 func init() {
 	commands = append(commands, []cli.Command{
-		cli.Command{
+		{
 			Name:      "convert",
 			Usage:     "convert a date/time from one calendar and format to another",
 			ArgsUsage: "<from-calendar> <from-format> <to-calendar> <to-format> [<date>]",
@@ -21,10 +21,10 @@ func init() {
 					return errArgMismatch
 				}
 
-				in_cal := c.Args()[0]
-				in_form := c.Args()[1]
-				out_cal := c.Args()[2]
-				out_form := c.Args()[3]
+				inCal := c.Args()[0]
+				inForm := c.Args()[1]
+				outCal := c.Args()[2]
+				outForm := c.Args()[3]
 				date := ""
 				if c.NArg() == 5 {
 					date = c.Args()[4]
@@ -35,12 +35,12 @@ func init() {
 					}
 				}
 
-				moment, err := calends.Create(date, in_cal, in_form)
+				moment, err := calends.Create(date, inCal, inForm)
 				if err != nil {
 					return cli.NewExitError(err, 2)
 				}
 
-				output, err := moment.Date(out_cal, out_form)
+				output, err := moment.Date(outCal, outForm)
 				if err != nil {
 					return cli.NewExitError(err, 2)
 				}

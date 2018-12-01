@@ -12,7 +12,7 @@ import (
 
 func init() {
 	commands = append(commands, []cli.Command{
-		cli.Command{
+		{
 			Name:      "format",
 			Usage:     "format a timestamp in a given calendar system and format",
 			ArgsUsage: "<to-calendar> <to-format> [<stamp>]",
@@ -22,8 +22,8 @@ func init() {
 					return errArgMismatch
 				}
 
-				out_cal := c.Args()[0]
-				out_form := c.Args()[1]
+				outCal := c.Args()[0]
+				outForm := c.Args()[1]
 				stamp := ""
 				if c.NArg() == 3 {
 					stamp = c.Args()[2]
@@ -40,7 +40,7 @@ func init() {
 					return cli.NewExitError(err, 2)
 				}
 
-				output, err := moment.Date(out_cal, out_form)
+				output, err := moment.Date(outCal, outForm)
 				if err != nil {
 					return cli.NewExitError(err, 2)
 				}

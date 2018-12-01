@@ -30,7 +30,7 @@ var completionStatesList = func(arg string) (list []string) {
 	return
 }
 
-// Main logic
+// Console contains the main logic for batch mode
 var Console = func(c *cli.Context) error {
 	completions = append(
 		completions,

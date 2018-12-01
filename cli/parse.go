@@ -12,7 +12,7 @@ import (
 
 func init() {
 	commands = append(commands, []cli.Command{
-		cli.Command{
+		{
 			Name:      "parse",
 			Usage:     "parse a date/time given a calendar system and format",
 			ArgsUsage: "<from-calendar> <from-format> [<date>]",
@@ -22,8 +22,8 @@ func init() {
 					return errArgMismatch
 				}
 
-				in_cal := c.Args()[0]
-				in_form := c.Args()[1]
+				inCal := c.Args()[0]
+				inForm := c.Args()[1]
 				date := ""
 				if c.NArg() == 3 {
 					date = c.Args()[2]
@@ -34,7 +34,7 @@ func init() {
 					}
 				}
 
-				moment, err := calends.Create(date, in_cal, in_form)
+				moment, err := calends.Create(date, inCal, inForm)
 				if err != nil {
 					return cli.NewExitError(err, 2)
 				}

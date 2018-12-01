@@ -13,7 +13,7 @@ import (
 
 func init() {
 	commands = append(commands, []cli.Command{
-		cli.Command{
+		{
 			Name:      "compare",
 			Usage:     "compare two timestamps using a given comparison method",
 			ArgsUsage: "<method> [<stamp1> [<stamp2>]]",

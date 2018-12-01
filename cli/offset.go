@@ -12,7 +12,7 @@ import (
 
 func init() {
 	commands = append(commands, []cli.Command{
-		cli.Command{
+		{
 			Name:      "offset",
 			Usage:     "adjusts a timestamp by an offset in a given calendar",
 			ArgsUsage: "<offset-calendar> [<offset> [<stamp>]]",
@@ -22,7 +22,7 @@ func init() {
 					return errArgMismatch
 				}
 
-				off_cal := c.Args()[0]
+				offCal := c.Args()[0]
 				offset := ""
 				if c.NArg() > 1 {
 					offset = c.Args()[1]
@@ -48,7 +48,7 @@ func init() {
 					return cli.NewExitError(err, 2)
 				}
 
-				moment, err = moment.Add(offset, off_cal)
+				moment, err = moment.Add(offset, offCal)
 				if err != nil {
 					return cli.NewExitError(err, 2)
 				}

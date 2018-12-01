@@ -25,7 +25,7 @@ func main() {
 	app.Version = calends.Version
 	app.Compiled = time.Now()
 	app.Authors = []cli.Author{
-		cli.Author{
+		{
 			Name:  "Dan Hunsaker",
 			Email: "danhunsaker@gmail.com",
 		},
