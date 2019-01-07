@@ -30,5 +30,5 @@ core*
 !core*.go
 *~
 .build/
-
 .gopath/
+.zephir/

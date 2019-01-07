@@ -41,15 +41,4 @@ run.config:
       pip install -I -r doc-requirements.txt
     - |
       # Install Zephir
-      cd /app/.gopath
-      if [ ! -d zephir ]
-      then
-        git clone https://github.com/phalcon/zephir
-        cd zephir
-      else
-        cd zephir
-        git pull
-      fi
-      composer install
-      sed "s#%ZEPHIRDIR%#$(pwd)#g" bin/zephir > /data/bin/zephir
-      chmod 0755 /data/bin/zephir
+      composer global require phalcon/zephir

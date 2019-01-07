@@ -15,70 +15,6 @@ addons:
       - gdb
       - libpcre3-dev
 
-matrix:
-  allow_failures:
-    - language: php
-      php: '7.0'
-    - language: php
-      php: '7.1'
-  include:
-    - &phpDefaults
-      language: php
-      php: '7.3'
-      before_install:
-        - export ZEPHIR_VERSION="development"
-        - export ZEPHIR_PARSER_VERSION="v1.1.3"
-        - export RE2C_VERSION=1.0.3
-        - export BOX_VERSION=3.3.1
-        - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
-        - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
-      install:
-        - git clone --depth=1 -v https://github.com/phalcon/zephir -b ${ZEPHIR_VERSION}
-        - cd zephir
-        - bash ./.ci/install-prereqs.sh
-        - bash ./.ci/install-re2c.sh $RE2C_VERSION
-        - travis_retry composer install --ansi --prefer-dist --no-interaction --optimize-autoloader --no-suggest --no-progress
-        - ln -s $(pwd)/zephir ${HOME}/bin/zephir
-        - cd ..
-      before_script:
-        - |
-          GIMME_OUTPUT="$(gimme 1.11 | tee -a ${HOME}/.bashrc)" && eval "$GIMME_OUTPUT"
-          export GOPATH=${HOME}/gopath
-          export PATH=${GOPATH}/bin:$PATH
-          mkdir -p ${GOPATH}/src/github.com/danhunsaker/calends
-          rsync -az ${TRAVIS_BUILD_DIR}/ ${GOPATH}/src/github.com/danhunsaker/calends/
-          export TRAVIS_BUILD_DIR=${GOPATH}/src/github.com/danhunsaker/calends
-        - |
-          cd ${TRAVIS_BUILD_DIR}
-          go get -v -t ./...
-        - |
-          cd ${TRAVIS_BUILD_DIR}/libcalends
-          go build -v -o libcalends.so -buildmode=c-shared .
-        - |
-          cd ${TRAVIS_BUILD_DIR}/libcalends/php
-          zephir build --dev -v || (cat compile-errors.log; false)
-        - echo "set auto-load safe-path /" > ~/.gdbinit
-        - ulimit -c unlimited || true
-        - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
-        - sudo chmod +s $(which gdb)
-      script:
-        - |
-          cd ${TRAVIS_BUILD_DIR}/libcalends/php/ext
-          TRAVIS='' NO_INTERACTION=true php run-tests.php -P -d "extension=calends.so"
-        - ${TRAVIS_BUILD_DIR}/tests/failed_test_info.sh
-
-    - << : *phpDefaults
-      php: '7.2'
-
-    - << : *phpDefaults
-      php: '7.1'
-
-    - << : *phpDefaults
-      php: '7.0'
-
-    - << : *phpDefaults
-      php: 'master'
-
 before_script:
   - echo "set auto-load safe-path /" > ~/.gdbinit
   - ulimit -c unlimited || true
@@ -118,3 +54,56 @@ after_success:
           --file "${archive}"
       done
     fi
+
+jobs:
+  include:
+    - &phpDefaults
+      stage: PHP Extension
+      language: php
+      php: '7.3'
+      before_install:
+        - export ZEPHIR_VERSION="development"
+        - export ZEPHIR_PARSER_VERSION="v1.1.3"
+        - export RE2C_VERSION=1.0.3
+        - export BOX_VERSION=3.3.1
+        - export PHP_MAJOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 1)"
+        - export PHP_MINOR="$(`phpenv which php` -r 'echo phpversion();' | cut -d '.' -f 2)"
+      install:
+        - |
+          git clone --depth=1 -v https://github.com/phalcon/zephir -b ${ZEPHIR_VERSION}
+          cd zephir
+          bash ./.ci/install-re2c.sh $RE2C_VERSION
+          bash ./.ci/install-prereqs.sh
+          cd ..
+          composer global require phalcon/zephir
+          export PATH=${HOME}/.config/composer/vendor/bin:${PATH}
+        - |
+          GIMME_OUTPUT="$(gimme 1.11 | tee -a ${HOME}/.bashrc)" && eval "$GIMME_OUTPUT"
+          export GOPATH=${HOME}/gopath
+          export PATH=${GOPATH}/bin:${PATH}
+          mkdir -p ${GOPATH}/src/github.com/danhunsaker/calends
+          rsync -az ${TRAVIS_BUILD_DIR}/ ${GOPATH}/src/github.com/danhunsaker/calends/
+          export TRAVIS_BUILD_DIR=${GOPATH}/src/github.com/danhunsaker/calends
+      script:
+        - ${TRAVIS_BUILD_DIR}/tests/php.sh
+
+    - << : *phpDefaults
+      php: '7.2'
+
+    - << : *phpDefaults
+      php: '7.1'
+
+    - << : *phpDefaults
+      php: '7.0'
+
+    - << : *phpDefaults
+      php: 'master'
+
+matrix:
+  allow_failures:
+    - language: php
+      php: '7.0'
+    - language: php
+      php: '7.1'
+    - language: php
+      php: 'master'
