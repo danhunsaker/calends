@@ -1,8 +1,8 @@
 --TEST--
-Calends\Calends::calendarRegister() Basic Object test
+Calends\Calends::calendarRegister() Basic Object test (PHP 7.2+)
 --SKIPIF--
 <?php
-if (!extension_loaded('calends')) {
+if (version_compare(PHP_VERSION, '7.2', '<') || !extension_loaded('calends')) {
 	echo 'skip';
 }
 ?>

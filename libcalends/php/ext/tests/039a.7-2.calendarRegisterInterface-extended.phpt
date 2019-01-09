@@ -1,8 +1,8 @@
 --TEST--
-Calends\Calends::calendarRegister() Extended Object test
+Calends\Calends::calendarRegister() Extended Interface test (PHP 7.2+)
 --SKIPIF--
 <?php
-if (!extension_loaded('calends')) {
+if (version_compare(PHP_VERSION, '7.2', '<') || !extension_loaded('calends')) {
 	echo 'skip';
 }
 ?>
@@ -13,21 +13,21 @@ if (!extension_loaded('calends')) {
 		exit;
 	}
 
-	class TestCalendar implements Calends\CalendarObjectInterface {
-		function toInternal($date, string $format): Calends\TAITime {
+	class TestCalendar implements Calends\CalendarInterface {
+		static function toInternal($date, string $format): Calends\TAITime {
 			return new Calends\TAITime();
 		}
 
-		function fromInternal(Calends\TAITime $stamp, string $format): string {
+		static function fromInternal(Calends\TAITime $stamp, string $format): string {
 			return "{$stamp->toString()}::{$format}";
 		}
 
-		function offset(Calends\TAITime $stamp, $offset): Calends\TAITime {
+		static function offset(Calends\TAITime $stamp, $offset): Calends\TAITime {
 			return $stamp;
 		}
 	}
 
-	Calends\Calends::calendarRegister('test', 'default', new TestCalendar);
+	Calends\Calends::calendarRegister('test', 'default', TestCalendar::class);
 
 	if (!Calends\Calends::calendarRegistered('test')) {
 		echo "Calendar not registered!";

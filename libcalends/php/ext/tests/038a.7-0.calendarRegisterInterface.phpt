@@ -1,8 +1,8 @@
 --TEST--
-Calends\Calends::calendarRegister() Basic Interface test
+Calends\Calends::calendarRegister() Basic Interface test (PHP 7.0-7.1)
 --SKIPIF--
 <?php
-if (!extension_loaded('calends')) {
+if (version_compare(PHP_VERSION, '7.2', '>=') || !extension_loaded('calends')) {
 	echo 'skip';
 }
 ?>
@@ -11,11 +11,11 @@ if (!extension_loaded('calends')) {
 	var_dump(Calends\Calends::calendarRegistered('test'));
 
 	class TestCalendar implements Calends\CalendarInterface {
-		static function toInternal($date, string $format): Calends\TAITime {
+		static function toInternal($date, $format): Calends\TAITime {
 			return new Calends\TAITime();
 		}
 
-		static function fromInternal(Calends\TAITime $stamp, string $format): string {
+		static function fromInternal(Calends\TAITime $stamp, $format): string {
 			return "{$stamp->toString()}::{$format}";
 		}
 

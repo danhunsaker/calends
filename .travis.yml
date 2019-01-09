@@ -1,3 +1,5 @@
+stage: Golang/Core
+
 language: go
 
 sudo: true
@@ -36,7 +38,7 @@ after_failure:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - |
-    if [[ -n ${TRAVIS_TAG} && ${TRAVIS_GO_VERSION} = '1.11.x' ]]
+    if [[ -n "${TRAVIS_TAG}" && "${TRAVIS_GO_VERSION}" = "1.11.x" && -z "${TRAVIS_PHP_VERSION}" ]]
     then
       set -e
       cd ${TRAVIS_BUILD_DIR}
@@ -58,7 +60,7 @@ after_success:
 jobs:
   include:
     - &phpDefaults
-      stage: PHP Extension
+      stage: PHP
       language: php
       php: '7.3'
       before_install:
