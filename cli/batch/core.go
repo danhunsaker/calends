@@ -1,3 +1,5 @@
+// Package cli/batch creates the batch operations interface to the calends
+// library.
 package batch
 
 import (

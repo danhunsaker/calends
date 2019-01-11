@@ -1,4 +1,4 @@
-// GREIORIAN CALENDAR
+// GREGORIAN CALENDAR
 /*
 
 Supports dates and times in the Gregorian calendar system, the current

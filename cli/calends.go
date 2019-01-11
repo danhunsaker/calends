@@ -1,3 +1,4 @@
+// Package cli creates the command-line interface to the calends library.
 package main
 
 import (

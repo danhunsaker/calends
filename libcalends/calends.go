@@ -1,3 +1,5 @@
+// Package libcalends exports the calends library for use by C/C++, and thereby
+// other programming languages.
 package main
 
 //char* Calends_version;
