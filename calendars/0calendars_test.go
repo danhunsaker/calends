@@ -42,10 +42,10 @@ func init() {
 
 func TestRegisterClass(t *testing.T) {
 	instance := testCalendarClass{}
-	RegisterClass("testCalendarClass", instance, instance.DefaultFormat)
+	RegisterObject("testCalendarClass", instance, instance.DefaultFormat)
 
 	if !Registered("testCalendarClass") {
-		t.Errorf("RegisterClass(%#v, %#v) failed", "testCalendarClass", instance)
+		t.Errorf("RegisterObject(%#v, %#v) failed", "testCalendarClass", instance)
 	}
 }
 
@@ -59,10 +59,10 @@ func TestRegisterElements(t *testing.T) {
 
 func TestUnregister(t *testing.T) {
 	instance := testCalendarClass{}
-	RegisterClass("testCalendarClass", instance, instance.DefaultFormat)
+	RegisterObject("testCalendarClass", instance, instance.DefaultFormat)
 
 	if !Registered("testCalendarClass") {
-		t.Errorf("RegisterClass(%#v, %#v) failed", "testCalendarClass", instance)
+		t.Errorf("RegisterObject(%#v, %#v) failed", "testCalendarClass", instance)
 	}
 
 	Unregister("testCalendarClass")
@@ -78,7 +78,7 @@ func TestRegistered(t *testing.T) {
 	}
 
 	instance := testCalendarClass{"test"}
-	RegisterClass("testCalendar", instance, instance.DefaultFormat)
+	RegisterObject("testCalendar", instance, instance.DefaultFormat)
 
 	if !Registered("testCalendar") {
 		t.Errorf("Registered(testCalendar) failed - the calendar should be registered before the test ends")
@@ -97,7 +97,7 @@ func TestListRegistered(t *testing.T) {
 	}
 
 	instance := testCalendarClass{"test"}
-	RegisterClass("teSt CaLenDar", instance, instance.DefaultFormat)
+	RegisterObject("teSt CaLenDar", instance, instance.DefaultFormat)
 
 	got = ListRegistered()
 	want = []string{"Gregorian", "Jdc", "Stardate", "Tai64", "TestCalendar", "Unix"}

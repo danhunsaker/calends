@@ -54,14 +54,14 @@ func ErrUnknownCalendar(calendar string) error {
 
 var registeredCalendars = make(map[string]calendarRegistration)
 
-// RegisterClass registers a calendar system class.
+// RegisterObject registers a calendar system object.
 /*
 
 Registers `definition` as `name`, and saves `defaultFormat` for later use while
 parsing or formatting.
 
 */
-func RegisterClass(name string, definition CalendarDefinition, defaultFormat string) {
+func RegisterObject(name string, definition CalendarDefinition, defaultFormat string) {
 	RegisterElements(name, definition.ToInternal, definition.FromInternal, definition.Offset, defaultFormat)
 }
 

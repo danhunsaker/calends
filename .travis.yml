@@ -46,14 +46,14 @@ after_success:
       go get github.com/aktau/github-release
       github-release info --user danhunsaker --repo calends --tag ${TRAVIS_TAG} || \
         github-release release --user danhunsaker --repo calends --tag ${TRAVIS_TAG} --draft
-      for archive in $(find dist/ -type f -name '*.tgz' -o -type f -name 'calends-*')
+      for asset in $(find dist/ -type f -name 'libcalends-*' -o -type f -name 'calends-*')
       do
         github-release upload \
           --user danhunsaker \
           --repo calends \
           --tag ${TRAVIS_TAG} \
-          --name "$(echo ${archive} | sed 's:dist/(bin/)?::;s/windows/win/;s/win-4.0/win-nt/;s/win-6.0/win-vista/;s/win-6.1/win-7/;s/win-6.3/win-8.1/;s/win-10.0/win-10/;s/darwin/mac-os/')" \
-          --file "${archive}"
+          --name "$(echo ${asset} | sed 's:dist/(bin/)?::;s/windows/win/;s/win-4.0/win-nt/;s/win-6.0/win-vista/;s/win-6.1/win-7/;s/win-6.3/win-8.1/;s/win-10.0/win-10/;s/darwin/mac-os/;s/arm-/armv/')" \
+          --file "${asset}"
       done
     fi
 

@@ -73,7 +73,7 @@ Once it is registered with the library, your calendar system can be used from
 anywhere in your application. To register a system, pass it to one of the
 following two functions:
 
-.. go:function:: func RegisterClass(name string, definition CalendarDefinition, defaultFormat string)
+.. go:function:: func RegisterObject(name string, definition CalendarDefinition, defaultFormat string)
 
    :param name: The name to register the calendar system under.
    :type name: :go:type:`string`

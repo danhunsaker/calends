@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/danhunsaker/calends"
-	"github.com/danhunsaker/calends/cli/batch"
 	"github.com/urfave/cli"
 )
 
@@ -37,7 +36,7 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = commands
 	app.ExitErrHandler = handleExitError
-	app.Action = batch.Console
+	app.Action = defaultAction
 
 	// Make it go!!!!
 	app.Run(os.Args)

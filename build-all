@@ -24,6 +24,13 @@ do
   [ -e ${dir}.dylib ] && mv ${dir}.dylib ${dir}/libcalends.dylib
   # Windows
   [ -e ${dir}.dll ] && mv ${dir}.dll ${dir}/libcalends.dll
-  tar czf ${dir}.tgz -C ${dir} .
+
+  if [ -e ${dir}/libcalends.dll ]
+  then
+    zip ${dir}.zip ${dir}/*
+  else
+    tar czvf ${dir}.tgz -C ${dir} .
+  fi
+
   rm -rf ${dir}
 done
