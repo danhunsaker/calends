@@ -1,0 +1,69 @@
+// DYNAMIC CALENDAR
+/*
+
+Supports custom, user-defined calendar systems. Each calendar system is
+specified according to its components and rules for construction. More details
+can be found in the `dynamic` sub-package.
+
+Supported Input Types:
+  - string
+  - []byte
+  - int
+  - float64
+  - math/big.Float
+
+Supported Format Strings:
+  - varies by actual (user-defined) calendar system
+
+*/
+package calendars
+
+import (
+	"github.com/danhunsaker/calends/calendars/dynamic"
+)
+
+func init() {
+	for _, info := range loadCalendars() {
+		RegisterDynamic(info)
+	}
+}
+
+type dynamicCalendar struct {
+	info dynamic.Calendar
+}
+
+func loadCalendars() (list []dynamic.Calendar) {
+	return
+}
+
+func RegisterDynamic(info dynamic.Calendar) {
+	RegisterObject(
+		info.Name,
+		dynamicCalendar{info},
+		info.DefaultFormat.String,
+	)
+}
+
+func (dyCal dynamicCalendar) ToInternal(date interface{}, format string) (stamp TAI64NAXURTime, err error) {
+	time, err := dyCal.info.ToTimestamp(date, format)
+	if err != nil {
+		return
+	}
+
+	stamp = TAI64NAXURTimeFromFloat(*time)
+	return
+}
+
+func (dyCal dynamicCalendar) FromInternal(stamp TAI64NAXURTime, format string) (string, error) {
+	return dyCal.info.FromTimestamp(stamp.Float(), format)
+}
+
+func (dyCal dynamicCalendar) Offset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err error) {
+	time, err := dyCal.info.Offset(in.Float(), offset)
+	if err != nil {
+		return
+	}
+
+	out = TAI64NAXURTimeFromFloat(*time)
+	return
+}
