@@ -44,8 +44,8 @@ func RegisterDynamic(info dynamic.Calendar) {
 	)
 }
 
-func (dyCal dynamicCalendar) ToInternal(date interface{}, format string) (stamp TAI64NAXURTime, err error) {
-	time, err := dyCal.info.ToTimestamp(date, format)
+func (self dynamicCalendar) ToInternal(date interface{}, format string) (stamp TAI64NAXURTime, err error) {
+	time, err := self.info.ToTimestamp(date, format)
 	if err != nil {
 		return
 	}
@@ -54,12 +54,12 @@ func (dyCal dynamicCalendar) ToInternal(date interface{}, format string) (stamp 
 	return
 }
 
-func (dyCal dynamicCalendar) FromInternal(stamp TAI64NAXURTime, format string) (string, error) {
-	return dyCal.info.FromTimestamp(stamp.Float(), format)
+func (self dynamicCalendar) FromInternal(stamp TAI64NAXURTime, format string) (string, error) {
+	return self.info.FromTimestamp(stamp.Float(), format)
 }
 
-func (dyCal dynamicCalendar) Offset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err error) {
-	time, err := dyCal.info.Offset(in.Float(), offset)
+func (self dynamicCalendar) Offset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err error) {
+	time, err := self.info.Offset(in.Float(), offset)
 	if err != nil {
 		return
 	}

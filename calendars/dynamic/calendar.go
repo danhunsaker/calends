@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
+	"regexp"
+	"strconv"
 	// "strings"
 )
 
@@ -17,7 +19,7 @@ type Calendar struct {
 	Fragments     []*Fragment
 }
 
-func (c *Calendar) ToTimestamp(date interface{}, format string) (stamp *big.Float, err error) {
+func (self *Calendar) ToTimestamp(date interface{}, format string) (stamp *big.Float, err error) {
 	var dateString string
 
 	switch date.(type) {
@@ -39,17 +41,18 @@ func (c *Calendar) ToTimestamp(date interface{}, format string) (stamp *big.Floa
 		return
 	}
 
-	stamp = c.unitsToTime(c.dateToUnits(dateString, formatFromString(c, format)))
+	stamp = self.unitsToTime(self.dateToUnits(dateString, formatFromString(self, format)))
 
 	return
 }
 
-func (c *Calendar) FromTimestamp(stamp *big.Float, format string) (string, error) {
-	return c.unitsToDate(c.timeToUnits(stamp), formatFromString(c, format)), nil
+func (self *Calendar) FromTimestamp(stamp *big.Float, format string) (string, error) {
+	return self.unitsToDate(self.timeToUnits(stamp), formatFromString(self, format)), nil
 }
 
-func (c *Calendar) Offset(in *big.Float, offset interface{}) (out *big.Float, err error) {
+func (self *Calendar) Offset(in *big.Float, offset interface{}) (out *big.Float, err error) {
 	var offsetString string
+	var units map[string]int
 
 	switch offset.(type) {
 	case big.Float:
@@ -70,13 +73,16 @@ func (c *Calendar) Offset(in *big.Float, offset interface{}) (out *big.Float, er
 		return
 	}
 
-	out = c.unitsToTime(c.unitsWithOffset(c.timeToUnits(in), offsetString))
+	units, err = self.unitsWithOffset(self.timeToUnits(in), offsetString)
+	if err != nil {
+		out = self.unitsToTime(units)
+	}
 
 	return
 }
 
-func (c *Calendar) dateToUnits(in string, format *Format) (out map[string]int) {
-	formats := append([]*Format{format, c.DefaultFormat}, c.Formats...)
+func (self *Calendar) dateToUnits(in string, format *Format) (out map[string]int) {
+	formats := append([]*Format{format, self.DefaultFormat}, self.Formats...)
 
 	for _, f := range formats {
 		out, err := f.parse(in)
@@ -85,26 +91,73 @@ func (c *Calendar) dateToUnits(in string, format *Format) (out map[string]int) {
 		}
 	}
 
-	return c.epochUnits(true)
+	return self.epochUnits(true)
 }
 
-func (c *Calendar) unitsToDate(in map[string]int, format *Format) (out string) {
+func (self *Calendar) unitsToDate(in map[string]int, format *Format) (out string) {
+	return format.format(in)
+}
+
+func (self *Calendar) unitsWithOffset(in map[string]int, offset string) (out map[string]int, err error) {
+	var names map[string]int
+	var matchUnit *Unit
+	var matchValue int64
+
+	re := regexp.MustCompile("(?P<value>[-+]?[0-9]+)\\s*(?P<unit>\\S+)")
+	for idx, name := range re.SubexpNames() {
+		if name == "" {
+			continue
+		}
+		names[name] = idx
+	}
+
+	for _, match := range re.FindAllStringSubmatch(offset, -1) {
+		matchUnit = nil
+	FindUnit:
+		for _, unit := range self.Units {
+			if unit.InternalName == match[names["unit"]] {
+				matchUnit = unit
+				break FindUnit
+			}
+
+			for _, name := range unit.Names {
+				if name.UnitName == match[names["unit"]] {
+					matchUnit = unit
+					break FindUnit
+				}
+			}
+		}
+		if matchUnit == nil {
+			continue
+		}
+
+		matchValue, err = strconv.ParseInt(match[names["value"]], 0, 0)
+		if err != nil {
+			return
+		}
+
+		unitName, unitValue := matchUnit.reduceAuxiliary(int(matchValue))
+		if currentValue, ok := out[unitName]; ok {
+			unitValue += currentValue
+		}
+
+		out[unitName] = unitValue
+	}
+
+	out = self.BaseUnit.carryOver(out)
+
 	return
 }
 
-func (c *Calendar) unitsWithOffset(in map[string]int, offset string) (out map[string]int) {
-	return
+func (self *Calendar) unitsToTime(in map[string]int) *big.Float {
+	return self.BaseUnit.toSeconds(self.sumUnits(self.epochUnits(false), in))
 }
 
-func (c *Calendar) unitsToTime(in map[string]int) *big.Float {
-	return c.BaseUnit.toSeconds(c.sumUnits(c.epochUnits(false), in))
+func (self *Calendar) timeToUnits(in *big.Float) map[string]int {
+	return self.sumUnits(self.epochUnits(true), self.BaseUnit.fromSeconds(in))
 }
 
-func (c *Calendar) timeToUnits(in *big.Float) map[string]int {
-	return c.sumUnits(c.epochUnits(true), c.BaseUnit.fromSeconds(in))
-}
-
-func (c *Calendar) sumUnits(a, b map[string]int) (out map[string]int) {
+func (self *Calendar) sumUnits(a, b map[string]int) (out map[string]int) {
 	for aKey, aVal := range a {
 		out[aKey] = aVal
 
@@ -119,13 +172,13 @@ func (c *Calendar) sumUnits(a, b map[string]int) (out map[string]int) {
 		}
 	}
 
-	out = c.BaseUnit.carryOver(out)
+	out = self.BaseUnit.carryOver(out)
 
 	return
 }
 
-func (c *Calendar) epochUnits(positive bool) (out map[string]int) {
-	for _, unit := range c.Units {
+func (self *Calendar) epochUnits(positive bool) (out map[string]int) {
+	for _, unit := range self.Units {
 		if unit.IsAuxiliary {
 			continue
 		}
