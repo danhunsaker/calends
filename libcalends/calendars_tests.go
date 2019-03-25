@@ -65,6 +65,7 @@ TAI64Time test_Calends_calendar_offset_tai(char* calendar, TAI64Time stamp, TAI6
 import "C"
 
 import (
+	"io/ioutil"
 	"testing"
 )
 
@@ -103,7 +104,7 @@ func testCalends_calendar_register(t *testing.T) {
 	ret := Calends_calendar_registered(C.CString(in))
 	want := false
 	if bool(ret) != want {
-		t.Errorf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
+		t.Fatalf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
 	}
 
 	Calends_calendar_register(
@@ -123,7 +124,7 @@ func testCalends_calendar_register(t *testing.T) {
 	ret = Calends_calendar_registered(C.CString(in))
 	want = true
 	if bool(ret) != want {
-		t.Errorf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
+		t.Fatalf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
 	}
 
 	calRet := calends_create("", C.CString("test"), C.CString(""))
@@ -201,7 +202,7 @@ func testCalends_calendar_unregister(t *testing.T) {
 	ret := Calends_calendar_registered(C.CString(in))
 	want := true
 	if bool(ret) != want {
-		t.Errorf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
+		t.Fatalf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
 	}
 
 	Calends_calendar_unregister(C.CString("test"))
@@ -211,6 +212,40 @@ func testCalends_calendar_unregister(t *testing.T) {
 	want = false
 	if bool(ret) != want {
 		t.Errorf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
+	}
+}
+
+func testCalends_calendar_register_dynamic(t *testing.T) {
+	t.Helper()
+
+	if Calends_calendar_registered(C.CString("test")) {
+		Calends_calendar_unregister(C.CString("test"))
+	}
+
+	json, err:= ioutil.ReadFile("../tests/dynamic.json")
+	if err != nil {
+		t.Fatalf("Failed to load test dynamic calendar: %#v", err)
+	}
+	Calends_calendar_register_dynamic(C.CString(string(json)))
+
+	in := "test"
+	ret := Calends_calendar_registered(C.CString(in))
+	want := true
+	if bool(ret) != want {
+		t.Fatalf("Calends_calendar_registered(%#v) returned %#v; wanted %#v", in, bool(ret), want)
+	}
+
+	calRet := calends_create("", C.CString("test"), C.CString(""))
+	if _, ok := instances.Load(uint64(calRet)); uint64(calRet) < 1 || !ok {
+		t.Errorf("calends_create(%#v, %#v, %#v) returned invalid Calends object ID %#v", "", "test", "", uint64(calRet))
+	}
+	Calends_release(calRet)
+
+	zeroDate := calends_create("0", C.CString("tai64"), C.CString("decimal"))
+
+	str := Calends_date(zeroDate, C.CString("test"), C.CString(""))
+	if C.GoString(str) != "0-000.000000000" {
+		t.Errorf("Calends_date(%#v, %#v, %#v) returned %#v; wanted %#v", zeroDate, "test", "", C.GoString(str), "0-000.000000000")
 	}
 }
 

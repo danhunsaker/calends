@@ -62,6 +62,7 @@ import (
 	"unsafe"
 
 	"github.com/danhunsaker/calends/calendars"
+	"github.com/danhunsaker/calends/calendars/dynamic"
 	"github.com/go-errors/errors"
 )
 
@@ -85,6 +86,17 @@ func Calends_calendar_register(
 		wrapOffset(name, offsetString, offsetLongLong, offsetDouble, offsetTai),
 		C.GoString(defaultFormat),
 	)
+}
+
+//export Calends_calendar_register_dynamic
+func Calends_calendar_register_dynamic(json *C.char) {
+	defer handlePanic()
+	calendar := dynamic.Calendar{}
+	err := calendar.UnmarshalJSON([]byte(C.GoString(json)))
+	if err != nil {
+		panic(err)
+	}
+	calendars.RegisterDynamic(calendar)
 }
 
 //export Calends_calendar_unregister

@@ -49,6 +49,7 @@ documentation][full].
   - [ ] **Meso-American**
   - [ ] **Discordian**
   - [x] **Stardate**
+  - [ ] **Dynamic** (User-Defined)
 - [x] Encodes both time spans and instants in a single interface
 - [x] Supports calculations and comparisons on spans and instants
 - [ ] Conversion to/from native date/time types
@@ -79,13 +80,13 @@ how to add your own.
 
 ## Contributing
 
-Pull requests are always welcome! That said, please be open to discussing the PR
-content, and possibly revising it if requested. Not all requests can be merged,
-and not all changes are desired.
+Pull requests (via [GitHub][]) are always welcome! That said, please be open to
+discussing the PR content, and possibly revising it if requested. Not all
+requests can be merged, and not all changes are desired.
 
-Or, you can contribute some money, instead! Check out [my
-Patreon](https://www.patreon.com/DanHunsaker) for options, there. Other options
-will likely be added for one-time donations in the future.
+Or, you can contribute some money, instead! Check out my [Patreon][] or
+[Liberapay][] for options, there. Other options will likely be added for
+one-time donations in the future.
 
 ## Security Reporting
 
@@ -95,6 +96,8 @@ your message (the account's key is `44806AB9`, or you can look it up by the
 email address). Security issues will be addressed internally before making any
 vulnerability announcements.
 
-[GitHub]:https://github.com/danhunsaker/calends
-[TAI64]:http://cr.yp.to/libtai/tai64.html
-[full]:https://calends.readthedocs.io/
+[GitHub]: https://github.com/danhunsaker/calends
+[TAI64]: http://cr.yp.to/libtai/tai64.html
+[full]: https://calends.readthedocs.io/
+[Patreon]: https://www.patreon.com/DanHunsaker
+[Liberapay]: https://liberapay.com/danhunsaker/

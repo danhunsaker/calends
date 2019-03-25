@@ -75,6 +75,9 @@ For a current indication of which of these features are fully implemented at the
     * :ref:`Stardate <calendar-system-stardate>`
         Yes, the ones from :t:`Star Trek`\ ™; several variants exist
 
+    * :ref:`Dynamic <calendar-system-dynamic>`
+        User-defined calendars, which don't require writing any code
+
 * Encodes both time spans and instants in a single interface
     The library treats the time values it encodes as ``[start, end)`` sets (that
     is, the ``start`` point is included in the range, as is every point between

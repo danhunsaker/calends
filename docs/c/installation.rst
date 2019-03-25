@@ -6,6 +6,8 @@
 Installing Calends for C/C++
 ============================
 
+.. _installation-c-binary:
+
 Binary Install
 --------------
 
@@ -14,6 +16,8 @@ For use with C/C++, simply grab the latest version of ``libcalends`` from the
 extract its contents wherever your compiler expects to find ``.h`` and
 ``.so``/``.dll``/``.dylib`` files. Be sure to grab the correct version for your
 architecture!
+
+.. _installation-c-source:
 
 Source Install
 --------------

@@ -3,5 +3,5 @@ package dynamic
 import ()
 
 type Intercalation struct {
-  Calendar *Calendar
+  Calendar *Calendar `json:"-"`
 }

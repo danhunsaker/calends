@@ -1,44 +1,42 @@
 package dynamic
 
 import (
-	"errors"
 	"fmt"
 )
 
 type Format struct {
-	Calendar    *Calendar
-	Name        string
-	String      string
-	Description string
+	Calendar    *Calendar `json:"-"`
+	Name        string    `json:"name"`
+	String      string    `json:"string"`
+	Description string    `json:"description"`
 }
 
-func formatFromString(c *Calendar, in string) (out *Format) {
-	out.Calendar = c
-	out.Name = in
-	out.String = in
-	out.Description = "format from string"
+func (self *Calendar) formatFromString(in string) (*Format) {
+	out := Format{
+		Calendar: self,
+		Name: in,
+		String: in,
+		Description: "format from string",
+	}
 
-	return
+	return &out
 }
 
 func (self *Format) parse(in string) (out map[string]int, err error) {
+	out = make(map[string]int, 0)
 	fragments := self.getFragments()
 
 	start := 0
 	isEscaped := false
 	for _, character := range self.String {
+		if start >= len(in) {
+			break
+		}
+
 		if character == '\\' {
 			isEscaped = true
 			continue
-		}
-
-		if isEscaped && []rune(in[start:])[0] == character {
-			start += len(string(character))
-			isEscaped = false
-			continue
-		}
-
-		if fragment, ok := fragments[character]; !isEscaped && ok {
+		} else if fragment, ok := fragments[character]; !isEscaped && ok {
 			var unit string
 			var value, end int
 			unit, value, end, err = fragment.parse(string(in[start:]))
@@ -48,9 +46,13 @@ func (self *Format) parse(in string) (out map[string]int, err error) {
 			out[unit] = value
 			start += end
 			continue
+		} else if []rune(in[start:])[0] == character {
+			start += len(string(character))
+			isEscaped = false
+			continue
 		}
 
-		err = errors.New(fmt.Sprintf("Input %s doesn't match format %s", in, self.Name))
+		err = fmt.Errorf("Input %s doesn't match format %s", in, self.Name)
 		break
 	}
 
@@ -81,6 +83,7 @@ func (self *Format) format(in map[string]int) (out string) {
 }
 
 func (self *Format) getFragments() (fragments map[rune]*Fragment) {
+	fragments = make(map[rune]*Fragment, 0)
 	for _, character := range self.String {
 		for _, fragment := range self.Calendar.Fragments {
 			if fragment.Code == character {

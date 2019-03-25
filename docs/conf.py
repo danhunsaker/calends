@@ -26,7 +26,7 @@ author = 'Hennik Hunsaker'
 # The short X.Y version
 version = '0.1'
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = '0.1.1'
 
 
 # -- General configuration ---------------------------------------------------
@@ -74,7 +74,7 @@ gettext_compact = False
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path .
-exclude_patterns = ['.build', 'Thumbs.db', '.DS_Store', '.git']
+exclude_patterns = ['.build', 'Thumbs.db', '.DS_Store', '.git', 'translations']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -114,7 +114,7 @@ html_static_path = ['.static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Calendsdoc'
+htmlhelp_basename = 'Calends'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -142,7 +142,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'Calends.tex', 'Calends: Documented',
-     'Hennik Hunsaker', 'manual'),
+     author, 'manual'),
 ]
 
 
@@ -162,8 +162,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Calends', 'Calends: Documented',
-     author, 'Calends', 'One line description of project.',
+    (master_doc, 'Calends', 'Calends: Documented', author, project,
+     'A library for handling dates and times across arbitrary calendar systems.',
      'Miscellaneous'),
 ]
 

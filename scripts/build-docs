@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e
+
+docdir="$(readlink -f $(dirname $0)/../docs)"
+
+# Support files
+make -C $docdir linkcheck changes gettext
+
+# Actual docs
+make -C $docdir html singlehtml htmlhelp qthelp epub man info latex
+
+if which latexmk >/dev/null
+then
+	make -C $docdir latexpdf latexpdfja
+fi

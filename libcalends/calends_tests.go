@@ -234,6 +234,7 @@ func testNo_registered_panic_handler(t *testing.T) {
 	t.Helper()
 
 	defer handlePanic()
+	clearPanicHandlers(t)
 	main()
 }
 
@@ -241,6 +242,7 @@ func testCalends_register_panic_handler(t *testing.T) {
 	t.Helper()
 
 	defer handlePanic()
+	clearPanicHandlers(t)
 	Calends_register_panic_handler(C.Calends_panic_handler(C.test_Calends_panic_handler))
 	main()
 }
@@ -249,5 +251,15 @@ func testUnknown_error_in_panic_handler(t *testing.T) {
 	t.Helper()
 
 	defer handlePanic()
+	clearPanicHandlers(t)
 	panic(t)
+}
+
+func clearPanicHandlers(t *testing.T) {
+	t.Helper()
+
+	for i := range panicHandlers.All() {
+		panicHandlers.Delete(uint64(i))
+		t.Logf("Cleared panic handler %d", i)
+	}
 }

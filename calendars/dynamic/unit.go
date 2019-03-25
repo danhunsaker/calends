@@ -1,26 +1,28 @@
 package dynamic
 
 import (
+	"encoding/json"
 	"math/big"
 )
 
 type Unit struct {
-	Calendar     *Calendar
-	InternalName string
-	Names        []*UnitName
-	Lengths      []*UnitLength
-	Eras         []*Era
-	Formats      []*Fragment
-	ScalesToMe   []*Unit
-	ScaleTo      *Unit
-	ScaleAmount  int
-	ScaleInverse bool // true: ScaleAmount Units per ScaleTo (false: ScaleTos per Unit)
-	UsesZero     bool
-	UnixEpoch    int
-	IsAuxiliary  bool
+	Calendar     *Calendar     `json:"-"`
+	InternalName string        `json:"internal_name"`
+	Names        []*UnitName   `json:"names"`
+	Lengths      []*UnitLength `json:"lengths"`
+	Eras         []*Era        `json:"eras"`
+	Formats      []*Fragment   `json:"-"`
+	ScalesToMe   []*Unit       `json:"-"`
+	ScaleTo      *Unit         `json:"scale_to,name"`
+	ScaleAmount  int           `json:"scale_amount"`
+	ScaleInverse bool          `json:"scale_inverse"` // true if 1 ScaleTo is ScaleAmount Units
+	UsesZero     bool          `json:"uses_zero"`
+	UnixEpoch    int           `json:"unix_epoch"`
+	IsAuxiliary  bool          `json:"is_auxiliary"`
 }
 
 func (self *Unit) toSeconds(units map[string]int) (seconds *big.Float) {
+	seconds = big.NewFloat(0.0)
 	value, _ := self.consolidate(units)
 	seconds.SetString(value)
 
@@ -62,6 +64,7 @@ func (self *Unit) consolidate(in map[string]int) (name string, value int) {
 }
 
 func (self *Unit) fromSeconds(seconds *big.Float) (units map[string]int) {
+	units = make(map[string]int, 0)
 	var unitVal int64
 	var round big.Accuracy
 	if self.ScaleInverse {
@@ -205,6 +208,7 @@ func (self *Unit) reduceAuxiliary(in int) (name string, out int) {
 }
 
 func (self *Unit) scale(in *big.Float) (out *big.Float) {
+	out = big.NewFloat(0.0)
 	if self.ScaleAmount != 0 {
 		if self.ScaleInverse {
 			out.Quo(in, big.NewFloat(float64(self.ScaleAmount)))
@@ -246,4 +250,26 @@ func (self *Unit) scale(in *big.Float) (out *big.Float) {
 	}
 
 	return
+}
+
+func (self *Unit) MarshalJSON() ([]byte, error) {
+	object := map[string]interface{}{
+		"internal_name": self.InternalName,
+		"names":         self.Names,
+		"lengths":       self.Lengths,
+		"eras":          self.Eras,
+		"scale_amount":  self.ScaleAmount,
+		"scale_inverse": self.ScaleInverse,
+		"uses_zero":     self.UsesZero,
+		"unix_epoch":    self.UnixEpoch,
+		"is_auxiliary":  self.IsAuxiliary,
+	}
+
+	if self.ScaleTo != nil {
+		object["scale_to"] = self.ScaleTo.InternalName
+	} else {
+		object["scale_to"] = nil
+	}
+
+	return json.Marshal(object)
 }

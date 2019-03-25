@@ -3,7 +3,7 @@ package dynamic
 import ()
 
 type FragmentText struct {
-	Fragment *Fragment
-	Value    string
-	Text     string
+	Fragment *Fragment `json:"-"`
+	Value    int       `json:"value"`
+	Text     string    `json:"text"`
 }

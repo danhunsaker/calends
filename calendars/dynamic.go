@@ -22,17 +22,19 @@ import (
 	"github.com/danhunsaker/calends/calendars/dynamic"
 )
 
-func init() {
-	for _, info := range loadCalendars() {
-		RegisterDynamic(info)
-	}
-}
-
 type dynamicCalendar struct {
 	info dynamic.Calendar
 }
 
-func loadCalendars() (list []dynamic.Calendar) {
+func init() {
+	for _, info := range loadDynamicCalendars() {
+		RegisterDynamic(info)
+	}
+}
+
+func loadDynamicCalendars() (list []dynamic.Calendar) {
+	// need to explore DB options...
+	// use dynamic.Calendar.UnmarshalJSON() for this?
 	return
 }
 

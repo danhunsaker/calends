@@ -1,7 +1,7 @@
 run.config:
   engine: php#option/no-default-cache-dirs
   engine.config:
-    runtime: php-7.0
+    runtime: php-7.3
     extensions:
       - ctype
       - fileinfo
@@ -34,15 +34,15 @@ run.config:
     - |
       # Set up Go stuff
       export GOPATH=/app/.gopath
-      echo /app/.gopath > /data/etc/env.d/GOPATH
-      mkdir -p /app/.gopath/{bin,src/github.com/danhunsaker}
-      ln -sfT /app /app/.gopath/src/github.com/danhunsaker/calends
-      cd /app/.gopath/src/github.com/danhunsaker/calends
+      echo ${GOPATH} > /data/etc/env.d/GOPATH
+      mkdir -p ${GOPATH}/{bin,src/github.com/danhunsaker}
+      ln -sfT /app ${GOPATH}/src/github.com/danhunsaker/calends
+      cd ${GOPATH}/src/github.com/danhunsaker/calends
       GO111MODULE=on go get -t -v ./...
     - |
       # Set up Sphinx documentation support
       pip install --upgrade pip
-      pip install -I -r doc-requirements.txt
+      pip install -I -r doc-reqs.txt
     - |
       # Install Zephir
       wget -O zephir https://github.com/phalcon/zephir/releases/download/0.11.12/zephir.phar

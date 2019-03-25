@@ -97,6 +97,6 @@ Appendix
    .. |Crowdin| image:: https://d322cqt584bo4o.cloudfront.net/calends/localized.svg
       :target: https://crowdin.com/project/calends
       :alt: Crowdin Translations Status
-   .. |Liberapay receiving| image:: https://img.shields.io/liberapay/receives/danhunsaker.svg?style=flat-square
+   .. |Liberapay receiving| image:: https://img.shields.io/liberapay/receives/danhunsaker.png?style=flat-square
       :target: https://liberapay.com/danhunsaker/
       :alt: Liberapay Donations (Receiving)

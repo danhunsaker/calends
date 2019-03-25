@@ -1,16 +1,17 @@
 package dynamic
 
 import (
+	"encoding/json"
 	"strconv"
 )
 
 type Era struct {
-	Calendar     *Calendar
-	InternalName string
-	Unit         *Unit
-	Ranges       []*EraRange
-	DefaultRange *EraRange
-	Formats      []*Fragment
+	Calendar     *Calendar   `json:"-"`
+	InternalName string      `json:"internal_name"`
+	Unit         *Unit       `json:"-"`
+	Ranges       []*EraRange `json:"ranges"`
+	DefaultRange *EraRange   `json:"default_range,name"`
+	Formats      []*Fragment `json:"-"`
 }
 
 func (self *Era) unitValue(parsed map[string]string) (name string, value int) {
@@ -50,4 +51,12 @@ func (self *Era) unitValue(parsed map[string]string) (name string, value int) {
 	value = myRange.StartValue + adjusted
 
 	return
+}
+
+func (self *Era) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"internal_name": self.InternalName,
+		"ranges":        self.Ranges,
+		"default_range": self.DefaultRange.RangeCode,
+	})
 }
