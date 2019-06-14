@@ -11,12 +11,17 @@
 [![Github commits (since latest release)](https://img.shields.io/github/commits-since/danhunsaker/calends/latest.svg?style=flat-square)](https://github.com/danhunsaker/calends)
 [![GitHub last commit](https://img.shields.io/github/last-commit/danhunsaker/calends.svg?style=flat-square)](https://github.com/danhunsaker/calends)
 
-[![Maintenance Status](https://img.shields.io/maintenance/yes/2018.svg?style=flat-square)](https://github.com/danhunsaker/calends)
+[![Maintenance Status](https://img.shields.io/maintenance/yes/2019.svg?style=flat-square)](https://github.com/danhunsaker/calends)
 [![Travis Build Status](https://img.shields.io/travis/danhunsaker/calends.svg?style=flat-square)](https://travis-ci.org/danhunsaker/calends)
 [![Codecov coverage](https://img.shields.io/codecov/c/github/danhunsaker/calends.svg?style=flat-square)](https://codecov.io/gh/danhunsaker/calends)
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/danhunsaker/calends.svg?style=flat-square)](https://scrutinizer-ci.com/g/danhunsaker/calends/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/danhunsaker/calends?style=flat-square)](https://goreportcard.com/report/github.com/danhunsaker/calends)
 ￼[![Libraries.io Dependency Check](https://img.shields.io/librariesio/github/danhunsaker/calends.svg?style=flat-square)](https://libraries.io/github/danhunsaker/calends)
+
+[![Code Climate coverage](https://img.shields.io/codeclimate/coverage-letter/danhunsaker/calends.svg?style=flat-square)](https://codeclimate.com/github/danhunsaker/calends)
+[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/danhunsaker/calends.svg?style=flat-square)](https://codeclimate.com/github/danhunsaker/calends)
+[![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/danhunsaker/calends.svg?style=flat-square)](https://codeclimate.com/github/danhunsaker/calends)
+[![Code Climate issues](https://img.shields.io/codeclimate/issues/danhunsaker/calends.svg?style=flat-square)](https://codeclimate.com/github/danhunsaker/calends)
 
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/calends/localized.svg)](https://crowdin.com/project/calends)
 [![Liberapay receiving](https://img.shields.io/liberapay/receives/danhunsaker.svg?style=flat-square)](https://liberapay.com/danhunsaker/)

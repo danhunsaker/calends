@@ -5,6 +5,7 @@ language: go
 sudo: true
 
 go:
+  - 1.12.x
   - 1.11.x
   - 1.10.x
   - 1.9.x
@@ -22,6 +23,9 @@ before_script:
   - ulimit -c unlimited || true
   - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
   - sudo chmod +s $(which gdb)
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ${TRAVIS_BUILD_DIR}/cc-test-reporter
+  - chmod +x ${TRAVIS_BUILD_DIR}/cc-test-reporter
+  - ${TRAVIS_BUILD_DIR}/cc-test-reporter before-build
 
 script:
   - ${TRAVIS_BUILD_DIR}/tests/go.sh
@@ -31,6 +35,12 @@ script:
   - |
     cd ${TRAVIS_BUILD_DIR}/cli
     go build -o calends .
+  - cd ${TRAVIS_BUILD_DIR}
+
+after_script:
+  - |
+    ln -s coverage.txt c.out
+    ${TRAVIS_BUILD_DIR}/cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -t gocov
 
 after_failure:
   - ${TRAVIS_BUILD_DIR}/tests/core_dump_info.sh /tmp/
@@ -38,7 +48,7 @@ after_failure:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - |
-    if [[ -n "${TRAVIS_TAG}" && "${TRAVIS_GO_VERSION}" = "1.11.x" && -z "${TRAVIS_PHP_VERSION}" ]]
+    if [[ -n "${TRAVIS_TAG}" && "${TRAVIS_GO_VERSION}" = "1.12.x" && -z "${TRAVIS_PHP_VERSION}" ]]
     then
       set -e
       cd ${TRAVIS_BUILD_DIR}
@@ -88,6 +98,9 @@ jobs:
           export TRAVIS_BUILD_DIR=${GOPATH}/src/github.com/danhunsaker/calends
       script:
         - ${TRAVIS_BUILD_DIR}/tests/php.sh
+      after_script:
+        - ${TRAVIS_BUILD_DIR}/cc-test-reporter after-build -t clover --exit-code $TRAVIS_TEST_RESULT
+
 
     - << : *phpDefaults
       php: '7.2'
