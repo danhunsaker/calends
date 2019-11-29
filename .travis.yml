@@ -7,9 +7,13 @@ sudo: true
 go:
   - 1.12.x
   - 1.11.x
-  - 1.10.x
-  - 1.9.x
   - tip
+
+arch:
+  - amd64
+  - ppc64le
+  - s390x
+  - arm64
 
 addons:
   apt:
@@ -21,11 +25,15 @@ addons:
 before_script:
   - echo "set auto-load safe-path /" > ~/.gdbinit
   - ulimit -c unlimited || true
-  - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null
+  - echo '/tmp/core_%e.%p' | sudo tee /proc/sys/kernel/core_pattern &> /dev/null || true
   - sudo chmod +s $(which gdb)
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ${TRAVIS_BUILD_DIR}/cc-test-reporter
-  - chmod +x ${TRAVIS_BUILD_DIR}/cc-test-reporter
-  - ${TRAVIS_BUILD_DIR}/cc-test-reporter before-build
+  - |
+    if [[ "${TRAVIS_CPU_ARCH}" == "amd64" ]]
+    then
+      curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ${TRAVIS_BUILD_DIR}/cc-test-reporter
+      chmod +x ${TRAVIS_BUILD_DIR}/cc-test-reporter
+      ${TRAVIS_BUILD_DIR}/cc-test-reporter before-build
+    fi
 
 script:
   - ${TRAVIS_BUILD_DIR}/tests/go.sh
@@ -40,7 +48,10 @@ script:
 after_script:
   - |
     ln -s coverage.txt c.out
-    ${TRAVIS_BUILD_DIR}/cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -t gocov
+    if [[ "${TRAVIS_CPU_ARCH}" == "amd64" ]]
+    then
+      ${TRAVIS_BUILD_DIR}/cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT -t gocov
+    fi
 
 after_failure:
   - ${TRAVIS_BUILD_DIR}/tests/core_dump_info.sh /tmp/
@@ -48,7 +59,7 @@ after_failure:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
   - |
-    if [[ -n "${TRAVIS_TAG}" && "${TRAVIS_GO_VERSION}" = "1.12.x" && -z "${TRAVIS_PHP_VERSION}" ]]
+    if [[ -n "${TRAVIS_TAG}" && "${TRAVIS_CPU_ARCH}" == "amd64" && "${TRAVIS_GO_VERSION}" = "1.12.x" && -z "${TRAVIS_PHP_VERSION}" ]]
     then
       set -e
       cd ${TRAVIS_BUILD_DIR}
@@ -72,9 +83,9 @@ jobs:
     - &phpDefaults
       stage: PHP
       language: php
-      php: '7.3'
+      php: '7.4'
       before_install:
-        - export ZEPHIR_VERSION="development"
+        - export ZEPHIR_VERSION="0.11.12"
         - export ZEPHIR_PARSER_VERSION="v1.3.1"
         - export RE2C_VERSION=1.0.3
         - export BOX_VERSION=3.3.1
@@ -87,10 +98,10 @@ jobs:
           bash ./.ci/install-re2c.sh $RE2C_VERSION
           bash ./.ci/install-prereqs.sh
           cd ..
-          composer global require phalcon/zephir
-          export PATH=${HOME}/.config/composer/vendor/bin:${PATH}
+          wget -O ~/bin/zephir "https://github.com/phalcon/zephir/releases/download/${ZEPHIR_VERSION}/zephir.phar"
+          chmod +x ~/bin/zephir
         - |
-          GIMME_OUTPUT="$(gimme 1.11 | tee -a ${HOME}/.bashrc)" && eval "$GIMME_OUTPUT"
+          GIMME_OUTPUT="$(gimme 1.12 | tee -a ${HOME}/.bashrc)" && eval "$GIMME_OUTPUT"
           export GOPATH=${HOME}/gopath
           export PATH=${GOPATH}/bin:${PATH}
           mkdir -p ${GOPATH}/src/github.com/danhunsaker/calends
@@ -103,21 +114,24 @@ jobs:
 
 
     - << : *phpDefaults
+      php: '7.3'
+
+    - << : *phpDefaults
       php: '7.2'
 
     - << : *phpDefaults
       php: '7.1'
 
     - << : *phpDefaults
-      php: '7.0'
-
-    - << : *phpDefaults
-      php: 'master'
+      php: 'master' # Currently 8.0.0-dev
 
 matrix:
   allow_failures:
+    - arch: ppc64le
+    - arch: s390x
+    - arch: arm64
     - language: php
-      php: '7.0'
+      php: '7.4'
     - language: php
       php: '7.1'
     - language: php

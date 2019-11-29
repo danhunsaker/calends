@@ -7,11 +7,11 @@ import (
 	"os"
 
 	"github.com/danhunsaker/calends"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func init() {
-	commands = append(commands, []cli.Command{
+	commands = append(commands, []*cli.Command{
 		{
 			Name:      "parse",
 			Usage:     "parse a date/time given a calendar system and format",
@@ -22,11 +22,11 @@ func init() {
 					return errArgMismatch
 				}
 
-				inCal := c.Args()[0]
-				inForm := c.Args()[1]
+				inCal := c.Args().Get(0)
+				inForm := c.Args().Get(1)
 				date := ""
 				if c.NArg() == 3 {
-					date = c.Args()[2]
+					date = c.Args().Get(2)
 				} else {
 					scanner := bufio.NewScanner(os.Stdin)
 					for scanner.Scan() {

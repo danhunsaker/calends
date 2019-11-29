@@ -8,11 +8,11 @@ import (
 	"os"
 
 	"github.com/danhunsaker/calends"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func init() {
-	commands = append(commands, []cli.Command{
+	commands = append(commands, []*cli.Command{
 		{
 			Name:      "compare",
 			Usage:     "compare two timestamps using a given comparison method",
@@ -23,10 +23,10 @@ func init() {
 					return errArgMismatch
 				}
 
-				method := c.Args()[0]
+				method := c.Args().Get(0)
 				stamp1 := ""
 				if c.NArg() > 1 {
-					stamp1 = c.Args()[1]
+					stamp1 = c.Args().Get(1)
 				} else {
 					scanner := bufio.NewScanner(os.Stdin)
 					for scanner.Scan() {
@@ -35,7 +35,7 @@ func init() {
 				}
 				stamp2 := ""
 				if c.NArg() == 3 {
-					stamp2 = c.Args()[2]
+					stamp2 = c.Args().Get(2)
 				} else {
 					scanner := bufio.NewScanner(os.Stdin)
 					for scanner.Scan() {

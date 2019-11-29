@@ -5,7 +5,7 @@ package main
 import (
 	"errors"
 
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 var defaultAction = func(c *cli.Context) error {

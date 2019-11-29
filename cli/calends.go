@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/danhunsaker/calends"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
-var commands []cli.Command
+var commands []*cli.Command
 
 var (
 	errArgMismatch = cli.NewExitError("Incorrect argument count\n", 1)
@@ -24,7 +24,7 @@ func main() {
 	app.Usage = "manipulate dates and times in multiple calendar systems at once"
 	app.Version = calends.Version
 	app.Compiled = time.Now()
-	app.Authors = []cli.Author{
+	app.Authors = []*cli.Author{
 		{
 			Name:  "Dan Hunsaker",
 			Email: "danhunsaker@gmail.com",
@@ -76,7 +76,7 @@ func handleExitError(context *cli.Context, err error) {
 func handleMultiError(multiErr cli.MultiError) (int, bool) {
 	code := 127
 	isUsageError := false
-	for _, merr := range multiErr.Errors {
+	for _, merr := range multiErr.Errors() {
 		if multiErr2, ok := merr.(cli.MultiError); ok {
 			code, isUsageError = handleMultiError(multiErr2)
 		} else {

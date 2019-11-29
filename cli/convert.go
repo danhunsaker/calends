@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"github.com/danhunsaker/calends"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func init() {
-	commands = append(commands, []cli.Command{
+	commands = append(commands, []*cli.Command{
 		{
 			Name:      "convert",
 			Usage:     "convert a date/time from one calendar and format to another",
@@ -21,13 +21,13 @@ func init() {
 					return errArgMismatch
 				}
 
-				inCal := c.Args()[0]
-				inForm := c.Args()[1]
-				outCal := c.Args()[2]
-				outForm := c.Args()[3]
+				inCal := c.Args().Get(0)
+				inForm := c.Args().Get(1)
+				outCal := c.Args().Get(2)
+				outForm := c.Args().Get(3)
 				date := ""
 				if c.NArg() == 5 {
-					date = c.Args()[4]
+					date = c.Args().Get(4)
 				} else {
 					scanner := bufio.NewScanner(os.Stdin)
 					for scanner.Scan() {

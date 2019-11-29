@@ -7,11 +7,11 @@ import (
 	"os"
 
 	"github.com/danhunsaker/calends"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func init() {
-	commands = append(commands, []cli.Command{
+	commands = append(commands, []*cli.Command{
 		{
 			Name:      "offset",
 			Usage:     "adjusts a timestamp by an offset in a given calendar",
@@ -22,10 +22,10 @@ func init() {
 					return errArgMismatch
 				}
 
-				offCal := c.Args()[0]
+				offCal := c.Args().Get(0)
 				offset := ""
 				if c.NArg() > 1 {
-					offset = c.Args()[1]
+					offset = c.Args().Get(1)
 				} else {
 					scanner := bufio.NewScanner(os.Stdin)
 					for scanner.Scan() {
@@ -34,7 +34,7 @@ func init() {
 				}
 				stamp := ""
 				if c.NArg() == 3 {
-					stamp = c.Args()[2]
+					stamp = c.Args().Get(2)
 				} else {
 					scanner := bufio.NewScanner(os.Stdin)
 					for scanner.Scan() {

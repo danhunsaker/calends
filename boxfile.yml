@@ -4,12 +4,14 @@ run.config:
     runtime: php-7.0
     extensions:
       - ctype
+      - fileinfo
       - gmp
       - json
       - mbstring
       - pdo
       - pdo_sqlite
       - zip
+      - zlib
       - xml
       - dom
       - simplexml
@@ -21,6 +23,8 @@ run.config:
     - autoconf
     - re2c
     - py27-pip
+    - gtexinfo
+    - unzip
   cache_dirs:
     - .gopath
   extra_path_dirs:
@@ -34,11 +38,13 @@ run.config:
       mkdir -p /app/.gopath/{bin,src/github.com/danhunsaker}
       ln -sfT /app /app/.gopath/src/github.com/danhunsaker/calends
       cd /app/.gopath/src/github.com/danhunsaker/calends
-      go get -t -v ./...
+      GO111MODULE=on go get -t -v ./...
     - |
       # Set up Sphinx documentation support
       pip install --upgrade pip
       pip install -I -r doc-requirements.txt
     - |
       # Install Zephir
-      composer global require phalcon/zephir
+      wget -O zephir https://github.com/phalcon/zephir/releases/download/0.11.12/zephir.phar
+      chmod +x zephir
+      mv zephir /data/bin/

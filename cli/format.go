@@ -7,11 +7,11 @@ import (
 	"os"
 
 	"github.com/danhunsaker/calends"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 func init() {
-	commands = append(commands, []cli.Command{
+	commands = append(commands, []*cli.Command{
 		{
 			Name:      "format",
 			Usage:     "format a timestamp in a given calendar system and format",
@@ -22,11 +22,11 @@ func init() {
 					return errArgMismatch
 				}
 
-				outCal := c.Args()[0]
-				outForm := c.Args()[1]
+				outCal := c.Args().Get(0)
+				outForm := c.Args().Get(1)
 				stamp := ""
 				if c.NArg() == 3 {
-					stamp = c.Args()[2]
+					stamp = c.Args().Get(2)
 				} else {
 					scanner := bufio.NewScanner(os.Stdin)
 					for scanner.Scan() {

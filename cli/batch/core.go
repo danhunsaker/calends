@@ -12,7 +12,7 @@ import (
 	"github.com/danhunsaker/calends"
 	"github.com/danhunsaker/calends/calendars"
 	"github.com/mattn/go-shellwords"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 )
 
 // Collections

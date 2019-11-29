@@ -9,13 +9,15 @@ set -e
 
 # Ensure everything is built, first, so we're testing the latest code
 cd "$(dirname "${start}")"
-go get -v -t ./...
+# GO111MODULE=on go get -v ./...
+go get -v ./...
 cd libcalends
 go build -v -o libcalends.so -buildmode=c-shared .
 
 cd php
+which -a zephir || echo "ZEPHIR NOT FOUND!!????"
 zephir fullclean
-zephir build --dev -v || (cat compile-errors.log; false)
+zephir build --dev || (cat compile-errors.log; false)
 
 # Run the actual tests
 cd ext
