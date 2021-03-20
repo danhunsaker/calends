@@ -465,7 +465,7 @@ Compare
    Compares the end date of the current :go:type:`Calends` object with the end
    date of ``c2``.
 
-Export
+export
 ------
 
 .. go:function:: func (Calends) String() string
