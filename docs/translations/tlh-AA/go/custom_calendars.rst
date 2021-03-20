@@ -8,11 +8,11 @@
 Custom Calendars in Golang
 ==========================
 
-Adding new calendars to Calends is a fairly straightforward process. Implement
+'ISjaH chu' chel Calends mIw fairly straightforward. Implement
 one interface, or its three methods as standalone functions, and then simply
 pass them to one of the two registration functions.
 
-Define
+define
 ------
 
 The interface in question looks like this:
@@ -26,23 +26,23 @@ The interface in question looks like this:
       :param date: The input date. Should support :go:type:`string` at the very
                    minimum.
       :type date: :go:type:`interface{}`
-      :param format: The format string for parsing the input date.
+      :param format: format SIrgh input date parsing.
       :type format: :go:type:`string`
-      :return: The parsed internal timestamp.
+      :return: parse internal timestamp.
       :rtype: :go:type:`TAI64NAXURTime`
       :return: Any error that occurs.
       :rtype: :go:type:`error`
 
-      Converts an input date/time representation to an internal
+      representation input date ghap poH bIDameH internal
       :go:type:`TAI64NAXURTime`.
 
    .. go:function:: func (CalendarDefinition) FromInternal(stamp TAI64NAXURTime, format string) (string, error)
 
-      :param stamp: The internal timestamp value.
+      :param stamp: internal timestamp lo'laHghach.
       :type stamp: :go:type:`TAI64NAXURTime`
-      :param format: The format string for formatting the output date.
+      :param format: format SIrgh output date formatting.
       :type format: :go:type:`string`
-      :return: The formatted date/time.
+      :return: format date ghap poH.
       :rtype: :go:type:`string`
       :return: Any error that occurs.
       :rtype: :go:type:`error`
@@ -51,35 +51,35 @@ The interface in question looks like this:
 
    .. go:function:: func (CalendarDefinition) Offset(stamp TAI64NAXURTime, offset interface) (TAI64NAXURTime, error)
 
-      :param stamp: The internal timestamp value.
+      :param stamp: internal timestamp lo'laHghach.
       :type stamp: :go:type:`TAI64NAXURTime`
-      :param offset: The input offset. Should support :go:type:`string` at the
+      :param offset: input offset. Should support :go:type:`string` at the
                      very minimum.
       :type offset: :go:type:`interface{}`
-      :return: The adjusted internal timestamp.
+      :return: lIS internal timestamp.
       :rtype: :go:type:`TAI64NAXURTime`
       :return: Any error that occurs.
       :rtype: :go:type:`error`
 
       Adds the given offset to an internal :go:type:`TAI64NAXURTime`.
 
-Registration
+registration
 ------------
 
-Register
+Suy qachmey
 ::::::::
 
-Once it is registered with the library, your calendar system can be used from
-anywhere in your application. To register a system, pass it to one of the
+wa'logh Suy qachmey 'oH je be'nI''a'wI', Datu', laH yIlo' 'ISjaH pat vo'
+anywhere neH application. To register a system, pass it to one of the
 following two functions:
 
 .. go:function:: func RegisterObject(name string, definition CalendarDefinition, defaultFormat string)
 
-   :param name: The name to register the calendar system under.
+   :param name: 'ISjaH pat bopummeH Suy qachmey pong.
    :type name: :go:type:`string`
    :param definition: The calendar system itself.
    :type definition: :go:type:`CalendarDefinition`
-   :param defaultFormat: The default format string.
+   :param defaultformat: default format Surgh.
    :type defaultFormat: :go:type:`string`
 
    Registers a calendar system class, storing ``definition`` as ``name``, and
@@ -87,7 +87,7 @@ following two functions:
 
 .. go:function:: func RegisterElements(name string, toInternal ToInternal, fromInternal FromInternal, offset Offset, defaultFormat string)
 
-   :param name: The name to register the calendar system under.
+   :param name: 'ISjaH pat bopummeH Suy qachmey pong.
    :type name: :go:type:`string`
    :param toInternal: The function for parsing dates into internal timestamps.
    :type toInternal: :go:func:`(CalendarDefinition) ToInternal`
@@ -96,48 +96,48 @@ following two functions:
    :type fromInternal: :go:func:`(CalendarDefinition) FromInternal`
    :param offset: The function for adding an offset to internal timestamps.
    :type offset: :go:func:`(CalendarDefinition) Offset`
-   :param defaultFormat: The default format string.
+   :param defaultformat: default format Surgh.
    :type defaultFormat: :go:type:`string`
 
    Registers a calendar system from its distinct functions. It does this by
    storing ``toInternal``, ``fromInternal``, and ``offset`` as the elements of
-   ``name``, and saving ``defaultFormat`` for later use while parsing or
+   ``name`` 'ej ``defaultFormat`` later lo' poStaHvIS parsing toD pagh
    formatting.
 
-Unregister
+unregister
 ::::::::::
 
 .. go:function:: func Unregister(name string)
 
-   :param name: The name of the calendar system to remove.
+   :param name: 'ISjaH pat teq pong.
    :type name: :go:type:`string`
 
-   Removes a calendar system from the callback list.
+   ['ISjaH pat vo' callback tetlh. ghaHDaq teq BERNARDO.
 
-Check and List
+check 'ej tetlh
 ::::::::::::::
 
 .. go:function:: func Registered(calendar string) bool
 
-   :param name: The calendar system name to check for.
+   :param name: 'ISjaH pat pong check.
    :type name: :go:type:`string`
-   :return: Whether or not the calendar system is currently registered.
+   :return: chaq pagh wej currently Suy qachmey 'ISjaH pat.
    :rtype: :go:type:`bool`
 
-   Returns whether or not a calendar system has been registered, yet.
+   chegh chaq pagh wej Suy qachmey 'ISjaH pat, 'ach.
 
 .. go:function:: func ListRegistered() []string
 
-   :return: The sorted list of calendar systems currently registered.
+   :return: currently Suy qachmey Segh tetlh 'ISjaH pat.
    :rtype: :go:type:`[]string`
 
-   Returns the list of calendar systems currently registered.
+   'ISjaH pat currently Suy qachmey tetlh chegh.
 
-Types and Values
+Segh lo'laHghach je
 ----------------
 
-Now we get to the inner workings that make calendar systems function – even the
-built-in ones. The majority of the "magic" comes from the
+DaH inner workings San 'ISjaH pat Qap – wej qaSpu'bogh
+built-in wa'. The majority of the "magic" comes from the
 :go:type:`TAI64NAXURTime` object itself, as a reliable way of storing the exact
 instants being calculated, and the only way times are handled by the library
 itself. A handful of methods provide basic operations that calendar system
@@ -145,7 +145,7 @@ developers can use to simplify their conversions (adding and subtracting the
 values of other timestamps, and importing/exporting timestamp values from/to
 arbitrary-precision floating point :go:type:`math/big.Float`\ s, in particular),
 and a couple of helpers exclusively handle adding and removing UTC leap second
-offsets. As long as you can convert your dates to/from Unix timestamps in a
+offsets. Hoch nI' law' dates laH bIDameH SoH ghap vo' unix timestamps neH
 :go:type:`string` or :go:type:`math/big.Float`, the rest is handled entirely by
 these helpers in the library itself.
 
@@ -170,25 +170,25 @@ these helpers in the library itself.
 
    .. go:function:: func (TAI64NAXURTime) Add(z TAI64NAXURTime) TAI64NAXURTime
 
-      :param z: The timestamp to add to the current one.
+      :param z: chel wa' Qu'mey potlh timestamp.
       :type z: :go:type:`TAI64NAXURTime`
-      :return: The sum of the two timestamps.
+      :return: sum timestamps cha'.
       :rtype: :go:type:`TAI64NAXURTime`
 
       Calculates the sum of two :go:type:`TAI64NAXURTime` values.
 
    .. go:function:: func (TAI64NAXURTime) Sub(z TAI64NAXURTime) TAI64NAXURTime
 
-      :param z: The timestamp to subtract from the current one.
+      :param z: boqHa' vo' wa' Qu'mey potlh timestamp.
       :type z: :go:type:`TAI64NAXURTime`
-      :return: The difference of the two timestamps.
+      :return: difference timestamps cha'.
       :rtype: :go:type:`TAI64NAXURTime`
 
       Calculates the difference of two :go:type:`TAI64NAXURTime` values.
 
    .. go:function:: func (TAI64NAXURTime) String() string
 
-      :return: The decimal string representation of the current timestamp.
+      :return: decimal SIrgh representation Qu'mey potlh timestamp.
       :rtype: :go:type:`string`
 
       Returns the decimal string representation of the :go:type:`TAI64NAXURTime`
@@ -196,7 +196,7 @@ these helpers in the library itself.
 
    .. go:function:: func (TAI64NAXURTime) HexString() string
 
-      :return: The hexadecimal string representation of the current timestamp.
+      :return: hexadecimal SIrgh representation Qu'mey potlh timestamp.
       :rtype: :go:type:`string`
 
       Returns the hexadecimal string representation of the
@@ -204,8 +204,8 @@ these helpers in the library itself.
 
    .. go:function:: func (TAI64NAXURTime) Float() Float
 
-      :return: The arbitrary-precision floating point representation of the
-               current timestamp.
+      :return: arbitrary-precision 'ej Dunbogh jom lang representation
+               Qu'mey potlh timestamp.
       :rtype: :go:type:`math/big.(*Float)`
 
       Returns the :go:type:`math/big.(*Float)` representation of the
@@ -247,14 +247,14 @@ these helpers in the library itself.
 
       Implements the :go:type:`encoding.BinaryUnmarshaler` interface.
 
-Helpers
+helper
 -------
 
 .. go:function:: func TAI64NAXURTimeFromDecimalString(in string) TAI64NAXURTime
 
-   :param in: The decimal string representation of a timestamp to calculate.
+   :param in: decimal SIrgh representation timestamp SIm.
    :type in: :go:type:`string`
-   :return: The calculated timestamp.
+   :return: SIm timestamp.
    :rtype: :go:type:`TAI64NAXURTime`
 
    Calculates a :go:type:`TAI64NAXURTime` from its decimal string
@@ -262,9 +262,9 @@ Helpers
 
 .. go:function:: func TAI64NAXURTimeFromHexString(in string) TAI64NAXURTime
 
-   :param in: The hexadecimal string representation of a timestamp to calculate.
+   :param in: hexadecimal SIrgh representation timestamp SIm.
    :type in: :go:type:`string`
-   :return: The calculated timestamp.
+   :return: SIm timestamp.
    :rtype: :go:type:`TAI64NAXURTime`
 
    Calculates a :go:type:`TAI64NAXURTime` from its hexadecimal string
@@ -272,10 +272,10 @@ Helpers
 
 .. go:function:: func TAI64NAXURTimeFromFloat(in Float) TAI64NAXURTime
 
-   :param in: The arbitrary-precision floating point representation of a
-              timestamp to calculate.
+   :param in: arbitrary-precision 'ej Dunbogh jom lang representation
+              Qo'noS timestamp SIm.
    :type in: :go:type:`math/big.Float`
-   :return: The calculated timestamp.
+   :return: SIm timestamp.
    :rtype: :go:type:`TAI64NAXURTime`
 
    Calculates a :go:type:`TAI64NAXURTime` from its :go:type:`math/big.Float`
@@ -283,18 +283,18 @@ Helpers
 
 .. go:function:: func UTCtoTAI(utc TAI64NAXURTime) TAI64NAXURTime
 
-   :param utc: The timestamp to remove the UTC offset from.
+   :param utc: timestamp UTC offset vo' teq.
    :type utc: :go:type:`TAI64NAXURTime`
-   :return: The calculated timestamp.
+   :return: SIm timestamp.
    :rtype: :go:type:`TAI64NAXURTime`
 
    Removes the UTC leap second offset from a TAI64NAXURTime value.
 
 .. go:function:: func TAItoUTC(tai TAI64NAXURTime) TAI64NAXURTime
 
-   :param tai: The timestamp to add the UTC offset to.
+   :param tai: timestamp UTC offset chel.
    :type tai: :go:type:`TAI64NAXURTime`
-   :return: The calculated timestamp.
+   :return: SIm timestamp.
    :rtype: :go:type:`TAI64NAXURTime`
 
    Adds the UTC leap second offset to a TAI64NAXURTime value.
