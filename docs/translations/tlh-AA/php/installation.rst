@@ -9,7 +9,7 @@ Installing Calends for PHP
 .. TODO ::
    Make this actually work...
 
-   Binary Install
+   binary jom
    --------------
 
    For use with PHP, simply grab the latest version of ``calends-php`` from the
@@ -17,7 +17,7 @@ Installing Calends for PHP
    and put it in your extension directory. Be sure to grab the correct version
    for your PHP version, OS, and processor!
 
-   Source Install
+   Hal jom
    --------------
 
 To install from source, you'll need a few prerequisites:
@@ -31,7 +31,7 @@ Once those are installed, clone the repository, build ``libcalends``, then run
 
 .. code-block:: bash
 
-   # Sample Linux steps:
+   # vIlopQo' jay' sample linux mIw:
    mkdir -p $GOPATH/src/github.com/danhunsaker
    cd $GOPATH/src/github.com/danhunsaker
    git clone https://github.com/danhunsaker/calends
@@ -41,7 +41,7 @@ Once those are installed, clone the repository, build ``libcalends``, then run
    cd php
    zephir install
 
-Adjust the above example commands as needed for your actual development OS.
+wovbe' example ra' lIS Hoch nIS actual development os.
 
 Finally, just add ``extension=calends.so`` to your ``php.ini``, and restart
 PHP-FPM and/or your web server.
