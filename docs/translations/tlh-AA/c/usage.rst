@@ -565,7 +565,7 @@ Compare
 
    Compares the end date of :c:data:`c1` with the end date of :c:data:`c2`.
 
-Export
+export
 ------
 
 .. c:function:: char* Calends_string(long long unsigned int c)
