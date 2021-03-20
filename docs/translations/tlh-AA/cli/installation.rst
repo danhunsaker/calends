@@ -7,13 +7,13 @@ Installing Calends for the Command Line
 =======================================
 
 You can grab a ``calends`` binary for your platform OS/architecture from the
-`GitHub Releases page <https://github.com/danhunsaker/calends/releases>`_, and
+github Releases page <https://github.com/danhunsaker/calends/releases>_, 'ej
 just run it directly. Alternately, you can clone the source and build it from
 there:
 
 .. code-block:: bash
 
-   # Sample Linux steps:
+   # vIlopQo' jay' sample linux mIw:
    mkdir -p $GOPATH/src/github.com/danhunsaker
    cd $GOPATH/src/github.com/danhunsaker
    git clone https://github.com/danhunsaker/calends
