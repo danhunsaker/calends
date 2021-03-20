@@ -8,10 +8,10 @@
 Custom Calendars in PHP
 ==========================
 
-Adding new calendars to Calends is a fairly straightforward process. Implement
+'ISjaH chu' chel Calends mIw fairly straightforward. Implement
 one of two interfaces, and then simply pass it to the registration method.
 
-Define
+define
 ------
 
 The more common interface looks like this:
@@ -24,11 +24,11 @@ The more common interface looks like this:
       :type $date: ``mixed``
       :param $format: The format string for parsing the input date.
       :type $format: ``string``
-      :return: The parsed internal timestamp.
+      :return: parse internal timestamp.
       :rtype: :php:class:`TAITime`
       :throws CalendsException: when an error occurs
 
-      Converts an input date/time representation to an internal
+      representation input date ghap poH bIDameH internal
       :php:class:`TAITime`.
 
    .. php:staticmethod:: FromInternal(TAITime $stamp, string $format): string
@@ -37,7 +37,7 @@ The more common interface looks like this:
       :type $stamp: :php:class:`TAITime`
       :param $format: The format string for formatting the output date.
       :type $format: ``string``
-      :return: The formatted date/time.
+      :return: format date ghap poH.
       :rtype: ``string``
       :throws CalendsException: when an error occurs
 
@@ -50,7 +50,7 @@ The more common interface looks like this:
       :param $offset: The input offset. Should support strings at the very
                       minimum.
       :type $offset: ``mixed``
-      :return: The adjusted internal timestamp.
+      :return: lIS internal timestamp.
       :rtype: :php:class:`TAITime`
       :throws CalendsException: when an error occurs
 
@@ -67,11 +67,11 @@ class methods:
       :type $date: ``mixed``
       :param $format: The format string for parsing the input date.
       :type $format: ``string``
-      :return: The parsed internal timestamp.
+      :return: parse internal timestamp.
       :rtype: :php:class:`TAITime`
       :throws CalendsException: when an error occurs
 
-      Converts an input date/time representation to an internal
+      representation input date ghap poH bIDameH internal
       :php:class:`TAITime`.
 
    .. php:method:: FromInternal(TAITime $stamp, string $format): string
@@ -80,7 +80,7 @@ class methods:
       :type $stamp: :php:class:`TAITime`
       :param $format: The format string for formatting the output date.
       :type $format: ``string``
-      :return: The formatted date/time.
+      :return: format date ghap poH.
       :rtype: ``string``
       :throws CalendsException: when an error occurs
 
@@ -93,21 +93,21 @@ class methods:
       :param $offset: The input offset. Should support strings at the very
                       minimum.
       :type $offset: ``mixed``
-      :return: The adjusted internal timestamp.
+      :return: lIS internal timestamp.
       :rtype: :php:class:`TAITime`
       :throws CalendsException: when an error occurs
 
       Adds the given offset to an internal :php:class:`TAITime`.
 
-Registration
+registration
 ------------
 
-Register
+Suy qachmey
 ::::::::
 
-Once it is registered with the library, your calendar system can be used from
-anywhere in your application. To register a system, pass it to the following
-function:
+wa'logh Suy qachmey 'oH je be'nI''a'wI', Datu', laH yIlo' 'ISjaH pat vo'
+anywhere neH application. pat Suy qachmey, 'oH juS toblu'
+Qap:
 
 .. php:class:: Calends
 
@@ -125,7 +125,7 @@ function:
    ``$name``, and saving ``$defaultFormat`` for later use while parsing or
    formatting.
 
-Unregister
+unregister
 ::::::::::
 
 .. php:staticmethod:: calendarUnregister(string $name)
@@ -133,36 +133,36 @@ Unregister
    :param $name: The name of the calendar system to remove.
    :type $name: ``string``
 
-   Removes a calendar system from the callback list.
+   ['ISjaH pat vo' callback tetlh. ghaHDaq teq BERNARDO.
 
-Check and List
+check 'ej tetlh
 ::::::::::::::
 
 .. php:staticmethod:: calendarRegistered(string $name): bool
 
    :param $name: The calendar system name to check for.
    :type $name: ``string``
-   :return: Whether or not the calendar system is currently registered.
+   :return: chaq pagh wej currently Suy qachmey 'ISjaH pat.
    :rtype: ``bool``
 
-   Returns whether or not a calendar system has been registered, yet.
+   chegh chaq pagh wej Suy qachmey 'ISjaH pat, 'ach.
 
 .. php:staticmethod:: calendarListRegistered(): array
 
-   :return: The sorted list of calendar systems currently registered.
+   :return: currently Suy qachmey Segh tetlh 'ISjaH pat.
    :rtype: ``[string]``
 
-   Returns the list of calendar systems currently registered.
+   'ISjaH pat currently Suy qachmey tetlh chegh.
 
-Types and Values
+Segh lo'laHghach je
 ----------------
 
-Now we get to the inner workings that make calendar systems function – even the
-built-in ones. The majority of the "magic" comes from the :php:class:`TAITime`
+DaH inner workings San 'ISjaH pat Qap – wej qaSpu'bogh
+built-in wa'. The majority of the "magic" comes from the :php:class:`TAITime`
 object itself, as a reliable way of storing the exact instants being calculated,
-and the only way times are handled by the library itself. A handful of methods
-provide basic operations that calendar system developers can use to simplify
-their conversions (adding and subtracting the values of other timestamps, and
+'ej DeS neH mIw poH pong be'nI''a'wI', Datu' narghtaHvIS 'oH. A handful of methods
+basic yo'SeH laH DanoHmeH 'ISjaH pat developers simplify 'e' DuHIvDI'
+conversions (chel 'ej latlh timestamps nIv boqHa' je
 importing/exporting timestamp values from/to string and numeric types, in
 particular), and a couple of helpers exclusively handle adding and removing UTC
 leap second offsets. As long as you can convert your dates to/from Unix
@@ -205,7 +205,7 @@ helpers in the library itself.
 
       :param $z: The timestamp to add to the current one.
       :type $z: :php:class:`TAITime`
-      :return: The sum of the two timestamps.
+      :return: sum timestamps cha'.
       :rtype: :php:class:`TAITime`
 
       Calculates the sum of two :php:class:`TAITime` values.
@@ -214,14 +214,14 @@ helpers in the library itself.
 
       :param $z: The timestamp to subtract from the current one.
       :type $z: :php:class:`TAITime`
-      :return: The difference of the two timestamps.
+      :return: difference timestamps cha'.
       :rtype: :php:class:`TAITime`
 
       Calculates the difference of two :php:class:`TAITime` values.
 
    .. php:method:: toString(): string
 
-      :return: The decimal string representation of the current timestamp.
+      :return: decimal SIrgh representation Qu'mey potlh timestamp.
       :rtype: ``string``
 
       Returns the decimal string representation of the :php:class:`TAITime`
@@ -236,14 +236,14 @@ helpers in the library itself.
 
       :param $in: The decimal string representation of a timestamp to calculate.
       :type $in: string
-      :return: The calculated timestamp.
+      :return: SIm timestamp.
       :rtype: :php:class:`TAITime`
 
       Calculates a :php:class:`TAITime` from its decimal string representation.
 
    .. php:method:: toHex(): string
 
-      :return: The hexadecimal string representation of the current timestamp.
+      :return: hexadecimal SIrgh representation Qu'mey potlh timestamp.
       :rtype: ``string``
 
       Returns the hexadecimal string representation of the :php:class:`TAITime`
@@ -253,7 +253,7 @@ helpers in the library itself.
 
       :param $in: The hexadecimal string representation of a timestamp to calculate.
       :type $in: string
-      :return: The calculated timestamp.
+      :return: SIm timestamp.
       :rtype: :php:class:`TAITime`
 
       Calculates a :php:class:`TAITime` from its hexadecimal string
@@ -269,9 +269,9 @@ helpers in the library itself.
    .. php:method:: fromNumber(numeric $in): TAITime
 
       :param $in: The arbitrary-precision floating point representation of a
-                 timestamp to calculate.
+                 Qo'noS timestamp SIm.
       :type $in: ``integer`` or ``float``
-      :return: The calculated timestamp.
+      :return: SIm timestamp.
       :rtype: :php:class:`TAITime`
 
       Calculates a :php:class:`TAITime` from its numeric (``integer`` or
@@ -279,14 +279,14 @@ helpers in the library itself.
 
    .. php:method:: fromUTC(): TAITime
 
-      :return: The calculated timestamp.
+      :return: SIm timestamp.
       :rtype: :php:class:`TAITime`
 
       Removes the UTC leap second offset from a TAITime value.
 
    .. php:method:: toUTC(): TAITime
 
-      :return: The calculated timestamp.
+      :return: SIm timestamp.
       :rtype: :php:class:`TAITime`
 
       Adds the UTC leap second offset to a TAITime value.
