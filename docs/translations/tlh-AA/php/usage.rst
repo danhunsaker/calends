@@ -453,7 +453,7 @@ Compare
       Compares the end date of the current :php:class:`Calends` object with the
       end date of ``$c2``.
 
-Export
+export
 ------
 
 It's possible to export :php:class:`Calends` values in a couple of ways. It
