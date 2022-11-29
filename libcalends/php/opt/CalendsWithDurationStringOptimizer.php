@@ -30,6 +30,6 @@ class CalendsWithDurationStringOptimizer extends OptimizerAbstract
         $context->headersManager->add('wrap_libcalends');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('double', 'ext_Calends_with_duration_string(' . implode($resolvedParams, ', ') . ')', $expression);
+        return new CompiledExpression('double', 'ext_Calends_with_duration_string(' . implode(', ', $resolvedParams) . ')', $expression);
     }
 }

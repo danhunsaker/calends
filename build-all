@@ -3,15 +3,17 @@
 set -e
 
 GOPATH=$(go env GOPATH)
-TARGETS=${TARGETS:-linux/386,linux/amd64,linux/arm-5,linux/arm-6,linux/arm-7,linux/arm64,windows-4.0/*,windows-6.0/*,windows-6.1/*,windows-6.3/*,windows-10.0/*}
+TARGETS=${TARGETS:-linux/386,linux/amd64,linux/arm-5,linux/arm-6,linux/arm-7,linux/arm64,darwin/*,windows-4.0/*,windows-6.0/*,windows-6.1/*,windows-6.3/*,windows-10.0/*,windows-11.0/*}
 
 v=$(grep 'Version =' calends.go | awk '{ print $4 }')
 VERSION=$(echo v${v//\"/})
 unset v
 
-go get github.com/karalabe/xgo
+go get github.com/crazy-max/xgo
+go install github.com/crazy-max/xgo
 ${GOPATH}/bin/xgo -buildmode=c-shared -dest=$(pwd)/dist/ -out=libcalends-${VERSION} -targets=${TARGETS} github.com/danhunsaker/calends/libcalends
 ${GOPATH}/bin/xgo -dest=$(pwd)/dist/bin/ -out=calends-${VERSION} -targets="*/*,${TARGETS}" github.com/danhunsaker/calends/cli
+GOOS=js GOARCH=wasm go build -o=$(pwd)/dist/calends-${VERSION}.wasm github.com/danhunsaker/calends
 
 for h in $(find dist/ -name '*.h')
 do

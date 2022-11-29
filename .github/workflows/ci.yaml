@@ -1,0 +1,122 @@
+name: CI (Test/Build/Release)
+
+on:
+  - push
+  - pull_request
+
+env:
+  PSR_VERSION: 1.2.0
+
+jobs:
+  test:
+    name: Test Go ${{ matrix.go }} and PHP ${{ matrix.php }} on ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        go:
+          - ~1.19.0
+          - ~1.18.0
+        php:
+          # - '8.1'
+          # - '8.0'
+          - '7.4'
+        include:
+          # - php: '8.1'
+          #   zephir: '0.16.3'
+          #   parser: '1.5.1'
+          #   re2c: '1.0.3'
+          # - php: '8.0'
+          #   zephir: '0.15.2'
+          #   parser: '1.4.2'
+          #   re2c: '1.0.3'
+          - php: '7.4'
+            zephir: '0.11.12'
+            parser: '1.3.1'
+            re2c: '1.0.3'
+          - os: ubuntu-latest
+            ext: so
+          - os: windows-latest
+            ext: dll
+          - os: macos-latest
+            ext: dylib
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Run Go tests
+        run: ./tests/go.sh
+
+      - name: Test building libcalends
+        run: go build -v -o libcalends.out -buildmode=c-shared ./libcalends
+
+      - name: Test building cli
+        run: go build -v -o calends.out ./cli
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: json, pcre, psr-${{ env.PSR_VERSION }}
+          tools: phpize, php-config
+      
+      - name: Install re2c
+        run: |
+          curl -L https://github.com/skvadrik/re2c/releases/download/${{ matrix.re2c }}/re2c-${{ matrix.re2c }}.tar.gz -o /tmp/re2c.tgz
+          tar -zxf /tmp/re2c.tgz -C /tmp/
+          cd /tmp/re2c-${{ matrix.re2c }}/
+          ./configure --silent --prefix="/opt/re2c/"
+          make --silent -j"$(getconf _NPROCESSORS_ONLN)"
+          sudo make --silent install
+          sudo ln -s "$(pwd)/bin/re2c" /usr/local/bin/re2c
+
+      - name: Install Zephir Parser
+        run: |
+          set -x
+          git clone --depth 1 -q -b "v${{ matrix.parser }}" https://github.com/phalcon/php-zephir-parser
+          cd php-zephir-parser
+          $(which phpize)
+          ./configure --with-php-config=$(which php-config) --enable-zephir_parser
+          make -j"$(getconf _NPROCESSORS_ONLN)"
+          sudo make install
+          echo 'extension=zephir_parser.${{ matrix.ext }}' | sudo tee "/etc/php/${{ matrix.php }}/cli/conf.d/20-zephir_parser.ini"
+          php --ri zephir_parser
+
+      - name: Install Zephir
+        run: |
+          sudo curl -L https://github.com/zephir-lang/zephir/releases/download/${{ matrix.zephir }}/zephir.phar -o /usr/local/bin/zephir
+          sudo chmod +x /usr/local/bin/zephir
+          zephir --version
+
+      - name: Run PHP tests
+        run: ./tests/php.sh
+
+  build:
+    name: Build Binaries
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Build binaries
+        run: ./build-all
+
+      - name: Release binaries
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/*
+            dist/bin/*

@@ -33,7 +33,7 @@ class CalendsEncodeTextOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_Calends_encode_text(" . implode($resolvedParams, ', ') . ');');
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_Calends_encode_text(" . implode(', ', $resolvedParams) . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

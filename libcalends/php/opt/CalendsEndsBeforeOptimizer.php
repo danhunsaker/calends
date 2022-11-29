@@ -33,7 +33,7 @@ class CalendsEndsBeforeOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_Calends_ends_before(" . implode($resolvedParams, ', ') . ');');
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_Calends_ends_before(" . implode(', ', $resolvedParams) . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

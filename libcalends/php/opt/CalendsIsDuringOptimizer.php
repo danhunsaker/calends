@@ -33,7 +33,7 @@ class CalendsIsDuringOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_Calends_is_during(" . implode($resolvedParams, ', ') . ');');
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_Calends_is_during(" . implode(', ', $resolvedParams) . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

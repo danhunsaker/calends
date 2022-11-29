@@ -33,7 +33,7 @@ class TAI64TimeDoubleOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
-        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_TAI64Time_double(" . implode($resolvedParams, ', ') . ');');
+        $context->codePrinter->output("{$symbolVariable->getRealName()} = ext_TAI64Time_double(" . implode(', ', $resolvedParams) . ');');
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

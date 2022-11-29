@@ -30,6 +30,6 @@ class CalendsSubtractFromEndDoubleOptimizer extends OptimizerAbstract
         $context->headersManager->add('wrap_libcalends');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('double', 'ext_Calends_subtract_from_end_double(' . implode($resolvedParams, ', ') . ')', $expression);
+        return new CompiledExpression('double', 'ext_Calends_subtract_from_end_double(' . implode(', ', $resolvedParams) . ')', $expression);
     }
 }

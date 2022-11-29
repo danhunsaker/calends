@@ -21,7 +21,7 @@ class CalendsReleaseOptimizer extends OptimizerAbstract
         $context->headersManager->add('wrap_libcalends');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        $context->codePrinter->output('ext_Calends_release(' . implode($resolvedParams, ', ') . ');');
-        return new CompiledExpression('void', 'ext_Calends_release(' . implode($resolvedParams, ', ') . ')', $expression);
+        $context->codePrinter->output('ext_Calends_release(' . implode(', ', $resolvedParams) . ');');
+        return new CompiledExpression('void', 'ext_Calends_release(' . implode(', ', $resolvedParams) . ')', $expression);
     }
 }

@@ -30,6 +30,6 @@ class CalendsWithEndDateStringOptimizer extends OptimizerAbstract
         $context->headersManager->add('wrap_libcalends');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        return new CompiledExpression('double', 'ext_Calends_with_end_date_string(' . implode($resolvedParams, ', ') . ')', $expression);
+        return new CompiledExpression('double', 'ext_Calends_with_end_date_string(' . implode(', ', $resolvedParams) . ')', $expression);
     }
 }
