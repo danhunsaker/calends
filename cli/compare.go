@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 
 	"github.com/danhunsaker/calends"
+	"github.com/go-errors/errors"
 	"github.com/urfave/cli/v2"
 )
 
@@ -46,18 +46,18 @@ func init() {
 				var moment1 calends.Calends
 				err := json.Unmarshal([]byte(stamp1), &moment1)
 				if err != nil {
-					return cli.NewExitError(err, 2)
+					return cli.Exit(err, 2)
 				}
 
 				var moment2 calends.Calends
 				err = json.Unmarshal([]byte(stamp2), &moment2)
 				if err != nil {
-					return cli.NewExitError(err, 2)
+					return cli.Exit(err, 2)
 				}
 
 				output, err := callComparisonMethod(method, moment1, moment2)
 				if err != nil {
-					return cli.NewExitError(err, 1)
+					return cli.Exit(err, 1)
 				}
 
 				fmt.Printf("%v\n", output)

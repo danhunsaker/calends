@@ -30,6 +30,8 @@ import (
 	"fmt"
 	"math/big"
 	"strings"
+
+	"github.com/go-errors/errors"
 )
 
 func init() {
@@ -49,7 +51,7 @@ func init() {
 				stamp = date.(TAI64NAXURTime)
 				return
 			default:
-				err = ErrUnsupportedInput
+				err = errors.Wrap(ErrUnsupportedInput, 1)
 				return
 			}
 
@@ -73,7 +75,7 @@ func init() {
 			case "tai64":
 				_, err = fmt.Sscanf(dateString, "%016X", &stamp.Seconds)
 			default:
-				err = ErrInvalidFormat
+				err = errors.Wrap(ErrInvalidFormat, 1)
 			}
 
 			if err != nil && err.Error() == "EOF" {
@@ -104,7 +106,7 @@ func init() {
 			case "tai64":
 				date = fmt.Sprintf("%016X", stamp.Seconds+0x4000000000000000)
 			default:
-				err = ErrInvalidFormat
+				err = errors.Wrap(ErrInvalidFormat, 1)
 			}
 
 			return
@@ -125,7 +127,7 @@ func init() {
 			case TAI64NAXURTime:
 				adjust = offset.(TAI64NAXURTime)
 			default:
-				err = ErrUnsupportedInput
+				err = errors.Wrap(ErrUnsupportedInput, 1)
 			}
 
 			out = in.Add(adjust)

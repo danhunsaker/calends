@@ -2,10 +2,6 @@ package main
 
 import "C"
 
-import (
-// "github.com/danhunsaker/calends"
-)
-
 func calends_add(p C.ulonglong, offset interface{}, calendar *C.char) C.ulonglong {
 	defer handlePanic()
 	c := instGet(p)

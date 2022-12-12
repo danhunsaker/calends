@@ -8,7 +8,7 @@ typedef struct _TAI64Time {
         unsigned int Xicto;    // Xictoseconds since the given attosecond
         unsigned int Ucto;     // Uctoseconds since the given xictosecond
         unsigned int Rocto;    // Roctoseconds since the given uctosecond
-				unsigned int padding;  // round the value out to the nearest 64 bits
+        unsigned int padding;  // round the value out to the nearest 64 bits
 } TAI64Time;
 
 typedef TAI64Time (*Calends_calendar_to_internal_string) (char*, char*, char*);
@@ -23,33 +23,33 @@ typedef TAI64Time (*Calends_calendar_offset_long_long) (char*, TAI64Time, long l
 typedef TAI64Time (*Calends_calendar_offset_double) (char*, TAI64Time, double);
 typedef TAI64Time (*Calends_calendar_offset_tai) (char*, TAI64Time, TAI64Time);
 
-static inline TAI64Time wrap_Calends_calendar_to_internal_string(Calends_calendar_to_internal_string f, char* name, char* date, char* format) {
+static inline TAI64Time bridge_Calends_calendar_to_internal_string(Calends_calendar_to_internal_string f, char* name, char* date, char* format) {
   return f(name, date, format);
 }
-static inline TAI64Time wrap_Calends_calendar_to_internal_long_long(Calends_calendar_to_internal_long_long f, char* name, long long int date, char* format) {
+static inline TAI64Time bridge_Calends_calendar_to_internal_long_long(Calends_calendar_to_internal_long_long f, char* name, long long int date, char* format) {
   return f(name, date, format);
 }
-static inline TAI64Time wrap_Calends_calendar_to_internal_double(Calends_calendar_to_internal_double f, char* name, double date, char* format) {
+static inline TAI64Time bridge_Calends_calendar_to_internal_double(Calends_calendar_to_internal_double f, char* name, double date, char* format) {
   return f(name, date, format);
 }
-static inline TAI64Time wrap_Calends_calendar_to_internal_tai(Calends_calendar_to_internal_tai f, char* name, TAI64Time date) {
+static inline TAI64Time bridge_Calends_calendar_to_internal_tai(Calends_calendar_to_internal_tai f, char* name, TAI64Time date) {
   return f(name, date);
 }
 
-static inline char* wrap_Calends_calendar_from_internal(Calends_calendar_from_internal f, char* name, TAI64Time stamp, char* format) {
+static inline char* bridge_Calends_calendar_from_internal(Calends_calendar_from_internal f, char* name, TAI64Time stamp, char* format) {
   return f(name, stamp, format);
 }
 
-static inline TAI64Time wrap_Calends_calendar_offset_string(Calends_calendar_offset_string f, char* name, TAI64Time stamp, char* offset) {
+static inline TAI64Time bridge_Calends_calendar_offset_string(Calends_calendar_offset_string f, char* name, TAI64Time stamp, char* offset) {
   return f(name, stamp, offset);
 }
-static inline TAI64Time wrap_Calends_calendar_offset_long_long(Calends_calendar_offset_long_long f, char* name, TAI64Time stamp, long long int offset) {
+static inline TAI64Time bridge_Calends_calendar_offset_long_long(Calends_calendar_offset_long_long f, char* name, TAI64Time stamp, long long int offset) {
   return f(name, stamp, offset);
 }
-static inline TAI64Time wrap_Calends_calendar_offset_double(Calends_calendar_offset_double f, char* name, TAI64Time stamp, double offset) {
+static inline TAI64Time bridge_Calends_calendar_offset_double(Calends_calendar_offset_double f, char* name, TAI64Time stamp, double offset) {
   return f(name, stamp, offset);
 }
-static inline TAI64Time wrap_Calends_calendar_offset_tai(Calends_calendar_offset_tai f, char* name, TAI64Time stamp, TAI64Time offset) {
+static inline TAI64Time bridge_Calends_calendar_offset_tai(Calends_calendar_offset_tai f, char* name, TAI64Time stamp, TAI64Time offset) {
   return f(name, stamp, offset);
 }
 */
@@ -58,9 +58,11 @@ import "C"
 import (
 	"math/big"
 	"strings"
+	"syscall"
 	"unsafe"
 
 	"github.com/danhunsaker/calends/calendars"
+	"github.com/go-errors/errors"
 )
 
 //export Calends_calendar_register
@@ -207,21 +209,34 @@ func wrapToInternal(
 		defer handlePanic()
 		switch in := in.(type) {
 		case string:
-			raw, err = C.wrap_Calends_calendar_to_internal_string(toInternalString, name, C.CString(in), C.CString(format))
+			raw, err = C.bridge_Calends_calendar_to_internal_string(toInternalString, name, C.CString(in), C.CString(format))
+			if err != nil {
+				err = errors.Wrap(err, 0)
+			}
 		case int:
-			raw, err = C.wrap_Calends_calendar_to_internal_long_long(toInternalLongLong, name, C.longlong(in), C.CString(format))
+			raw, err = C.bridge_Calends_calendar_to_internal_long_long(toInternalLongLong, name, C.longlong(in), C.CString(format))
+			if err != nil {
+				err = errors.Wrap(err, 0)
+			}
 		case float64:
-			raw, err = C.wrap_Calends_calendar_to_internal_double(toInternalDouble, name, C.double(in), C.CString(format))
+			raw, err = C.bridge_Calends_calendar_to_internal_double(toInternalDouble, name, C.double(in), C.CString(format))
+			if err != nil {
+				err = errors.Wrap(err, 0)
+			}
 		case calendars.TAI64NAXURTime:
 			pass := taiGoToC(in)
-			raw, err = C.wrap_Calends_calendar_to_internal_tai(toInternalTai, name, pass)
+			raw, err = C.bridge_Calends_calendar_to_internal_tai(toInternalTai, name, pass)
+			if err != nil {
+				err = errors.Wrap(err, 0)
+			}
 		default:
-			err = calendars.ErrUnsupportedInput
+			err = errors.Wrap(calendars.ErrUnsupportedInput, 1)
 		}
-		if err != nil {
-			return
+		if err != nil && !errors.Is(err, syscall.Errno(2)) {
+			panic(err)
 		}
 		out = taiCToGo(raw)
+		err = nil
 		return
 	}
 }
@@ -231,11 +246,12 @@ func wrapFromInternal(name *C.char, fromInternal C.Calends_calendar_from_interna
 		var raw *C.char
 		defer handlePanic()
 		pass := taiGoToC(in)
-		raw, err = C.wrap_Calends_calendar_from_internal(fromInternal, name, pass, C.CString(format))
-		if err != nil {
-			return
+		raw, err = C.bridge_Calends_calendar_from_internal(fromInternal, name, pass, C.CString(format))
+		if err != nil && !errors.Is(err, syscall.Errno(2)) {
+			panic(errors.Wrap(err, 0))
 		}
 		out = C.GoString(raw)
+		err = nil
 		return
 	}
 }
@@ -253,44 +269,57 @@ func wrapOffset(
 		pass := taiGoToC(in)
 		switch offset := offset.(type) {
 		case string:
-			raw, err = C.wrap_Calends_calendar_offset_string(offsetString, name, pass, C.CString(offset))
+			raw, err = C.bridge_Calends_calendar_offset_string(offsetString, name, pass, C.CString(offset))
+			if err != nil {
+				err = errors.Wrap(err, 0)
+			}
 		case int:
-			raw, err = C.wrap_Calends_calendar_offset_long_long(offsetLongLong, name, pass, C.longlong(offset))
+			raw, err = C.bridge_Calends_calendar_offset_long_long(offsetLongLong, name, pass, C.longlong(offset))
+			if err != nil {
+				err = errors.Wrap(err, 0)
+			}
 		case float64:
-			raw, err = C.wrap_Calends_calendar_offset_double(offsetDouble, name, pass, C.double(offset))
+			raw, err = C.bridge_Calends_calendar_offset_double(offsetDouble, name, pass, C.double(offset))
+			if err != nil {
+				err = errors.Wrap(err, 0)
+			}
 		case calendars.TAI64NAXURTime:
 			pass2 := taiGoToC(offset)
-			raw, err = C.wrap_Calends_calendar_offset_tai(offsetTai, name, pass, pass2)
+			raw, err = C.bridge_Calends_calendar_offset_tai(offsetTai, name, pass, pass2)
+			if err != nil {
+				err = errors.Wrap(err, 0)
+			}
 		default:
-			err = calendars.ErrUnsupportedInput
+			err = errors.Wrap(calendars.ErrUnsupportedInput, 1)
 		}
-		if err != nil {
-			return
+		if err != nil && !errors.Is(err, syscall.Errno(2)) {
+			panic(err)
 		}
 		out = taiCToGo(raw)
+		err = nil
 		return
 	}
 }
 
 func taiGoToC(in calendars.TAI64NAXURTime) C.TAI64Time {
 	return C.TAI64Time{
-		C.longlong(in.Seconds),
-		C.uint(in.Nano),
-		C.uint(in.Atto),
-		C.uint(in.Xicto),
-		C.uint(in.Ucto),
-		C.uint(in.Rocto),
-		C.uint(0),
+		Seconds: C.longlong(in.Seconds),
+		Nano:    C.uint(in.Nano),
+		Atto:    C.uint(in.Atto),
+		Xicto:   C.uint(in.Xicto),
+		Ucto:    C.uint(in.Ucto),
+		Rocto:   C.uint(in.Rocto),
+		padding: C.uint(0),
 	}
 }
 
 func taiCToGo(in C.TAI64Time) calendars.TAI64NAXURTime {
 	return calendars.TAI64NAXURTime{
-		int64(in.Seconds),
-		uint32(in.Nano),
-		uint32(in.Atto),
-		uint32(in.Xicto),
-		uint32(in.Ucto),
-		uint32(in.Rocto),
+		Seconds: int64(in.Seconds),
+		Nano:    uint32(in.Nano),
+		Atto:    uint32(in.Atto),
+		Xicto:   uint32(in.Xicto),
+		Ucto:    uint32(in.Ucto),
+		Rocto:   uint32(in.Rocto),
 	}
 }

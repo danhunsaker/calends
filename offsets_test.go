@@ -1,10 +1,10 @@
 package calends
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/danhunsaker/calends/calendars"
+	"github.com/go-errors/errors"
 )
 
 func TestAdd(t *testing.T) {
@@ -12,7 +12,7 @@ func TestAdd(t *testing.T) {
 	if err != nil {
 		t.Errorf("Add(%#v, %#v) gives error %q", "86400", "", err)
 	}
-	if ! (test.startTime.Seconds == 86400 && test.startTime.Nano == 2592000) {
+	if !(test.startTime.Seconds == 86400 && test.startTime.Nano == 2592000) {
 		t.Errorf("Add(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test.startTime.String(), "86400.002592000~")
 	}
 	if test.duration.String() != "-86400.00259" {
@@ -54,7 +54,7 @@ func TestSubtract(t *testing.T) {
 		if err != nil {
 			t.Errorf("Subtract(%#v, %#v) gives error %q", value, "", err)
 		}
-		if ! (test.startTime.Seconds == -86399 && test.startTime.Nano == 997408000) {
+		if !(test.startTime.Seconds == -86399 && test.startTime.Nano == 997408000) {
 			t.Errorf("Subtract(%#v, %#v) has startTime of %#v\nwant %#v", value, "", test.startTime.String(), "-86399.997408000~")
 		}
 		if test.duration.String() != "86399.99741" {
@@ -129,7 +129,7 @@ func TestAddFromEnd(t *testing.T) {
 	if test.duration.String() != "86400.00259" {
 		t.Errorf("AddFromEnd(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test.duration.String(), "86400.00259")
 	}
-	if ! (test.endTime.Seconds == 86400 && test.endTime.Nano == 2592000) {
+	if !(test.endTime.Seconds == 86400 && test.endTime.Nano == 2592000) {
 		t.Errorf("AddFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test.endTime.String(), "86400.002592000~")
 	}
 
@@ -171,7 +171,7 @@ func TestSubtractFromEnd(t *testing.T) {
 		if test.duration.String() != "-86399.99741" {
 			t.Errorf("SubtractFromEnd(%#v, %#v) has duration of %#v\nwant %#v", value, "", test.duration.String(), "-86399.99741")
 		}
-		if ! (test.endTime.Seconds == -86399 && test.endTime.Nano == 997408000) {
+		if !(test.endTime.Seconds == -86399 && test.endTime.Nano == 997408000) {
 			t.Errorf("SubtractFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", value, "", test.endTime.String(), "-86399.997408000~")
 		}
 	}
@@ -290,7 +290,7 @@ func TestNext(t *testing.T) {
 	if test4.duration.String() != "86400.00259" {
 		t.Errorf("4:Next(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test4.duration.String(), "86400.00259")
 	}
-	if ! (test4.endTime.Seconds == 86400 && test4.endTime.Nano == 2592000) {
+	if !(test4.endTime.Seconds == 86400 && test4.endTime.Nano == 2592000) {
 		t.Errorf("4:Next(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test4.endTime.String(), "86400.002592000~")
 	}
 
@@ -353,7 +353,7 @@ func TestPrevious(t *testing.T) {
 	if err4 != nil {
 		t.Errorf("4:Previous(%#v, %#v) gives error %q", "86400", "", err4)
 	}
-	if ! (test4.startTime.Seconds == -86399 && test4.startTime.Nano == 997408000) {
+	if !(test4.startTime.Seconds == -86399 && test4.startTime.Nano == 997408000) {
 		t.Errorf("4:Previous(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test4.startTime.String(), "-86399.997408000~")
 	}
 	if test4.duration.String() != "86399.99741" {
@@ -391,7 +391,7 @@ func TestSetDate(t *testing.T) {
 	if err != nil {
 		t.Errorf("SetDate(%#v, %#v, %#v) gives error %q", "86400", "", "", err)
 	}
-	if ! (test.startTime.Seconds == 86392 && test.startTime.Nano == 81999) {
+	if !(test.startTime.Seconds == 86392 && test.startTime.Nano == 81999) {
 		t.Errorf("SetDate(%#v, %#v, %#v) has startTime of %#v\nwant %#v", "86400", "", "", test.startTime.String(), "86392.000081999~")
 	}
 	if test.duration.String() != "-86392.00008" {
@@ -437,7 +437,7 @@ func TestSetEndDate(t *testing.T) {
 	if test.duration.String() != "86392.00008" {
 		t.Errorf("SetEndDate(%#v, %#v, %#v) has duration of %#v\nwant %#v", "86400", "", "", test.duration.String(), "86392.00008")
 	}
-	if ! (test.endTime.Seconds == 86392 && test.endTime.Nano == 81999) {
+	if !(test.endTime.Seconds == 86392 && test.endTime.Nano == 81999) {
 		t.Errorf("SetEndDate(%#v, %#v, %#v) has endTime of %#v\nwant %#v", "86400", "", "", test.endTime.String(), "86392.000081999~")
 	}
 
@@ -463,7 +463,7 @@ func TestSetDuration(t *testing.T) {
 	if test.duration.String() != "86400.00259" {
 		t.Errorf("SetDuration(%#v, %#v) has duration of %#v\nwant %#v", "86400", "", test.duration.String(), "86400.00259")
 	}
-	if ! (test.endTime.Seconds == 86400 && test.endTime.Nano == 2592000) {
+	if !(test.endTime.Seconds == 86400 && test.endTime.Nano == 2592000) {
 		t.Errorf("SetDuration(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "", test.endTime.String(), "86400.002592000~")
 	}
 
@@ -497,7 +497,7 @@ func TestSetDurationFromEnd(t *testing.T) {
 	if err != nil {
 		t.Errorf("SetDurationFromEnd(%#v, %#v) gives error %q", "86400", "", err)
 	}
-	if ! (test.startTime.Seconds == -86399 && test.startTime.Nano == 997408000) {
+	if !(test.startTime.Seconds == -86399 && test.startTime.Nano == 997408000) {
 		t.Errorf("SetDurationFromEnd(%#v, %#v) has startTime of %#v\nwant %#v", "86400", "", test.startTime.String(), "-86399.997408000~")
 	}
 	if test.duration.String() != "86399.99741" {

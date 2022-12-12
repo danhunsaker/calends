@@ -37,12 +37,12 @@ func init() {
 
 				moment, err := calends.Create(date, inCal, inForm)
 				if err != nil {
-					return cli.NewExitError(err, 2)
+					return cli.Exit(err, 2)
 				}
 
 				output, err := moment.Date(outCal, outForm)
 				if err != nil {
-					return cli.NewExitError(err, 2)
+					return cli.Exit(err, 2)
 				}
 
 				fmt.Println(output)

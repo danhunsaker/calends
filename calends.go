@@ -23,13 +23,13 @@ package calends
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"math/big"
 	"strings"
 
 	"github.com/danhunsaker/calends/calendars"
+	"github.com/go-errors/errors"
 )
 
 // The Calends type is the core of the library, and the primary interface with
@@ -41,7 +41,7 @@ type Calends struct {
 }
 
 // Version of the library
-var Version = "0.0.5"
+var Version = "0.0.6"
 
 // Create is the mechanism for constructing new Calends objects.
 /*
@@ -79,7 +79,7 @@ func Create(stamp interface{}, calendar, format string) (instance Calends, err e
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err = calendars.ErrUnknownCalendar(calendar)
+		err = errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return
 	}
 
@@ -177,10 +177,10 @@ func retrieveDuration(calendar string, stamp map[string]interface{}, format stri
 	var rawDuration interface{}
 	rawDuration, hasDuration = stamp["duration"]
 	if hasDuration {
-		switch rawDuration.(type) {
+		switch rawDuration := rawDuration.(type) {
 		case []byte:
 			var tmp *big.Float
-			tmp, _, err = big.ParseFloat(string(rawDuration.([]byte)), 10, 176, big.ToNearestAway)
+			tmp, _, err = big.ParseFloat(string(rawDuration), 10, 176, big.ToNearestAway)
 			if err == nil {
 				duration = *tmp
 			} else if err.Error() == "EOF" {
@@ -189,7 +189,7 @@ func retrieveDuration(calendar string, stamp map[string]interface{}, format stri
 			}
 		case string:
 			var tmp *big.Float
-			tmp, _, err = big.ParseFloat(rawDuration.(string), 10, 176, big.ToNearestAway)
+			tmp, _, err = big.ParseFloat(rawDuration, 10, 176, big.ToNearestAway)
 			if err == nil {
 				duration = *tmp
 			} else if err.Error() == "EOF" {
@@ -197,14 +197,14 @@ func retrieveDuration(calendar string, stamp map[string]interface{}, format stri
 				err = nil
 			}
 		case int:
-			duration = *big.NewFloat(float64(rawDuration.(int)))
+			duration = *big.NewFloat(float64(rawDuration))
 		case float64:
-			duration = *big.NewFloat(rawDuration.(float64))
+			duration = *big.NewFloat(rawDuration)
 		case *big.Float:
-			tmp := rawDuration.(*big.Float)
+			tmp := rawDuration
 			duration = *tmp
 		case big.Float:
-			duration = rawDuration.(big.Float)
+			duration = rawDuration
 		default:
 			err = errors.New("Invalid Duration Type")
 		}
@@ -219,7 +219,7 @@ func (c Calends) Date(calendar, format string) (string, error) {
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar(calendar)
+		err := errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return "", err
 	}
 
@@ -241,7 +241,7 @@ func (c Calends) EndDate(calendar, format string) (string, error) {
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar(calendar)
+		err := errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return "", err
 	}
 
@@ -289,7 +289,7 @@ func (c *Calends) UnmarshalText(text []byte) error {
 	var start, end string
 
 	n, err := fmt.Sscanf(string(text), "%56s::%56s", &start, &end)
-	if err != nil && err != io.EOF && err.Error() != "input does not match format" && err.Error() != "unexpected EOF" {
+	if err != nil && err.Error() != io.EOF.Error() && err.Error() != "input does not match format" && err.Error() != "unexpected EOF" {
 		return err
 	}
 

@@ -16,6 +16,7 @@ import (
 	"sync/atomic"
 
 	"github.com/danhunsaker/calends"
+	// "github.com/go-errors/errors"
 )
 
 var maxShards = uint64(64)
@@ -135,11 +136,12 @@ func handlePanic() {
 		}
 
 		// We need a string to pass to the handler(s)
-		switch r.(type) {
+		switch r := r.(type) {
 		case string:
-			err = r.(string)
+			err = r
 		case error:
-			err = r.(error).Error()
+			err = r.Error()
+			// err = errors.Wrap(r, 2).ErrorStack()
 		default:
 			err = fmt.Sprintf("%#v", r)
 		}

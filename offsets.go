@@ -1,9 +1,8 @@
 package calends
 
 import (
-	"errors"
-
 	"github.com/danhunsaker/calends/calendars"
+	"github.com/go-errors/errors"
 )
 
 // Add creates a new Calends object a given offset after the current start
@@ -13,7 +12,7 @@ func (c Calends) Add(offset interface{}, calendar string) (out Calends, err erro
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar(calendar)
+		err := errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return c, err
 	}
 
@@ -40,7 +39,7 @@ func (c Calends) AddFromEnd(offset interface{}, calendar string) (out Calends, e
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar(calendar)
+		err := errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return c, err
 	}
 
@@ -112,7 +111,7 @@ func (c Calends) SetDate(stamp interface{}, calendar, format string) (Calends, e
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar(calendar)
+		err := errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return c, err
 	}
 
@@ -137,7 +136,7 @@ func (c Calends) SetEndDate(stamp interface{}, calendar, format string) (Calends
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar(calendar)
+		err := errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return c, err
 	}
 
@@ -163,7 +162,7 @@ func (c Calends) SetDuration(duration interface{}, calendar string) (Calends, er
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar(calendar)
+		err := errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return c, err
 	}
 
@@ -182,7 +181,7 @@ func (c Calends) SetDurationFromEnd(duration interface{}, calendar string) (Cale
 		calendar = "unix"
 	}
 	if !calendars.Registered(calendar) {
-		err := calendars.ErrUnknownCalendar(calendar)
+		err := errors.Wrap(calendars.ErrUnknownCalendar(calendar), 1)
 		return c, err
 	}
 

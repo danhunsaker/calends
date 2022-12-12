@@ -2,11 +2,11 @@ package calends
 
 import (
 	"encoding/json"
-	"errors"
 	"math/big"
 	"testing"
 
 	"github.com/danhunsaker/calends/calendars"
+	"github.com/go-errors/errors"
 )
 
 func testValue(dur float64) Calends {

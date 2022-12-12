@@ -101,6 +101,8 @@ package calendars
 import (
 	"fmt"
 	"math/big"
+
+	"github.com/go-errors/errors"
 )
 
 var jdcBaseGregorian = big.NewFloat(1721425.5)
@@ -220,7 +222,7 @@ func stardateToInternal(date interface{}, format string) (stamp TAI64NAXURTime, 
 	case string:
 		in = date.(string)
 	default:
-		err = ErrUnsupportedInput
+		err = errors.Wrap(ErrUnsupportedInput, 1)
 		return
 	}
 
@@ -244,7 +246,7 @@ func stardateToInternal(date interface{}, format string) (stamp TAI64NAXURTime, 
 	case "guide-oldtng":
 		jdc = stardateFixedRateToJDC(in, format)
 	case "guide-oldtos":
-		err = ErrInvalidFormat
+		err = errors.Wrap(ErrInvalidFormat, 1)
 	case "aldrich":
 		jdc = stardateFixedRateToJDC(in, format)
 	case "red-dragon":
@@ -258,7 +260,7 @@ func stardateToInternal(date interface{}, format string) (stamp TAI64NAXURTime, 
 	case "sto-anthodev":
 		jdc = stardateFixedRateToJDC(in, format)
 	default:
-		err = ErrInvalidFormat
+		err = errors.Wrap(ErrInvalidFormat, 1)
 	}
 	if err != nil {
 		return
@@ -300,7 +302,7 @@ func stardateFromInternal(stamp TAI64NAXURTime, format string) (date string, err
 	case "guide-oldtng":
 		date = stardateJDCToFixedRate(jdcFloat, format)
 	case "guide-oldtos":
-		err = ErrInvalidFormat
+		err = errors.Wrap(ErrInvalidFormat, 1)
 	case "aldrich":
 		date = stardateJDCToFixedRate(jdcFloat, format)
 	case "red-dragon":
@@ -314,7 +316,7 @@ func stardateFromInternal(stamp TAI64NAXURTime, format string) (date string, err
 	case "sto-anthodev":
 		date = stardateJDCToFixedRate(jdcFloat, format)
 	default:
-		err = ErrInvalidFormat
+		err = errors.Wrap(ErrInvalidFormat, 1)
 	}
 
 	return
@@ -330,7 +332,7 @@ func stardateOffset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, 
 	case string:
 		mod = offset.(string)
 	default:
-		err = ErrUnsupportedInput
+		err = errors.Wrap(ErrUnsupportedInput, 1)
 		return
 	}
 

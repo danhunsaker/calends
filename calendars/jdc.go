@@ -28,6 +28,8 @@ package calendars
 import (
 	"fmt"
 	"math/big"
+
+	"github.com/go-errors/errors"
 )
 
 var jdcBaseDay = big.NewFloat(40587.)     // Modified Julian Date at January 1, 1970
@@ -66,7 +68,7 @@ func jdcToInternal(date interface{}, format string) (stamp TAI64NAXURTime, err e
 	case string:
 		in = date.(string)
 	default:
-		err = ErrUnsupportedInput
+		err = errors.Wrap(ErrUnsupportedInput, 1)
 		return
 	}
 
@@ -79,7 +81,7 @@ func jdcToInternal(date interface{}, format string) (stamp TAI64NAXURTime, err e
 		mjd = *mjdP
 		jdc.Add(mjdP, jdcModifier)
 	default:
-		err = ErrInvalidFormat
+		err = errors.Wrap(ErrInvalidFormat, 1)
 	}
 	if err != nil {
 		return
@@ -127,7 +129,7 @@ func jdcFromInternal(stamp TAI64NAXURTime, format string) (date string, err erro
 		mjdInt, _ := mjd.Int(nil)
 		date = fmt.Sprintf("%f", mjd.Sub(&mjd, jdc.SetInt(mjdInt)))
 	default:
-		err = ErrInvalidFormat
+		err = errors.Wrap(ErrInvalidFormat, 1)
 	}
 
 	return
@@ -153,7 +155,7 @@ func jdcOffset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err e
 	case string:
 		mod = offset.(string)
 	default:
-		err = ErrUnsupportedInput
+		err = errors.Wrap(ErrUnsupportedInput, 1)
 		return
 	}
 

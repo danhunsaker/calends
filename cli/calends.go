@@ -13,7 +13,7 @@ import (
 var commands []*cli.Command
 
 var (
-	errArgMismatch = cli.NewExitError("Incorrect argument count\n", 1)
+	errArgMismatch = cli.Exit("Incorrect argument count\n", 1)
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 			Email: "danhunsaker@gmail.com",
 		},
 	}
-	app.Copyright = "(c) 2018 Dan Hunsaker"
+	app.Copyright = "(c) 2018-2022 Dan Hunsaker"
 
 	// configuration
 	app.EnableBashCompletion = true

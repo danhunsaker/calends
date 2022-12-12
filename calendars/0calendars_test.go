@@ -1,9 +1,10 @@
 package calendars
 
 import (
-	"errors"
 	"strings"
 	"testing"
+
+	"github.com/go-errors/errors"
 )
 
 var testCalendarElements calendarRegistration

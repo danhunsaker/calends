@@ -1,0 +1,20 @@
+{
+    "name": "danhunsaker/calends",
+    "description": "A library for handling dates and times across arbitrary calendar systems",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Hennik Hunsaker",
+            "email": "hennik@insidiouslogic.systems"
+        }
+    ],
+    "require": {
+        "ext-ffi": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Calends\\": "src/"
+        }
+    }
+}
