@@ -9,7 +9,7 @@ env:
 
 jobs:
   test:
-    name: Test Go ${{ matrix.go }} and PHP ${{ matrix.php }} on ${{ matrix.os }}
+    name: Test Go ${{ matrix.go }}/PHP ${{ matrix.php }}/Dart ${{ matrix.dart }} on ${{ matrix.os }}
     strategy:
       matrix:
         os:
@@ -25,6 +25,8 @@ jobs:
           - '8.1'
           - '8.0'
           - '7.4'
+        dart:
+          - stable
         include:
           - os: ubuntu-latest
             ext: so
@@ -49,6 +51,11 @@ jobs:
           coverage: none
           extensions: ffi
 
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.dart }}
+
       - name: Run Go tests (Not Windows)
         if: ${{ matrix.os != 'windows-latest' }}
         run: ./tests/go.sh
@@ -67,29 +74,15 @@ jobs:
         if: ${{ matrix.os != 'windows-latest' }}
         run: ./tests/php.sh ${{ steps.php.outputs.php-version }} ${{ matrix.ext }}
 
-      - name: Upload Artifacts (Not Windows)
-        if: ${{ failure() && matrix.os != 'windows-latest' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: go-${{ matrix.go }}-php-${{ matrix.php }}-${{ matrix.os }}
-          path: |
-            libcalends/libcalends.h
-            libcalends/libcalends.${{ matrix.ext }}
-            libcalends/php/Calends.h
-
       - name: Test PHP wrapper (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: pwsh ./tests/php.ps1 ${{ steps.php.outputs.php-version }} ${{ matrix.ext }}
 
-      - name: Upload Artifacts (Windows)
-        if: ${{ failure() && matrix.os == 'windows-latest' }}
-        uses: actions/upload-artifact@v3
-        with:
-          name: go-${{ matrix.go }}-php-${{ matrix.php }}-${{ matrix.os }}
-          path: |
-            libcalends/libcalends.h
-            libcalends/libcalends.${{ matrix.ext }}
-            libcalends/php/Calends.h
+      - name: Test Dart wrapper
+        run: |
+          cd libcalends/dart
+          dart pub get
+          dart test
 
   build:
     name: Build Binaries

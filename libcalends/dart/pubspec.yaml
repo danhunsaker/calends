@@ -1,0 +1,26 @@
+name: calends
+description: A library for handling dates and times across arbitrary calendar systems
+version: 0.0.5
+homepage: https://github.com/danhunsaker/calends/tree/main/libcalends/dart/
+
+environment:
+  sdk: '>=2.18.5 <3.0.0'
+
+dependencies:
+  ffi: ^2.0.1
+
+dev_dependencies:
+  ffigen: ^7.2.2
+  lints: ^2.0.0
+  test: ^1.16.0
+
+ffigen:
+  name: CalendsBindings
+  description: Bindings for a library for handling dates and times across arbitrary calendar systems
+  output: 'lib/src/generated_bindings.dart'
+  headers:
+    entry-points:
+      - '../libcalends.h'
+  functions:
+    rename:
+      'Calends_(.*)': '$1'
