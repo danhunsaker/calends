@@ -1,0 +1,115 @@
+name: CI (Test/Build/Release)
+
+on:
+  - push
+  - pull_request
+
+env:
+  GO111MODULE: on
+
+jobs:
+  test:
+    name: Test Go ${{ matrix.go }} and PHP ${{ matrix.php }} on ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+        go:
+          - ~1.19.0
+          - ~1.18.0
+          - ~1.17.0
+        php:
+          - '8.2'
+          - '8.1'
+          - '8.0'
+          - '7.4'
+        include:
+          - os: ubuntu-latest
+            ext: so
+          - os: windows-latest
+            ext: dll
+          - os: macos-latest
+            ext: dylib
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        id: php
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          extensions: ffi
+
+      - name: Run Go tests (Not Windows)
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: ./tests/go.sh
+
+      - name: Run Go tests (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: pwsh ./tests/go.ps1
+
+      - name: Test building libcalends
+        run: go build -v -o libcalends.out -buildmode=c-shared ./libcalends
+
+      - name: Test building cli
+        run: go build -v -o calends.out ./cli
+
+      - name: Test PHP wrapper (Not Windows)
+        if: ${{ matrix.os != 'windows-latest' }}
+        run: ./tests/php.sh ${{ steps.php.outputs.php-version }} ${{ matrix.ext }}
+
+      - name: Upload Artifacts (Not Windows)
+        if: ${{ failure() && matrix.os != 'windows-latest' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: go-${{ matrix.go }}-php-${{ matrix.php }}-${{ matrix.os }}
+          path: |
+            libcalends/libcalends.h
+            libcalends/libcalends.${{ matrix.ext }}
+            libcalends/php/Calends.h
+
+      - name: Test PHP wrapper (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: pwsh ./tests/php.ps1 ${{ steps.php.outputs.php-version }} ${{ matrix.ext }}
+
+      - name: Upload Artifacts (Windows)
+        if: ${{ failure() && matrix.os == 'windows-latest' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: go-${{ matrix.go }}-php-${{ matrix.php }}-${{ matrix.os }}
+          path: |
+            libcalends/libcalends.h
+            libcalends/libcalends.${{ matrix.ext }}
+            libcalends/php/Calends.h
+
+  build:
+    name: Build Binaries
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Build binaries
+        run: ./build-all
+
+      - name: Release binaries
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/*
+            dist/bin/*

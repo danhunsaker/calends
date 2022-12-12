@@ -20,6 +20,8 @@ package calendars
 import (
 	"fmt"
 	"math/big"
+
+	"github.com/go-errors/errors"
 )
 
 func init() {
@@ -82,7 +84,7 @@ func unixParseDate(date interface{}) (stamp TAI64NAXURTime, err error) {
 	case string:
 		stamp = TAI64NAXURTimeFromDecimalString(date.(string))
 	default:
-		err = ErrUnsupportedInput
+		err = errors.Wrap(ErrUnsupportedInput, 1)
 	}
 
 	return

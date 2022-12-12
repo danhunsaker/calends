@@ -1,0 +1,41 @@
+# github.com/AlekSi/pointer v1.2.0
+## explicit; go 1.18
+github.com/AlekSi/pointer
+# github.com/chzyer/readline v1.5.1
+## explicit; go 1.15
+github.com/chzyer/readline
+# github.com/cpuguy83/go-md2man/v2 v2.0.2
+## explicit; go 1.11
+github.com/cpuguy83/go-md2man/v2/md2man
+# github.com/go-errors/errors v1.4.2
+## explicit; go 1.14
+github.com/go-errors/errors
+# github.com/knz/strtime v0.0.0-20200924090105-187c67f2bf5e
+## explicit
+github.com/knz/strtime
+# github.com/mattn/go-shellwords v1.0.12
+## explicit; go 1.13
+github.com/mattn/go-shellwords
+# github.com/olebedev/when v0.0.0-20221205223600-4d190b02b8d8
+## explicit; go 1.19
+github.com/olebedev/when
+github.com/olebedev/when/rules
+github.com/olebedev/when/rules/br
+github.com/olebedev/when/rules/common
+github.com/olebedev/when/rules/en
+github.com/olebedev/when/rules/ru
+# github.com/pkg/errors v0.9.1
+## explicit
+github.com/pkg/errors
+# github.com/russross/blackfriday/v2 v2.1.0
+## explicit
+github.com/russross/blackfriday/v2
+# github.com/urfave/cli/v2 v2.23.7
+## explicit; go 1.18
+github.com/urfave/cli/v2
+# github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673
+## explicit
+github.com/xrash/smetrics
+# golang.org/x/sys v0.3.0
+## explicit; go 1.17
+golang.org/x/sys/unix

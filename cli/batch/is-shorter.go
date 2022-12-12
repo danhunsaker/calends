@@ -1,9 +1,8 @@
 package batch
 
 import (
-	"errors"
-
 	"github.com/chzyer/readline"
+	"github.com/go-errors/errors"
 )
 
 func init() {

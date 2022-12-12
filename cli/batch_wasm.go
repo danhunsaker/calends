@@ -1,10 +1,10 @@
+//go:build wasm
 // +build wasm
 
 package main
 
 import (
-	"errors"
-
+	"github.com/go-errors/errors"
 	"github.com/urfave/cli/v2"
 )
 

@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 set -e
+
+go get -v ./...
+go mod vendor
+
 echo "mode: atomic" > coverage.txt
 
 for d in $(go list ./... | grep -v vendor); do

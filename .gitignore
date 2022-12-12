@@ -32,3 +32,6 @@ core*
 .build/
 .gopath/
 .zephir/
+*.dep
+/vendor/
+!/vendor/modules.txt

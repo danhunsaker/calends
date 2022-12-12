@@ -37,12 +37,12 @@ func init() {
 				var moment calends.Calends
 				err := json.Unmarshal([]byte(stamp), &moment)
 				if err != nil {
-					return cli.NewExitError(err, 2)
+					return cli.Exit(err, 2)
 				}
 
 				output, err := moment.Date(outCal, outForm)
 				if err != nil {
-					return cli.NewExitError(err, 2)
+					return cli.Exit(err, 2)
 				}
 
 				fmt.Println(output)

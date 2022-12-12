@@ -3,27 +3,41 @@
 set -e
 
 GOPATH=$(go env GOPATH)
-TARGETS=${TARGETS:-linux/386,linux/amd64,linux/arm-5,linux/arm-6,linux/arm-7,linux/arm64,windows-4.0/*,windows-6.0/*,windows-6.1/*,windows-6.3/*,windows-10.0/*}
+TARGETS=${TARGETS:-linux/386,linux/amd64,linux/arm-5,linux/arm-6,linux/arm-7,linux/arm64,darwin/*,windows/*}
 
 v=$(grep 'Version =' calends.go | awk '{ print $4 }')
 VERSION=$(echo v${v//\"/})
 unset v
 
-go get github.com/karalabe/xgo
+go get -v ./...
+go mod vendor
+go install github.com/crazy-max/xgo@latest
 ${GOPATH}/bin/xgo -buildmode=c-shared -dest=$(pwd)/dist/ -out=libcalends-${VERSION} -targets=${TARGETS} github.com/danhunsaker/calends/libcalends
-${GOPATH}/bin/xgo -dest=$(pwd)/dist/bin/ -out=calends-${VERSION} -targets="*/*,${TARGETS}" github.com/danhunsaker/calends/cli
+${GOPATH}/bin/xgo -dest=$(pwd)/dist/bin/ -out=calends-${VERSION} -targets=${TARGETS} ./cli
+GOOS=js GOARCH=wasm go build -o=$(pwd)/dist/calends-${VERSION}.wasm github.com/danhunsaker/calends
 
 for h in $(find dist/ -name '*.h')
 do
   dir=${h/.h/}
   mkdir -p ${dir}
   mv ${dir}.h ${dir}/libcalends.h
+  echo "#define FFI_SCOPE \"CALENDS\"" > ${dir}/calends-phpffi.h
   # Linux
-  [ -e ${dir}.so ] && mv ${dir}.so ${dir}/libcalends.so
+  [ -e ${dir}.so ] && ( 
+    mv ${dir}.so ${dir}/libcalends.so
+    echo "#define FFI_LIB \"libcalends.so\"" >> ${dir}/calends-phpffi.h
+  )
   # Darwin
-  [ -e ${dir}.dylib ] && mv ${dir}.dylib ${dir}/libcalends.dylib
+  [ -e ${dir}.dylib ] && (
+    mv ${dir}.dylib ${dir}/libcalends.dylib
+    echo "#define FFI_LIB \"libcalends.dylib\"" >> ${dir}/calends-phpffi.h
+  )
   # Windows
-  [ -e ${dir}.dll ] && mv ${dir}.dll ${dir}/libcalends.dll
+  [ -e ${dir}.dll ] && (
+    mv ${dir}.dll ${dir}/libcalends.dll
+    echo "#define FFI_LIB \"libcalends.dll\"" >> ${dir}/calends-phpffi.h
+  )
+  cpp -P -D"__attribute__(ARGS)=" ${dir}/libcalends.h | egrep -v '_Complex|^static inline .*\{$|return |^\}$' >> ${dir}/calends-phpffi.h
 
   if [ -e ${dir}/libcalends.dll ]
   then

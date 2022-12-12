@@ -21,6 +21,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/go-errors/errors"
 	"github.com/knz/strtime"
 	when "github.com/olebedev/when"
 	when_common "github.com/olebedev/when/rules/common"
@@ -44,7 +45,7 @@ func init() {
 			case []byte:
 				str = string(date.([]byte))
 			default:
-				err = ErrUnsupportedInput
+				err = errors.Wrap(ErrUnsupportedInput, 1)
 				return
 			}
 
@@ -91,7 +92,7 @@ func init() {
 			case []byte:
 				str = string(offset.([]byte))
 			default:
-				err = ErrUnsupportedInput
+				err = errors.Wrap(ErrUnsupportedInput, 1)
 			}
 			if err != nil {
 				return
@@ -106,7 +107,7 @@ func init() {
 				return
 			}
 			if r == nil {
-				err = ErrUnsupportedInput
+				err = errors.Wrap(ErrUnsupportedInput, 1)
 				return
 			}
 
