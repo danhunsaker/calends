@@ -17,7 +17,7 @@ CalendsBindings loadLib() {
   if (Platform.isMacOS) libraryName = 'libcalends.dylib';
   if (Platform.isWindows) libraryName = 'libcalends.dll';
 
-  final libraryPath = path.join(Directory.current.path, '..', libraryName);
+  final libraryPath = path.join(Directory.current.path, libraryName);
 
   return CalendsBindings(
     Platform.isIOS

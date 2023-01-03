@@ -13,29 +13,29 @@ type testCalendarClass struct {
 	DefaultFormat string
 }
 
-func (testCalendarClass) ToInternal(in interface{}, mod string) (out TAI64NAXURTime, err error) {
+func (testCalendarClass) ToInternal(in interface{}, mod string) (out TAI64NARUXTime, err error) {
 	err = errors.New("testToInternal")
 	return
 }
 
-func (testCalendarClass) FromInternal(in TAI64NAXURTime, mod string) (out string, err error) {
+func (testCalendarClass) FromInternal(in TAI64NARUXTime, mod string) (out string, err error) {
 	err = errors.New("testFromInternal")
 	return
 }
 
-func (testCalendarClass) Offset(in TAI64NAXURTime, mod interface{}) (out TAI64NAXURTime, err error) {
+func (testCalendarClass) Offset(in TAI64NARUXTime, mod interface{}) (out TAI64NARUXTime, err error) {
 	err = errors.New("testOffset")
 	return
 }
 
 func init() {
-	testCalendarElements.ToInternal = func(in interface{}, mod string) (out TAI64NAXURTime, err error) {
+	testCalendarElements.ToInternal = func(in interface{}, mod string) (out TAI64NARUXTime, err error) {
 		return
 	}
-	testCalendarElements.FromInternal = func(in TAI64NAXURTime, mod string) (out string, err error) {
+	testCalendarElements.FromInternal = func(in TAI64NARUXTime, mod string) (out string, err error) {
 		return
 	}
-	testCalendarElements.Offset = func(in TAI64NAXURTime, mod interface{}) (out TAI64NAXURTime, err error) {
+	testCalendarElements.Offset = func(in TAI64NARUXTime, mod interface{}) (out TAI64NARUXTime, err error) {
 		return
 	}
 	testCalendarElements.DefaultFormat = "test"
@@ -146,13 +146,13 @@ func TestFromInternal(t *testing.T) {
 		TestRegistered(t)
 	}
 
-	_, err := FromInternal("testCalendar", TAI64NAXURTime{}, "")
+	_, err := FromInternal("testCalendar", TAI64NARUXTime{}, "")
 
 	if err == nil || err.Error() != "testFromInternal" {
-		t.Errorf("FromInternal(\"testCalendar\", TAI64NAXURTime{}, \"\") failed - got %#v, but wanted %#v", err.Error(), "testFromInternal")
+		t.Errorf("FromInternal(\"testCalendar\", TAI64NARUXTime{}, \"\") failed - got %#v, but wanted %#v", err.Error(), "testFromInternal")
 	}
 
-	_, err = FromInternal("invalid", TAI64NAXURTime{}, "")
+	_, err = FromInternal("invalid", TAI64NARUXTime{}, "")
 
 	if err.Error() != ErrUnknownCalendar("invalid").Error() {
 		t.Errorf("FromInternal(\"invalid\", \"\", \"\") failed - got %q, but wanted %q", err, ErrUnknownCalendar("invalid"))
@@ -164,13 +164,13 @@ func TestOffset(t *testing.T) {
 		TestRegistered(t)
 	}
 
-	_, err := Offset("testCalendar", TAI64NAXURTime{}, "")
+	_, err := Offset("testCalendar", TAI64NARUXTime{}, "")
 
 	if err == nil || err.Error() != "testOffset" {
-		t.Errorf("Offset(\"testCalendar\", TAI64NAXURTime{}, \"\") failed - got %#v, but wanted %#v", err.Error(), "testOffset")
+		t.Errorf("Offset(\"testCalendar\", TAI64NARUXTime{}, \"\") failed - got %#v, but wanted %#v", err.Error(), "testOffset")
 	}
 
-	_, err = Offset("invalid", TAI64NAXURTime{}, "")
+	_, err = Offset("invalid", TAI64NARUXTime{}, "")
 
 	if err.Error() != ErrUnknownCalendar("invalid").Error() {
 		t.Errorf("Offset(\"invalid\", \"\", \"\") failed - got %q, but wanted %q", err, ErrUnknownCalendar("invalid"))

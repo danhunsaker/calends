@@ -67,7 +67,7 @@ void main() {
       expect(test.date('fake', ''),
           equals('00000000000000000000000000000000000000000000000000000000'));
 
-      expect(test.add('1', 'fake').date('tai64', 'tai64naxur'),
+      expect(test.add('1', 'fake').date('tai64', 'tai64narux'),
           equals('-3FFFFFFFFFFFFFFF0000000000000000000000000000000000000000'));
 
       fake.unregister();

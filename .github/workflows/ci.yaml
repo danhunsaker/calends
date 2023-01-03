@@ -9,24 +9,28 @@ env:
 
 jobs:
   test:
-    name: Test Go ${{ matrix.go }}/PHP ${{ matrix.php }}/Dart ${{ matrix.dart }} on ${{ matrix.os }}
+    name: "Tests: Go ${{ matrix.go }}/Dart ${{ matrix.dart }}/Node ${{ matrix.node }}/PHP ${{ matrix.php }} on ${{ matrix.os }}"
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest
           - windows-latest
           - macos-latest
         go:
-          - ~1.19.0
-          - ~1.18.0
-          - ~1.17.0
+          - '1.19'
+          - '1.18'
+          - '1.17'
+        dart:
+          - stable
+        node:
+          - 18
+          - 16
         php:
           - '8.2'
           - '8.1'
           - '8.0'
           - '7.4'
-        dart:
-          - stable
         include:
           - os: ubuntu-latest
             ext: so
@@ -43,6 +47,17 @@ jobs:
         with:
           go-version: ${{ matrix.go }}
 
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ matrix.dart }}
+
+      - name: Setup Node
+        if: ${{ matrix.go == 1.19 }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         id: php
@@ -51,10 +66,11 @@ jobs:
           coverage: none
           extensions: ffi
 
-      - name: Setup Dart
-        uses: dart-lang/setup-dart@v1
-        with:
-          sdk: ${{ matrix.dart }}
+      - name: Local Dependencies
+        if: ${{ matrix.os == 'ubuntu-latest' && github.actor == 'nektos/act' }}
+        run: |
+          apt-get update
+          apt-get install -y wget
 
       - name: Run Go tests (Not Windows)
         if: ${{ matrix.os != 'windows-latest' }}
@@ -65,10 +81,32 @@ jobs:
         run: pwsh ./tests/go.ps1
 
       - name: Test building libcalends
-        run: go build -v -o libcalends.out -buildmode=c-shared ./libcalends
+        run: go build -v -o libcalends.${{ matrix.ext }} -buildmode=c-shared ./libcalends
 
       - name: Test building cli
         run: go build -v -o calends.out ./cli
+
+      - name: Test building WASM
+        if: ${{ matrix.go == 1.19 }}
+        run: go build -v -o calends.wasm ./wasm
+        env:
+          GOOS: js
+          GOARCH: wasm
+
+      - name: Test Dart wrapper
+        run: |
+          cp libcalends.${{ matrix.ext }} libcalends/dart/
+          cd libcalends/dart
+          dart pub get
+          dart test
+
+      - name: Test WASM via JS wrapper
+        if: ${{ matrix.go == 1.19 }}
+        run: |
+          cp calends.wasm wasm/js/
+          cd wasm/js
+          npm ci
+          npm test
 
       - name: Test PHP wrapper (Not Windows)
         if: ${{ matrix.os != 'windows-latest' }}
@@ -77,12 +115,6 @@ jobs:
       - name: Test PHP wrapper (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: pwsh ./tests/php.ps1 ${{ steps.php.outputs.php-version }} ${{ matrix.ext }}
-
-      - name: Test Dart wrapper
-        run: |
-          cd libcalends/dart
-          dart pub get
-          dart test
 
   build:
     name: Build Binaries
@@ -94,7 +126,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.go }}
+          go-version: '1.19'
 
       - name: Build binaries
         run: ./build-all

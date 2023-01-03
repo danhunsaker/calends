@@ -33,7 +33,7 @@ func init() {
 		// name
 		"gregorian",
 		// toInternal
-		func(date interface{}, format string) (stamp TAI64NAXURTime, err error) {
+		func(date interface{}, format string) (stamp TAI64NARUXTime, err error) {
 			var in time.Time
 			var str string
 
@@ -66,7 +66,7 @@ func init() {
 			return
 		},
 		// fromInternal
-		func(stamp TAI64NAXURTime, format string) (date string, err error) {
+		func(stamp TAI64NARUXTime, format string) (date string, err error) {
 			tmp := time.Unix(stamp.Seconds, int64(stamp.Nano)).UTC()
 			if strings.ContainsRune(format, '%') {
 				date, err = strtime.Strftime(tmp, format)
@@ -77,7 +77,7 @@ func init() {
 			return
 		},
 		// offset
-		func(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err error) {
+		func(in TAI64NARUXTime, offset interface{}) (out TAI64NARUXTime, err error) {
 			var str string
 
 			switch offset.(type) {

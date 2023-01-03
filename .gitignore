@@ -35,3 +35,4 @@ core*
 *.dep
 /vendor/
 !/vendor/modules.txt
+wasm/**/*.wasm

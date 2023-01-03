@@ -19,16 +19,16 @@ void main() {
       expect(tai0.Atto, equals(0));
     });
 
-    test('Xicto', () {
-      expect(tai0.Xicto, equals(0));
+    test('Ronto', () {
+      expect(tai0.Ronto, equals(0));
     });
 
-    test('Ucto', () {
-      expect(tai0.Ucto, equals(0));
+    test('Udecto', () {
+      expect(tai0.Udecto, equals(0));
     });
 
-    test('Rocto', () {
-      expect(tai0.Rocto, equals(0));
+    test('Xindecto', () {
+      expect(tai0.Xindecto, equals(0));
     });
 
     test('toDouble', () {
@@ -51,16 +51,16 @@ void main() {
       expect(tai0.Atto, equals(0));
     });
 
-    test('Xicto', () {
-      expect(tai0.Xicto, equals(0));
+    test('Ronto', () {
+      expect(tai0.Ronto, equals(0));
     });
 
-    test('Ucto', () {
-      expect(tai0.Ucto, equals(0));
+    test('Udecto', () {
+      expect(tai0.Udecto, equals(0));
     });
 
-    test('Rocto', () {
-      expect(tai0.Rocto, equals(0));
+    test('Xindecto', () {
+      expect(tai0.Xindecto, equals(0));
     });
 
     test('toTAI64String', () {
@@ -84,16 +84,16 @@ void main() {
       expect(tai0.Atto, equals(0));
     });
 
-    test('Xicto', () {
-      expect(tai0.Xicto, equals(0));
+    test('Ronto', () {
+      expect(tai0.Ronto, equals(0));
     });
 
-    test('Ucto', () {
-      expect(tai0.Ucto, equals(0));
+    test('Udecto', () {
+      expect(tai0.Udecto, equals(0));
     });
 
-    test('Rocto', () {
-      expect(tai0.Rocto, equals(0));
+    test('Xindecto', () {
+      expect(tai0.Xindecto, equals(0));
     });
 
     test('toHex', () {
@@ -118,16 +118,16 @@ void main() {
       expect(tai0.Atto, equals(0));
     });
 
-    test('Xicto', () {
-      expect(tai0.Xicto, equals(0));
+    test('Ronto', () {
+      expect(tai0.Ronto, equals(0));
     });
 
-    test('Ucto', () {
-      expect(tai0.Ucto, equals(0));
+    test('Udecto', () {
+      expect(tai0.Udecto, equals(0));
     });
 
-    test('Rocto', () {
-      expect(tai0.Rocto, equals(0));
+    test('Xindecto', () {
+      expect(tai0.Xindecto, equals(0));
     });
 
     test('encodeText', () {
@@ -180,16 +180,16 @@ void main() {
       expect(tai0.Atto, equals(0));
     });
 
-    test('Xicto', () {
-      expect(tai0.Xicto, equals(0));
+    test('Ronto', () {
+      expect(tai0.Ronto, equals(0));
     });
 
-    test('Ucto', () {
-      expect(tai0.Ucto, equals(0));
+    test('Udecto', () {
+      expect(tai0.Udecto, equals(0));
     });
 
-    test('Rocto', () {
-      expect(tai0.Rocto, equals(0));
+    test('Xindecto', () {
+      expect(tai0.Xindecto, equals(0));
     });
 
     test('encodeBinary', () {

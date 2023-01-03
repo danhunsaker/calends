@@ -2,9 +2,9 @@
 // calendar systems.
 /*
 
-Dates and times are converted to "TAI64NAXUR instants", values that
+Dates and times are converted to "TAI64NARUX instants", values that
 unambiguously encode moments over 146 billion years into the past or future, in
-increments as small as 10**-45 seconds (internally called a "roctosecond", but
+increments as small as 10**-45 seconds (internally called a "xindectosecond", but
 there's no actual prefix for units this small, even though the Planck Time - the
 smallest meaningful period of time in quantum physics - is 54 of them).
 Calculations and comparisons are done using these instants, to maintain the
@@ -35,9 +35,9 @@ import (
 // The Calends type is the core of the library, and the primary interface with
 // it.
 type Calends struct {
-	startTime calendars.TAI64NAXURTime
+	startTime calendars.TAI64NARUXTime
 	duration  *big.Float
-	endTime   calendars.TAI64NAXURTime
+	endTime   calendars.TAI64NARUXTime
 }
 
 // Version of the library
@@ -89,7 +89,7 @@ func Create(stamp interface{}, calendar, format string) (instance Calends, err e
 
 	switch stamp := stamp.(type) {
 	default:
-		var internal calendars.TAI64NAXURTime
+		var internal calendars.TAI64NARUXTime
 
 		internal, err = calendars.ToInternal(calendar, stamp, format)
 		instance = Calends{
@@ -131,16 +131,16 @@ func retrieveInstance(calendar string, stamp map[string]interface{}, format stri
 		instance = Calends{
 			startTime: start,
 			duration:  &duration,
-			endTime:   start.Add(calendars.TAI64NAXURTimeFromFloat(duration)),
+			endTime:   start.Add(calendars.TAI64NARUXTimeFromFloat(duration)),
 		}
 	} else if hasEnd && hasDuration {
 		instance = Calends{
-			startTime: end.Sub(calendars.TAI64NAXURTimeFromFloat(duration)),
+			startTime: end.Sub(calendars.TAI64NARUXTimeFromFloat(duration)),
 			duration:  &duration,
 			endTime:   end,
 		}
 	} else {
-		var internal calendars.TAI64NAXURTime
+		var internal calendars.TAI64NARUXTime
 
 		internal, err = calendars.ToInternal(calendar, stamp, format)
 		instance = Calends{
@@ -153,7 +153,7 @@ func retrieveInstance(calendar string, stamp map[string]interface{}, format stri
 	return
 }
 
-func retrieveStart(calendar string, stamp map[string]interface{}, format string) (start calendars.TAI64NAXURTime, hasStart bool, err error) {
+func retrieveStart(calendar string, stamp map[string]interface{}, format string) (start calendars.TAI64NARUXTime, hasStart bool, err error) {
 	var rawStart interface{}
 	rawStart, hasStart = stamp["start"]
 	if hasStart {
@@ -163,7 +163,7 @@ func retrieveStart(calendar string, stamp map[string]interface{}, format string)
 	return
 }
 
-func retrieveEnd(calendar string, stamp map[string]interface{}, format string) (end calendars.TAI64NAXURTime, hasEnd bool, err error) {
+func retrieveEnd(calendar string, stamp map[string]interface{}, format string) (end calendars.TAI64NARUXTime, hasEnd bool, err error) {
 	var rawEnd interface{}
 	rawEnd, hasEnd = stamp["end"]
 	if hasEnd {
@@ -285,7 +285,7 @@ func (c Calends) MarshalText() ([]byte, error) {
 
 // UnmarshalText implements the encoding.TextUnmarshaler interface.
 func (c *Calends) UnmarshalText(text []byte) error {
-	var startTime, endTime calendars.TAI64NAXURTime
+	var startTime, endTime calendars.TAI64NARUXTime
 	var start, end string
 
 	n, err := fmt.Sscanf(string(text), "%56s::%56s", &start, &end)
@@ -303,7 +303,7 @@ func (c *Calends) UnmarshalText(text []byte) error {
 	tmp, err := Create(map[string]interface{}{
 		"start": startTime,
 		"end":   endTime,
-	}, "tai64", "tai64naxur")
+	}, "tai64", "tai64narux")
 
 	*c = tmp
 
@@ -331,7 +331,7 @@ func (c Calends) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the encoding/json.Unmarshaler interface.
 func (c *Calends) UnmarshalJSON(text []byte) error {
-	var startTime, endTime calendars.TAI64NAXURTime
+	var startTime, endTime calendars.TAI64NARUXTime
 
 	parsed := make(map[string]string)
 	err := json.Unmarshal(text, &parsed)

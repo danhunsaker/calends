@@ -6,7 +6,7 @@ import (
 	"github.com/danhunsaker/calends/calendars"
 )
 
-func getTimesByMode(c, z Calends, mode string) (x, y calendars.TAI64NAXURTime) {
+func getTimesByMode(c, z Calends, mode string) (x, y calendars.TAI64NARUXTime) {
 	switch mode {
 	case "end":
 		x = c.endTime
@@ -96,7 +96,7 @@ func (c Calends) Overlaps(z Calends) bool {
 // Abuts checks whether the current object starts when another object ends, or
 // vice-versa, and that neither contains the other.
 func (c Calends) Abuts(z Calends) bool {
-	return (c.Compare(z, "start-end") == 0 && c.Compare(z, "end-start") == 0) && !(c.Contains(z) || z.Contains(c))
+	return ((c.Compare(z, "start-end") == 0 || c.Compare(z, "end-start") == 0) && !(c.Contains(z) || z.Contains(c)))
 }
 
 // IsBefore checks whether both of the current object's endpoints occur before

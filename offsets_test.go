@@ -79,7 +79,7 @@ func TestSubtract(t *testing.T) {
 		t.Errorf("Subtract(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "tai64", test.endTime.String(), "0")
 	}
 
-	test, err = testValue(0).Subtract(calendars.TAI64NAXURTime{}, "tai64")
+	test, err = testValue(0).Subtract(calendars.TAI64NARUXTime{}, "tai64")
 	if err != nil {
 		t.Errorf("Subtract(%#v, %#v) gives error %q", "86400", "tai64", err)
 	}
@@ -190,7 +190,7 @@ func TestSubtractFromEnd(t *testing.T) {
 		t.Errorf("SubtractFromEnd(%#v, %#v) has endTime of %#v\nwant %#v", "86400", "tai64", test.endTime.String(), "-86400")
 	}
 
-	test, err = testValue(0).SubtractFromEnd(calendars.TAI64NAXURTime{}, "tai64")
+	test, err = testValue(0).SubtractFromEnd(calendars.TAI64NARUXTime{}, "tai64")
 	if err != nil {
 		t.Errorf("SubtractFromEnd(%#v, %#v) gives error %q", "86400", "tai64", err)
 	}
@@ -239,7 +239,7 @@ func TestNext(t *testing.T) {
 	test1.Next([]byte(""), "")
 	test1.Next(0, "unix")
 	test1.Next(0.0, "unix")
-	test1.Next(calendars.TAI64NAXURTime{}, "unix")
+	test1.Next(calendars.TAI64NARUXTime{}, "unix")
 	test1.Next(nil, "unix")
 
 	if err1 != nil {

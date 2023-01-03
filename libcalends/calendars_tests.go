@@ -5,9 +5,9 @@ typedef struct _TAI64Time {
         long long int Seconds; // Seconds since 1970-01-01 00:00:00 TAI
         unsigned int Nano;     // Nanoseconds since the given second
         unsigned int Atto;     // Attoseconds since the given nanosecond
-        unsigned int Xicto;    // Xictoseconds since the given attosecond
-        unsigned int Ucto;     // Uctoseconds since the given xictosecond
-        unsigned int Rocto;    // Roctoseconds since the given uctosecond
+        unsigned int Ronto;    // Rontoseconds since the given attosecond
+        unsigned int Udecto;     // Udectoseconds since the given rontosecond
+        unsigned int Xindecto;    // Xindectoseconds since the given udectosecond
 				unsigned int padding;  // round the value out to the nearest 64 bits
 } TAI64Time;
 

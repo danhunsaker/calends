@@ -31,25 +31,11 @@ object(Calends\TAITime)#%d (6) {
   int(0)
   ["atto"]=>
   int(0)
-  ["xicto"]=>
+  ["ronto"]=>
   int(0)
-  ["ucto"]=>
+  ["udecto"]=>
   int(0)
-  ["rocto"]=>
-  int(0)
-}
-object(Calends\TAITime)#%d (6) {
-  ["seconds"]=>
-  int(0)
-  ["nano"]=>
-  int(0)
-  ["atto"]=>
-  int(0)
-  ["xicto"]=>
-  int(0)
-  ["ucto"]=>
-  int(0)
-  ["rocto"]=>
+  ["xindecto"]=>
   int(0)
 }
 object(Calends\TAITime)#%d (6) {
@@ -59,25 +45,11 @@ object(Calends\TAITime)#%d (6) {
   int(0)
   ["atto"]=>
   int(0)
-  ["xicto"]=>
+  ["ronto"]=>
   int(0)
-  ["ucto"]=>
+  ["udecto"]=>
   int(0)
-  ["rocto"]=>
-  int(0)
-}
-object(Calends\TAITime)#%d (6) {
-  ["seconds"]=>
-  int(0)
-  ["nano"]=>
-  int(0)
-  ["atto"]=>
-  int(0)
-  ["xicto"]=>
-  int(0)
-  ["ucto"]=>
-  int(0)
-  ["rocto"]=>
+  ["xindecto"]=>
   int(0)
 }
 object(Calends\TAITime)#%d (6) {
@@ -87,10 +59,38 @@ object(Calends\TAITime)#%d (6) {
   int(0)
   ["atto"]=>
   int(0)
-  ["xicto"]=>
+  ["ronto"]=>
   int(0)
-  ["ucto"]=>
+  ["udecto"]=>
   int(0)
-  ["rocto"]=>
+  ["xindecto"]=>
+  int(0)
+}
+object(Calends\TAITime)#%d (6) {
+  ["seconds"]=>
+  int(0)
+  ["nano"]=>
+  int(0)
+  ["atto"]=>
+  int(0)
+  ["ronto"]=>
+  int(0)
+  ["udecto"]=>
+  int(0)
+  ["xindecto"]=>
+  int(0)
+}
+object(Calends\TAITime)#%d (6) {
+  ["seconds"]=>
+  int(0)
+  ["nano"]=>
+  int(0)
+  ["atto"]=>
+  int(0)
+  ["ronto"]=>
+  int(0)
+  ["udecto"]=>
+  int(0)
+  ["xindecto"]=>
   int(0)
 }

@@ -27,11 +27,11 @@ a manner that allows them to be used elsewhere.
     Representation
   - ``tai64na``    - hexadecimal; with attoseconds; TAI64NA External
     Representation
-  - ``tai64nax``   - hexadecimal; with xictoseconds; TAI64NAX External
+  - ``tai64nar``   - hexadecimal; with rontoseconds; TAI64NAR External
     Representation
-  - ``tai64naxu``  - hexadecimal; with uctoseconds; TAI64NAXU External
+  - ``tai64naru``  - hexadecimal; with udectoseconds; TAI64NARU External
     Representation
-  - ``tai64naxur`` - **hexadecimal; with roctoseconds**; TAI64NAXUR External
+  - ``tai64narux`` - **hexadecimal; with xindectoseconds**; TAI64NARUX External
     Representation
 
 *Offsets:*
