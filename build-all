@@ -41,7 +41,7 @@ do
 
   if [ -e ${dir}/libcalends.dll ]
   then
-    zip ${dir}.zip ${dir}/*
+    zip -j ${dir}.zip ${dir}/*
   else
     tar czvf ${dir}.tgz -C ${dir} .
   fi
