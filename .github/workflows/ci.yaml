@@ -53,7 +53,7 @@ jobs:
           sdk: ${{ matrix.dart }}
 
       - name: Setup Node
-        if: ${{ matrix.go == 1.19 }}
+        if: ${{ matrix.go == '1.19' }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
@@ -65,6 +65,8 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
           extensions: ffi
+        env:
+          update: true
 
       - name: Local Dependencies
         if: ${{ matrix.os == 'ubuntu-latest' && github.actor == 'nektos/act' }}
@@ -87,7 +89,7 @@ jobs:
         run: go build -v -o calends.out ./cli
 
       - name: Test building WASM
-        if: ${{ matrix.go == 1.19 }}
+        if: ${{ matrix.go == '1.19' }}
         run: go build -v -o calends.wasm ./wasm
         env:
           GOOS: js
@@ -101,7 +103,7 @@ jobs:
           dart test
 
       - name: Test WASM via JS wrapper
-        if: ${{ matrix.go == 1.19 }}
+        if: ${{ matrix.go == '1.19' }}
         run: |
           cp calends.wasm wasm/js/
           cd wasm/js
@@ -130,6 +132,12 @@ jobs:
 
       - name: Build binaries
         run: ./build-all
+
+      - name: Upload binaries as assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: builds
+          path: dist/*
 
       - name: Release binaries
         if: startsWith(github.ref, 'refs/tags/')
