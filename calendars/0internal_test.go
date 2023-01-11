@@ -6,9 +6,9 @@ import (
 )
 
 func TestAdd(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
-	and := TAI64NAXURTime{Seconds: 2}
-	want := TAI64NAXURTime{Seconds: 3}
+	in := TAI64NARUXTime{Seconds: 1}
+	and := TAI64NARUXTime{Seconds: 2}
+	want := TAI64NARUXTime{Seconds: 3}
 	got := in.Add(and)
 
 	if got != want {
@@ -17,9 +17,9 @@ func TestAdd(t *testing.T) {
 }
 
 func TestSub(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
-	and := TAI64NAXURTime{Seconds: 2}
-	want := TAI64NAXURTime{Seconds: -1}
+	in := TAI64NARUXTime{Seconds: 1}
+	and := TAI64NARUXTime{Seconds: 2}
+	want := TAI64NARUXTime{Seconds: -1}
 	got := in.Sub(and)
 
 	if got != want {
@@ -28,7 +28,7 @@ func TestSub(t *testing.T) {
 }
 
 func TestString(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
+	in := TAI64NARUXTime{Seconds: 1}
 	want := "1"
 	got := in.String()
 
@@ -38,7 +38,7 @@ func TestString(t *testing.T) {
 }
 
 func TestHexString(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
+	in := TAI64NARUXTime{Seconds: 1}
 	want := "40000000000000010000000000000000000000000000000000000000"
 	got := in.HexString()
 
@@ -48,7 +48,7 @@ func TestHexString(t *testing.T) {
 }
 
 func TestFloat(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
+	in := TAI64NARUXTime{Seconds: 1}
 	want := big.NewFloat(1)
 	got := in.Float()
 
@@ -58,7 +58,7 @@ func TestFloat(t *testing.T) {
 }
 
 func TestMarshalText(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
+	in := TAI64NARUXTime{Seconds: 1}
 	want := "40000000000000010000000000000000000000000000000000000000"
 	got, _ := in.MarshalText()
 
@@ -68,9 +68,9 @@ func TestMarshalText(t *testing.T) {
 }
 
 func TestUnmarshalText(t *testing.T) {
-	var got TAI64NAXURTime
+	var got TAI64NARUXTime
 	in := []byte("40000000000000010000000000000000000000000000000000000000")
-	want := TAI64NAXURTime{Seconds: 1}
+	want := TAI64NARUXTime{Seconds: 1}
 	got.UnmarshalText(in)
 
 	if got != want {
@@ -79,7 +79,7 @@ func TestUnmarshalText(t *testing.T) {
 }
 
 func TestMarshalBinary(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
+	in := TAI64NARUXTime{Seconds: 1}
 	want := "@\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 	got, _ := in.MarshalBinary()
 
@@ -89,9 +89,9 @@ func TestMarshalBinary(t *testing.T) {
 }
 
 func TestUnmarshalBinary(t *testing.T) {
-	var got TAI64NAXURTime
+	var got TAI64NARUXTime
 	in := []byte("@\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00")
-	want := TAI64NAXURTime{Seconds: 1}
+	want := TAI64NARUXTime{Seconds: 1}
 	got.UnmarshalBinary(in)
 
 	if got != want {
@@ -99,33 +99,33 @@ func TestUnmarshalBinary(t *testing.T) {
 	}
 }
 
-func TestTAI64NAXURTimeFromDecimalString(t *testing.T) {
+func TestTAI64NARUXTimeFromDecimalString(t *testing.T) {
 	in := "1"
-	want := TAI64NAXURTime{Seconds: 1}
-	got := TAI64NAXURTimeFromDecimalString(in)
+	want := TAI64NARUXTime{Seconds: 1}
+	got := TAI64NARUXTimeFromDecimalString(in)
 
 	if got != want {
-		t.Errorf("TAI64NAXURTimeFromDecimalString(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
+		t.Errorf("TAI64NARUXTimeFromDecimalString(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
 	}
 }
 
-func TestTAI64NAXURTimeFromHexString(t *testing.T) {
+func TestTAI64NARUXTimeFromHexString(t *testing.T) {
 	in := "40000000000000010000000000000000000000000000000000000000"
-	want := TAI64NAXURTime{Seconds: 1}
-	got := TAI64NAXURTimeFromHexString(in)
+	want := TAI64NARUXTime{Seconds: 1}
+	got := TAI64NARUXTimeFromHexString(in)
 
 	if got != want {
-		t.Errorf("TAI64NAXURTimeFromHexString(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
+		t.Errorf("TAI64NARUXTimeFromHexString(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
 	}
 }
 
-func TestTAI64NAXURTimeFromFloat(t *testing.T) {
+func TestTAI64NARUXTimeFromFloat(t *testing.T) {
 	in := *big.NewFloat(1)
-	want := TAI64NAXURTime{Seconds: 1}
-	got := TAI64NAXURTimeFromFloat(in)
+	want := TAI64NARUXTime{Seconds: 1}
+	got := TAI64NARUXTimeFromFloat(in)
 
 	if got != want {
-		t.Errorf("TAI64NAXURTimeFromFloat(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
+		t.Errorf("TAI64NARUXTimeFromFloat(%#v) failed\ngot  %#v\nwant %#v", in, got, want)
 	}
 }
 

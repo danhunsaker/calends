@@ -11,7 +11,7 @@ elsewhere.
 Supported Input Types:
   - string
   - []byte
-  - TAI64NAXURTime
+  - TAI64NARUXTime
   - math/big.Float for Offset
 
 Supported Format Strings:
@@ -19,9 +19,9 @@ Supported Format Strings:
   - tai64       - hexadecimal; just seconds
   - tai64n      - hexadecimal; with nanoseconds
   - tai64na     - hexadecimal; with attoseconds
-  - tai64nax    - hexadecimal; with xictoseconds
-  - tai64naxu   - hexadecimal; with uctoseconds
-  - tai64naxur  - hexadecimal; with roctoseconds
+  - tai64nar    - hexadecimal; with rontoseconds
+  - tai64naru   - hexadecimal; with udectoseconds
+  - tai64narux  - hexadecimal; with xindectoseconds
 
 */
 package calendars
@@ -39,7 +39,7 @@ func init() {
 		// name
 		"TAI64",
 		// toInternal
-		func(date interface{}, format string) (stamp TAI64NAXURTime, err error) {
+		func(date interface{}, format string) (stamp TAI64NARUXTime, err error) {
 			var dateString string
 			switch date.(type) {
 			// TODO - other types
@@ -47,8 +47,8 @@ func init() {
 				dateString = string(date.([]byte))
 			case string:
 				dateString = date.(string)
-			case TAI64NAXURTime:
-				stamp = date.(TAI64NAXURTime)
+			case TAI64NARUXTime:
+				stamp = date.(TAI64NARUXTime)
 				return
 			default:
 				err = errors.Wrap(ErrUnsupportedInput, 1)
@@ -61,13 +61,13 @@ func init() {
 				if len(tmp) < 2 {
 					tmp = append(tmp, "0")
 				}
-				_, err = fmt.Sscanf(fmt.Sprintf("%s %-045s", tmp[0], tmp[1]), "%d %09d%09d%09d%09d%09d", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Xicto, &stamp.Ucto, &stamp.Rocto)
-			case "tai64naxur":
-				_, err = fmt.Sscanf(dateString, "%016X%08X%08X%08X%08X%08X", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Xicto, &stamp.Ucto, &stamp.Rocto)
-			case "tai64naxu":
-				_, err = fmt.Sscanf(dateString, "%016X%08X%08X%08X%08X", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Xicto, &stamp.Ucto)
-			case "tai64nax":
-				_, err = fmt.Sscanf(dateString, "%016X%08X%08X%08X", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Xicto)
+				_, err = fmt.Sscanf(fmt.Sprintf("%s %-045s", tmp[0], tmp[1]), "%d %09d%09d%09d%09d%09d", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Ronto, &stamp.Udecto, &stamp.Xindecto)
+			case "tai64narux":
+				_, err = fmt.Sscanf(dateString, "%016X%08X%08X%08X%08X%08X", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Ronto, &stamp.Udecto, &stamp.Xindecto)
+			case "tai64naru":
+				_, err = fmt.Sscanf(dateString, "%016X%08X%08X%08X%08X", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Ronto, &stamp.Udecto)
+			case "tai64nar":
+				_, err = fmt.Sscanf(dateString, "%016X%08X%08X%08X", &stamp.Seconds, &stamp.Nano, &stamp.Atto, &stamp.Ronto)
 			case "tai64na":
 				_, err = fmt.Sscanf(dateString, "%016X%08X%08X", &stamp.Seconds, &stamp.Nano, &stamp.Atto)
 			case "tai64n":
@@ -89,16 +89,16 @@ func init() {
 			return
 		},
 		// fromInternal
-		func(stamp TAI64NAXURTime, format string) (date string, err error) {
+		func(stamp TAI64NARUXTime, format string) (date string, err error) {
 			switch format {
 			case "decimal":
-				date = strings.TrimRight(strings.TrimRight(fmt.Sprintf("%0d.%09d%09d%09d%09d%09d", stamp.Seconds, stamp.Nano, stamp.Atto, stamp.Xicto, stamp.Ucto, stamp.Rocto), "0"), ".")
-			case "tai64naxur":
-				date = fmt.Sprintf("%016X%08X%08X%08X%08X%08X", stamp.Seconds+0x4000000000000000, stamp.Nano, stamp.Atto, stamp.Xicto, stamp.Ucto, stamp.Rocto)
-			case "tai64naxu":
-				date = fmt.Sprintf("%016X%08X%08X%08X%08X", stamp.Seconds+0x4000000000000000, stamp.Nano, stamp.Atto, stamp.Xicto, stamp.Ucto)
-			case "tai64nax":
-				date = fmt.Sprintf("%016X%08X%08X%08X", stamp.Seconds+0x4000000000000000, stamp.Nano, stamp.Atto, stamp.Xicto)
+				date = strings.TrimRight(strings.TrimRight(fmt.Sprintf("%0d.%09d%09d%09d%09d%09d", stamp.Seconds, stamp.Nano, stamp.Atto, stamp.Ronto, stamp.Udecto, stamp.Xindecto), "0"), ".")
+			case "tai64narux":
+				date = fmt.Sprintf("%016X%08X%08X%08X%08X%08X", stamp.Seconds+0x4000000000000000, stamp.Nano, stamp.Atto, stamp.Ronto, stamp.Udecto, stamp.Xindecto)
+			case "tai64naru":
+				date = fmt.Sprintf("%016X%08X%08X%08X%08X", stamp.Seconds+0x4000000000000000, stamp.Nano, stamp.Atto, stamp.Ronto, stamp.Udecto)
+			case "tai64nar":
+				date = fmt.Sprintf("%016X%08X%08X%08X", stamp.Seconds+0x4000000000000000, stamp.Nano, stamp.Atto, stamp.Ronto)
 			case "tai64na":
 				date = fmt.Sprintf("%016X%08X%08X", stamp.Seconds+0x4000000000000000, stamp.Nano, stamp.Atto)
 			case "tai64n":
@@ -112,20 +112,20 @@ func init() {
 			return
 		},
 		// offset
-		func(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err error) {
-			var adjust TAI64NAXURTime
+		func(in TAI64NARUXTime, offset interface{}) (out TAI64NARUXTime, err error) {
+			var adjust TAI64NARUXTime
 			switch offset.(type) {
 			// TODO - other types
 			case big.Float:
-				adjust = TAI64NAXURTimeFromFloat(offset.(big.Float))
+				adjust = TAI64NARUXTimeFromFloat(offset.(big.Float))
 			case *big.Float:
-				adjust = TAI64NAXURTimeFromFloat(*offset.(*big.Float))
+				adjust = TAI64NARUXTimeFromFloat(*offset.(*big.Float))
 			case []byte:
-				adjust = TAI64NAXURTimeFromDecimalString(string(offset.([]byte)))
+				adjust = TAI64NARUXTimeFromDecimalString(string(offset.([]byte)))
 			case string:
-				adjust = TAI64NAXURTimeFromDecimalString(offset.(string))
-			case TAI64NAXURTime:
-				adjust = offset.(TAI64NAXURTime)
+				adjust = TAI64NARUXTimeFromDecimalString(offset.(string))
+			case TAI64NARUXTime:
+				adjust = offset.(TAI64NARUXTime)
 			default:
 				err = errors.Wrap(ErrUnsupportedInput, 1)
 			}
@@ -135,6 +135,6 @@ func init() {
 			return
 		},
 		// defaultFormat
-		"tai64naxur",
+		"tai64narux",
 	)
 }

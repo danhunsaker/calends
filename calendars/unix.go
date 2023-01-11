@@ -29,8 +29,8 @@ func init() {
 		// name
 		"unix",
 		// toInternal
-		func(date interface{}, format string) (stamp TAI64NAXURTime, err error) {
-			var tmp TAI64NAXURTime
+		func(date interface{}, format string) (stamp TAI64NARUXTime, err error) {
+			var tmp TAI64NARUXTime
 			// parse the value
 			tmp, err = unixParseDate(date)
 			if err != nil {
@@ -41,7 +41,7 @@ func init() {
 			return
 		},
 		// fromInternal
-		func(stamp TAI64NAXURTime, format string) (date string, err error) {
+		func(stamp TAI64NARUXTime, format string) (date string, err error) {
 			stamp = TAItoUTC(stamp)
 
 			// format the value
@@ -49,8 +49,8 @@ func init() {
 			return
 		},
 		// offset
-		func(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err error) {
-			var tmp1, tmp2 TAI64NAXURTime
+		func(in TAI64NARUXTime, offset interface{}) (out TAI64NARUXTime, err error) {
+			var tmp1, tmp2 TAI64NARUXTime
 
 			tmp1 = TAItoUTC(in)
 
@@ -68,21 +68,21 @@ func init() {
 	)
 }
 
-func unixParseDate(date interface{}) (stamp TAI64NAXURTime, err error) {
+func unixParseDate(date interface{}) (stamp TAI64NARUXTime, err error) {
 	switch date.(type) {
 	// TODO - other types
 	case int:
-		stamp = TAI64NAXURTimeFromDecimalString(fmt.Sprintf("%d", date.(int)))
+		stamp = TAI64NARUXTimeFromDecimalString(fmt.Sprintf("%d", date.(int)))
 	case float64:
-		stamp = TAI64NAXURTimeFromDecimalString(fmt.Sprintf("%f", date.(float64)))
+		stamp = TAI64NARUXTimeFromDecimalString(fmt.Sprintf("%f", date.(float64)))
 	case big.Float:
-		stamp = TAI64NAXURTimeFromFloat(date.(big.Float))
+		stamp = TAI64NARUXTimeFromFloat(date.(big.Float))
 	case *big.Float:
-		stamp = TAI64NAXURTimeFromFloat(*date.(*big.Float))
+		stamp = TAI64NARUXTimeFromFloat(*date.(*big.Float))
 	case []byte:
-		stamp = TAI64NAXURTimeFromDecimalString(string(date.([]byte)))
+		stamp = TAI64NARUXTimeFromDecimalString(string(date.([]byte)))
 	case string:
-		stamp = TAI64NAXURTimeFromDecimalString(date.(string))
+		stamp = TAI64NARUXTimeFromDecimalString(date.(string))
 	default:
 		err = errors.Wrap(ErrUnsupportedInput, 1)
 	}

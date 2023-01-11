@@ -152,7 +152,7 @@ handled entirely by these helpers in the library itself.
 
 .. c:type:: TAI64Time
 
-   Stores a ``TAI64NAXUR`` instant in a reliable, easy-converted format. Each
+   Stores a ``TAI64NARUX`` instant in a reliable, easy-converted format. Each
    9-digit fractional segment is stored in a separate 32-bit integer to preserve
    its value with a very high degree of accuracy, without having to rely on
    string parsing or external arbitrary-precision math libraries.
@@ -169,17 +169,17 @@ handled entirely by these helpers in the library itself.
 
         Attoseconds since the given nanosecond
 
-   .. c:member:: unsigned int xicto
+   .. c:member:: unsigned int ronto
 
-        Xictoseconds since the given attosecond
+        Rontoseconds since the given attosecond
 
-   .. c:member:: unsigned int ucto
+   .. c:member:: unsigned int udecto
 
-        Uctoseconds since the given xictosecond
+        Udectoseconds since the given rontosecond
 
-   .. c:member:: unsigned int rocto
+   .. c:member:: unsigned int xindecto
 
-        Roctoseconds since the given uctosecond
+        Xindectoseconds since the given udectosecond
 
    .. c:member:: unsigned int padding
 

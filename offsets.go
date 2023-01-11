@@ -283,7 +283,7 @@ func emptyValue(in interface{}) (out bool) {
 		out = false
 	case float64:
 		out = false
-	case calendars.TAI64NAXURTime:
+	case calendars.TAI64NARUXTime:
 		out = false
 	default:
 		out = true
@@ -306,8 +306,8 @@ func negateOffset(in interface{}) (out interface{}) {
 		out = 0 - in
 	case float64:
 		out = 0.0 - in
-	case calendars.TAI64NAXURTime:
-		out = (calendars.TAI64NAXURTime{}).Sub(in)
+	case calendars.TAI64NARUXTime:
+		out = (calendars.TAI64NARUXTime{}).Sub(in)
 	default:
 		out = ""
 	}

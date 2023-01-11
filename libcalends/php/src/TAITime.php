@@ -11,9 +11,9 @@ final class TAITime
     public int $seconds = 0;
     public int $nano = 0;
     public int $atto = 0;
-    public int $xicto = 0;
-    public int $ucto = 0;
-    public int $rocto = 0;
+    public int $ronto = 0;
+    public int $udecto = 0;
+    public int $xindecto = 0;
 
     private static function ffiInit()
     {
@@ -34,9 +34,9 @@ final class TAITime
         $out->seconds = $stamp->Seconds;
         $out->nano = $stamp->Nano;
         $out->atto = $stamp->Atto;
-        $out->xicto = $stamp->Xicto;
-        $out->ucto = $stamp->Ucto;
-        $out->rocto = $stamp->Rocto;
+        $out->ronto = $stamp->Ronto;
+        $out->udecto = $stamp->Udecto;
+        $out->xindecto = $stamp->Xindecto;
 
         return $out;
     }
@@ -48,9 +48,9 @@ final class TAITime
         $out->Seconds = $this->seconds;
         $out->Nano = $this->nano;
         $out->Atto = $this->atto;
-        $out->Xicto = $this->xicto;
-        $out->Ucto = $this->ucto;
-        $out->Rocto = $this->rocto;
+        $out->Ronto = $this->ronto;
+        $out->Udecto = $this->udecto;
+        $out->Xindecto = $this->xindecto;
 
         return $out;
     }

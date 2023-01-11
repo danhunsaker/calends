@@ -27,11 +27,11 @@ object(Calends\TAITime)#%d (6) {
   int(0)
   ["atto"]=>
   int(0)
-  ["xicto"]=>
+  ["ronto"]=>
   int(0)
-  ["ucto"]=>
+  ["udecto"]=>
   int(0)
-  ["rocto"]=>
+  ["xindecto"]=>
   int(0)
 }
 object(Calends\TAITime)#%d (6) {
@@ -41,11 +41,11 @@ object(Calends\TAITime)#%d (6) {
   int(0)
   ["atto"]=>
   int(0)
-  ["xicto"]=>
+  ["ronto"]=>
   int(0)
-  ["ucto"]=>
+  ["udecto"]=>
   int(0)
-  ["rocto"]=>
+  ["xindecto"]=>
   int(0)
 }
 object(Calends\TAITime)#%d (6) {
@@ -55,10 +55,10 @@ object(Calends\TAITime)#%d (6) {
   int(0)
   ["atto"]=>
   int(0)
-  ["xicto"]=>
+  ["ronto"]=>
   int(0)
-  ["ucto"]=>
+  ["udecto"]=>
   int(0)
-  ["rocto"]=>
+  ["xindecto"]=>
   int(0)
 }

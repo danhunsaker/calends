@@ -21,7 +21,7 @@ The interface in question looks like this:
 
 .. go:type:: CalendarDefinition
 
-   .. go:function:: func (CalendarDefinition) ToInternal(date interface, format string) (TAI64NAXURTime, error)
+   .. go:function:: func (CalendarDefinition) ToInternal(date interface, format string) (TAI64NARUXTime, error)
 
       :param date: The input date. Should support :go:type:`string` at the very
                    minimum.
@@ -29,17 +29,17 @@ The interface in question looks like this:
       :param format: The format string for parsing the input date.
       :type format: :go:type:`string`
       :return: The parsed internal timestamp.
-      :rtype: :go:type:`TAI64NAXURTime`
+      :rtype: :go:type:`TAI64NARUXTime`
       :return: Any error that occurs.
       :rtype: :go:type:`error`
 
       Converts an input date/time representation to an internal
-      :go:type:`TAI64NAXURTime`.
+      :go:type:`TAI64NARUXTime`.
 
-   .. go:function:: func (CalendarDefinition) FromInternal(stamp TAI64NAXURTime, format string) (string, error)
+   .. go:function:: func (CalendarDefinition) FromInternal(stamp TAI64NARUXTime, format string) (string, error)
 
       :param stamp: The internal timestamp value.
-      :type stamp: :go:type:`TAI64NAXURTime`
+      :type stamp: :go:type:`TAI64NARUXTime`
       :param format: The format string for formatting the output date.
       :type format: :go:type:`string`
       :return: The formatted date/time.
@@ -47,21 +47,21 @@ The interface in question looks like this:
       :return: Any error that occurs.
       :rtype: :go:type:`error`
 
-      Converts an internal :go:type:`TAI64NAXURTime` to a date/time string.
+      Converts an internal :go:type:`TAI64NARUXTime` to a date/time string.
 
-   .. go:function:: func (CalendarDefinition) Offset(stamp TAI64NAXURTime, offset interface) (TAI64NAXURTime, error)
+   .. go:function:: func (CalendarDefinition) Offset(stamp TAI64NARUXTime, offset interface) (TAI64NARUXTime, error)
 
       :param stamp: The internal timestamp value.
-      :type stamp: :go:type:`TAI64NAXURTime`
+      :type stamp: :go:type:`TAI64NARUXTime`
       :param offset: The input offset. Should support :go:type:`string` at the
                      very minimum.
       :type offset: :go:type:`interface{}`
       :return: The adjusted internal timestamp.
-      :rtype: :go:type:`TAI64NAXURTime`
+      :rtype: :go:type:`TAI64NARUXTime`
       :return: Any error that occurs.
       :rtype: :go:type:`error`
 
-      Adds the given offset to an internal :go:type:`TAI64NAXURTime`.
+      Adds the given offset to an internal :go:type:`TAI64NARUXTime`.
 
 Registration
 ------------
@@ -138,7 +138,7 @@ Types and Values
 
 Now we get to the inner workings that make calendar systems function – even the
 built-in ones. The majority of the "magic" comes from the
-:go:type:`TAI64NAXURTime` object itself, as a reliable way of storing the exact
+:go:type:`TAI64NARUXTime` object itself, as a reliable way of storing the exact
 instants being calculated, and the only way times are handled by the library
 itself. A handful of methods provide basic operations that calendar system
 developers can use to simplify their conversions (adding and subtracting the
@@ -149,69 +149,69 @@ offsets. As long as you can convert your dates to/from Unix timestamps in a
 :go:type:`string` or :go:type:`math/big.Float`, the rest is handled entirely by
 these helpers in the library itself.
 
-.. go:type:: TAI64NAXURTime
+.. go:type:: TAI64NARUXTime
 
    :param int64 Seconds: The number of TAI seconds since ``CE 1970-01-01
                          00:00:00 TAI``.
    :param uint32 Nano: The first 9 digits of the timestamp's fractional
                        component.
    :param uint32 Atto: The 10th through 18th digits of the fractional component.
-   :param uint32 Xicto: The 19th through 27th digits of the fractional
+   :param uint32 Ronto: The 19th through 27th digits of the fractional
                         component.
-   :param uint32 Ucto: The 28th through 36th digits of the fractional component.
-   :param uint32 Rocto: The 37th through 45th digits of the fractional
+   :param uint32 Udecto: The 28th through 36th digits of the fractional component.
+   :param uint32 Xindecto: The 37th through 45th digits of the fractional
                         component.
 
-   :go:type:`TAI64NAXURTime` stores a ``TAI64NAXUR`` instant in a reliable,
+   :go:type:`TAI64NARUXTime` stores a ``TAI64NARUX`` instant in a reliable,
    easy-converted format. Each 9-digit fractional segment is stored in a
    separate 32-bit integer to preserve its value with a very high degree of
    accuracy, without having to rely on string parsing or Golang's
    :go:type:`math/big.*` values.
 
-   .. go:function:: func (TAI64NAXURTime) Add(z TAI64NAXURTime) TAI64NAXURTime
+   .. go:function:: func (TAI64NARUXTime) Add(z TAI64NARUXTime) TAI64NARUXTime
 
       :param z: The timestamp to add to the current one.
-      :type z: :go:type:`TAI64NAXURTime`
+      :type z: :go:type:`TAI64NARUXTime`
       :return: The sum of the two timestamps.
-      :rtype: :go:type:`TAI64NAXURTime`
+      :rtype: :go:type:`TAI64NARUXTime`
 
-      Calculates the sum of two :go:type:`TAI64NAXURTime` values.
+      Calculates the sum of two :go:type:`TAI64NARUXTime` values.
 
-   .. go:function:: func (TAI64NAXURTime) Sub(z TAI64NAXURTime) TAI64NAXURTime
+   .. go:function:: func (TAI64NARUXTime) Sub(z TAI64NARUXTime) TAI64NARUXTime
 
       :param z: The timestamp to subtract from the current one.
-      :type z: :go:type:`TAI64NAXURTime`
+      :type z: :go:type:`TAI64NARUXTime`
       :return: The difference of the two timestamps.
-      :rtype: :go:type:`TAI64NAXURTime`
+      :rtype: :go:type:`TAI64NARUXTime`
 
-      Calculates the difference of two :go:type:`TAI64NAXURTime` values.
+      Calculates the difference of two :go:type:`TAI64NARUXTime` values.
 
-   .. go:function:: func (TAI64NAXURTime) String() string
+   .. go:function:: func (TAI64NARUXTime) String() string
 
       :return: The decimal string representation of the current timestamp.
       :rtype: :go:type:`string`
 
-      Returns the decimal string representation of the :go:type:`TAI64NAXURTime`
+      Returns the decimal string representation of the :go:type:`TAI64NARUXTime`
       value.
 
-   .. go:function:: func (TAI64NAXURTime) HexString() string
+   .. go:function:: func (TAI64NARUXTime) HexString() string
 
       :return: The hexadecimal string representation of the current timestamp.
       :rtype: :go:type:`string`
 
       Returns the hexadecimal string representation of the
-      :go:type:`TAI64NAXURTime` value.
+      :go:type:`TAI64NARUXTime` value.
 
-   .. go:function:: func (TAI64NAXURTime) Float() Float
+   .. go:function:: func (TAI64NARUXTime) Float() Float
 
       :return: The arbitrary-precision floating point representation of the
                current timestamp.
       :rtype: :go:type:`math/big.(*Float)`
 
       Returns the :go:type:`math/big.(*Float)` representation of the
-      :go:type:`TAI64NAXURTime` value.
+      :go:type:`TAI64NARUXTime` value.
 
-   .. go:function:: func (TAI64NAXURTime) MarshalText() ([]byte, error)
+   .. go:function:: func (TAI64NARUXTime) MarshalText() ([]byte, error)
 
       :return: A byte slice containing the marshalled text.
       :rtype: :go:type:`[]byte`
@@ -220,7 +220,7 @@ these helpers in the library itself.
 
       Implements the :go:type:`encoding.TextMarshaler` interface.
 
-   .. go:function:: func (TAI64NAXURTime) UnmarshalText(in []byte) error
+   .. go:function:: func (TAI64NARUXTime) UnmarshalText(in []byte) error
 
       :param in: A byte slice containing the marshalled text.
       :type in: :go:type:`[]byte`
@@ -229,7 +229,7 @@ these helpers in the library itself.
 
       Implements the :go:type:`encoding.TextUnmarshaler` interface.
 
-   .. go:function:: func (TAI64NAXURTime) MarshalBinary() ([]byte, error)
+   .. go:function:: func (TAI64NARUXTime) MarshalBinary() ([]byte, error)
 
       :return: A byte slice containing the marshalled binary data.
       :rtype: :go:type:`[]byte`
@@ -238,7 +238,7 @@ these helpers in the library itself.
 
       Implements the :go:type:`encoding.BinaryMarshaler` interface.
 
-   .. go:function:: func (TAI64NAXURTime) UnmarshalBinary(in []byte) error
+   .. go:function:: func (TAI64NARUXTime) UnmarshalBinary(in []byte) error
 
       :param in: A byte slice containing the marshalled binary data.
       :type in: :go:type:`[]byte`
@@ -250,54 +250,54 @@ these helpers in the library itself.
 Helpers
 -------
 
-.. go:function:: func TAI64NAXURTimeFromDecimalString(in string) TAI64NAXURTime
+.. go:function:: func TAI64NARUXTimeFromDecimalString(in string) TAI64NARUXTime
 
    :param in: The decimal string representation of a timestamp to calculate.
    :type in: :go:type:`string`
    :return: The calculated timestamp.
-   :rtype: :go:type:`TAI64NAXURTime`
+   :rtype: :go:type:`TAI64NARUXTime`
 
-   Calculates a :go:type:`TAI64NAXURTime` from its decimal string
+   Calculates a :go:type:`TAI64NARUXTime` from its decimal string
    representation.
 
-.. go:function:: func TAI64NAXURTimeFromHexString(in string) TAI64NAXURTime
+.. go:function:: func TAI64NARUXTimeFromHexString(in string) TAI64NARUXTime
 
    :param in: The hexadecimal string representation of a timestamp to calculate.
    :type in: :go:type:`string`
    :return: The calculated timestamp.
-   :rtype: :go:type:`TAI64NAXURTime`
+   :rtype: :go:type:`TAI64NARUXTime`
 
-   Calculates a :go:type:`TAI64NAXURTime` from its hexadecimal string
+   Calculates a :go:type:`TAI64NARUXTime` from its hexadecimal string
    representation.
 
-.. go:function:: func TAI64NAXURTimeFromFloat(in Float) TAI64NAXURTime
+.. go:function:: func TAI64NARUXTimeFromFloat(in Float) TAI64NARUXTime
 
    :param in: The arbitrary-precision floating point representation of a
               timestamp to calculate.
    :type in: :go:type:`math/big.Float`
    :return: The calculated timestamp.
-   :rtype: :go:type:`TAI64NAXURTime`
+   :rtype: :go:type:`TAI64NARUXTime`
 
-   Calculates a :go:type:`TAI64NAXURTime` from its :go:type:`math/big.Float`
+   Calculates a :go:type:`TAI64NARUXTime` from its :go:type:`math/big.Float`
    representation.
 
-.. go:function:: func UTCtoTAI(utc TAI64NAXURTime) TAI64NAXURTime
+.. go:function:: func UTCtoTAI(utc TAI64NARUXTime) TAI64NARUXTime
 
    :param utc: The timestamp to remove the UTC offset from.
-   :type utc: :go:type:`TAI64NAXURTime`
+   :type utc: :go:type:`TAI64NARUXTime`
    :return: The calculated timestamp.
-   :rtype: :go:type:`TAI64NAXURTime`
+   :rtype: :go:type:`TAI64NARUXTime`
 
-   Removes the UTC leap second offset from a TAI64NAXURTime value.
+   Removes the UTC leap second offset from a TAI64NARUXTime value.
 
-.. go:function:: func TAItoUTC(tai TAI64NAXURTime) TAI64NAXURTime
+.. go:function:: func TAItoUTC(tai TAI64NARUXTime) TAI64NARUXTime
 
    :param tai: The timestamp to add the UTC offset to.
-   :type tai: :go:type:`TAI64NAXURTime`
+   :type tai: :go:type:`TAI64NARUXTime`
    :return: The calculated timestamp.
-   :rtype: :go:type:`TAI64NAXURTime`
+   :rtype: :go:type:`TAI64NARUXTime`
 
-   Adds the UTC leap second offset to a TAI64NAXURTime value.
+   Adds the UTC leap second offset to a TAI64NARUXTime value.
 
 Errors
 ------

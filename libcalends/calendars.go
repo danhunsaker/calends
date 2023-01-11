@@ -2,13 +2,13 @@ package main
 
 /*
 typedef struct _TAI64Time {
-        long long int Seconds; // Seconds since 1970-01-01 00:00:00 TAI
-        unsigned int Nano;     // Nanoseconds since the given second
-        unsigned int Atto;     // Attoseconds since the given nanosecond
-        unsigned int Xicto;    // Xictoseconds since the given attosecond
-        unsigned int Ucto;     // Uctoseconds since the given xictosecond
-        unsigned int Rocto;    // Roctoseconds since the given uctosecond
-        unsigned int padding;  // round the value out to the nearest 64 bits
+    long long int Seconds; // Seconds since 1970-01-01 00:00:00 TAI
+    unsigned int Nano;     // Billionths of a second since the given second
+    unsigned int Atto;     // Billionths of a nanosecond since the given nanosecond
+    unsigned int Ronto;    // Billionths of an attosecond since the given attosecond
+    unsigned int Udecto;   // Billionths of a rontosecond since the given rontosecond
+    unsigned int Xindecto; // Billionths of an udectosecond since the given udectosecond
+    unsigned int padding;  // round the value out to the nearest 64 bits
 } TAI64Time;
 
 typedef TAI64Time (*Calends_calendar_to_internal_string) (char*, char*, char*);
@@ -24,33 +24,33 @@ typedef TAI64Time (*Calends_calendar_offset_double) (char*, TAI64Time, double);
 typedef TAI64Time (*Calends_calendar_offset_tai) (char*, TAI64Time, TAI64Time);
 
 static inline TAI64Time bridge_Calends_calendar_to_internal_string(Calends_calendar_to_internal_string f, char* name, char* date, char* format) {
-  return f(name, date, format);
+    return f(name, date, format);
 }
 static inline TAI64Time bridge_Calends_calendar_to_internal_long_long(Calends_calendar_to_internal_long_long f, char* name, long long int date, char* format) {
-  return f(name, date, format);
+    return f(name, date, format);
 }
 static inline TAI64Time bridge_Calends_calendar_to_internal_double(Calends_calendar_to_internal_double f, char* name, double date, char* format) {
-  return f(name, date, format);
+    return f(name, date, format);
 }
 static inline TAI64Time bridge_Calends_calendar_to_internal_tai(Calends_calendar_to_internal_tai f, char* name, TAI64Time date) {
-  return f(name, date);
+    return f(name, date);
 }
 
 static inline char* bridge_Calends_calendar_from_internal(Calends_calendar_from_internal f, char* name, TAI64Time stamp, char* format) {
-  return f(name, stamp, format);
+    return f(name, stamp, format);
 }
 
 static inline TAI64Time bridge_Calends_calendar_offset_string(Calends_calendar_offset_string f, char* name, TAI64Time stamp, char* offset) {
-  return f(name, stamp, offset);
+    return f(name, stamp, offset);
 }
 static inline TAI64Time bridge_Calends_calendar_offset_long_long(Calends_calendar_offset_long_long f, char* name, TAI64Time stamp, long long int offset) {
-  return f(name, stamp, offset);
+    return f(name, stamp, offset);
 }
 static inline TAI64Time bridge_Calends_calendar_offset_double(Calends_calendar_offset_double f, char* name, TAI64Time stamp, double offset) {
-  return f(name, stamp, offset);
+    return f(name, stamp, offset);
 }
 static inline TAI64Time bridge_Calends_calendar_offset_tai(Calends_calendar_offset_tai f, char* name, TAI64Time stamp, TAI64Time offset) {
-  return f(name, stamp, offset);
+    return f(name, stamp, offset);
 }
 */
 import "C"
@@ -124,7 +124,7 @@ func TAI64Time_string(t C.TAI64Time) *C.char {
 
 //export TAI64Time_from_string
 func TAI64Time_from_string(in *C.char) C.TAI64Time {
-	return taiGoToC(calendars.TAI64NAXURTimeFromDecimalString(C.GoString(in)))
+	return taiGoToC(calendars.TAI64NARUXTimeFromDecimalString(C.GoString(in)))
 }
 
 //export TAI64Time_hex_string
@@ -135,7 +135,7 @@ func TAI64Time_hex_string(t C.TAI64Time) *C.char {
 
 //export TAI64Time_from_hex_string
 func TAI64Time_from_hex_string(in *C.char) C.TAI64Time {
-	return taiGoToC(calendars.TAI64NAXURTimeFromHexString(C.GoString(in)))
+	return taiGoToC(calendars.TAI64NARUXTimeFromHexString(C.GoString(in)))
 }
 
 //export TAI64Time_double
@@ -147,7 +147,7 @@ func TAI64Time_double(t C.TAI64Time) C.double {
 
 //export TAI64Time_from_double
 func TAI64Time_from_double(in C.double) C.TAI64Time {
-	return taiGoToC(calendars.TAI64NAXURTimeFromFloat(*big.NewFloat(float64(in))))
+	return taiGoToC(calendars.TAI64NARUXTimeFromFloat(*big.NewFloat(float64(in))))
 }
 
 //export TAI64Time_encode_text
@@ -163,7 +163,7 @@ func TAI64Time_encode_text(t C.TAI64Time) *C.char {
 
 //export TAI64Time_decode_text
 func TAI64Time_decode_text(in *C.char) C.TAI64Time {
-	time := calendars.TAI64NAXURTime{}
+	time := calendars.TAI64NARUXTime{}
 	time.UnmarshalText([]byte(C.GoString(in)))
 	return taiGoToC(time)
 }
@@ -182,7 +182,7 @@ func TAI64Time_encode_binary(t C.TAI64Time, length *C.int) unsafe.Pointer {
 
 //export TAI64Time_decode_binary
 func TAI64Time_decode_binary(in unsafe.Pointer, len C.int) C.TAI64Time {
-	time := calendars.TAI64NAXURTime{}
+	time := calendars.TAI64NARUXTime{}
 	time.UnmarshalBinary(C.GoBytes(in, len))
 	return taiGoToC(time)
 }
@@ -203,8 +203,8 @@ func wrapToInternal(
 	toInternalLongLong C.Calends_calendar_to_internal_long_long,
 	toInternalDouble C.Calends_calendar_to_internal_double,
 	toInternalTai C.Calends_calendar_to_internal_tai,
-) func(interface{}, string) (calendars.TAI64NAXURTime, error) {
-	return func(in interface{}, format string) (out calendars.TAI64NAXURTime, err error) {
+) func(interface{}, string) (calendars.TAI64NARUXTime, error) {
+	return func(in interface{}, format string) (out calendars.TAI64NARUXTime, err error) {
 		var raw C.TAI64Time
 		defer handlePanic()
 		switch in := in.(type) {
@@ -223,7 +223,7 @@ func wrapToInternal(
 			if err != nil {
 				err = errors.Wrap(err, 0)
 			}
-		case calendars.TAI64NAXURTime:
+		case calendars.TAI64NARUXTime:
 			pass := taiGoToC(in)
 			raw, err = C.bridge_Calends_calendar_to_internal_tai(toInternalTai, name, pass)
 			if err != nil {
@@ -241,8 +241,8 @@ func wrapToInternal(
 	}
 }
 
-func wrapFromInternal(name *C.char, fromInternal C.Calends_calendar_from_internal) func(calendars.TAI64NAXURTime, string) (string, error) {
-	return func(in calendars.TAI64NAXURTime, format string) (out string, err error) {
+func wrapFromInternal(name *C.char, fromInternal C.Calends_calendar_from_internal) func(calendars.TAI64NARUXTime, string) (string, error) {
+	return func(in calendars.TAI64NARUXTime, format string) (out string, err error) {
 		var raw *C.char
 		defer handlePanic()
 		pass := taiGoToC(in)
@@ -262,8 +262,8 @@ func wrapOffset(
 	offsetLongLong C.Calends_calendar_offset_long_long,
 	offsetDouble C.Calends_calendar_offset_double,
 	offsetTai C.Calends_calendar_offset_tai,
-) func(calendars.TAI64NAXURTime, interface{}) (calendars.TAI64NAXURTime, error) {
-	return func(in calendars.TAI64NAXURTime, offset interface{}) (out calendars.TAI64NAXURTime, err error) {
+) func(calendars.TAI64NARUXTime, interface{}) (calendars.TAI64NARUXTime, error) {
+	return func(in calendars.TAI64NARUXTime, offset interface{}) (out calendars.TAI64NARUXTime, err error) {
 		var raw C.TAI64Time
 		defer handlePanic()
 		pass := taiGoToC(in)
@@ -283,7 +283,7 @@ func wrapOffset(
 			if err != nil {
 				err = errors.Wrap(err, 0)
 			}
-		case calendars.TAI64NAXURTime:
+		case calendars.TAI64NARUXTime:
 			pass2 := taiGoToC(offset)
 			raw, err = C.bridge_Calends_calendar_offset_tai(offsetTai, name, pass, pass2)
 			if err != nil {
@@ -301,25 +301,25 @@ func wrapOffset(
 	}
 }
 
-func taiGoToC(in calendars.TAI64NAXURTime) C.TAI64Time {
+func taiGoToC(in calendars.TAI64NARUXTime) C.TAI64Time {
 	return C.TAI64Time{
-		Seconds: C.longlong(in.Seconds),
-		Nano:    C.uint(in.Nano),
-		Atto:    C.uint(in.Atto),
-		Xicto:   C.uint(in.Xicto),
-		Ucto:    C.uint(in.Ucto),
-		Rocto:   C.uint(in.Rocto),
-		padding: C.uint(0),
+		Seconds:  C.longlong(in.Seconds),
+		Nano:     C.uint(in.Nano),
+		Atto:     C.uint(in.Atto),
+		Ronto:    C.uint(in.Ronto),
+		Udecto:   C.uint(in.Udecto),
+		Xindecto: C.uint(in.Xindecto),
+		padding:  C.uint(0),
 	}
 }
 
-func taiCToGo(in C.TAI64Time) calendars.TAI64NAXURTime {
-	return calendars.TAI64NAXURTime{
-		Seconds: int64(in.Seconds),
-		Nano:    uint32(in.Nano),
-		Atto:    uint32(in.Atto),
-		Xicto:   uint32(in.Xicto),
-		Ucto:    uint32(in.Ucto),
-		Rocto:   uint32(in.Rocto),
+func taiCToGo(in C.TAI64Time) calendars.TAI64NARUXTime {
+	return calendars.TAI64NARUXTime{
+		Seconds:  int64(in.Seconds),
+		Nano:     uint32(in.Nano),
+		Atto:     uint32(in.Atto),
+		Ronto:    uint32(in.Ronto),
+		Udecto:   uint32(in.Udecto),
+		Xindecto: uint32(in.Xindecto),
 	}
 }

@@ -3,7 +3,7 @@
 /*
 
 It provides an interface for custom calendar systems to implement, and a data
-type for storing instants in the internal TAI64NAXUR format, so that the various
+type for storing instants in the internal TAI64NARUX format, so that the various
 date/time manipulation functions of Calends can easily operate on them. It also
 provides a handful of utility functions and methods to simplify the conversion
 process between the calendar system and the internal format.
@@ -24,20 +24,20 @@ import (
 
 // CalendarDefinition is the primary interface for defining calendar systems.
 type CalendarDefinition interface {
-	// Convert a date representation to an internal TAI64NAXURTime
-	ToInternal(interface{}, string) (TAI64NAXURTime, error)
+	// Convert a date representation to an internal TAI64NARUXTime
+	ToInternal(interface{}, string) (TAI64NARUXTime, error)
 
-	// Convert an internal TAI64NAXURTime to a date representation
-	FromInternal(TAI64NAXURTime, string) (string, error)
+	// Convert an internal TAI64NARUXTime to a date representation
+	FromInternal(TAI64NARUXTime, string) (string, error)
 
-	// Calculate the TAI64NAXURTime at a given offset from another TAI64NAXURTime
-	Offset(TAI64NAXURTime, interface{}) (TAI64NAXURTime, error)
+	// Calculate the TAI64NARUXTime at a given offset from another TAI64NARUXTime
+	Offset(TAI64NARUXTime, interface{}) (TAI64NARUXTime, error)
 }
 
 type calendarRegistration struct {
-	ToInternal    func(interface{}, string) (TAI64NAXURTime, error)
-	FromInternal  func(TAI64NAXURTime, string) (string, error)
-	Offset        func(TAI64NAXURTime, interface{}) (TAI64NAXURTime, error)
+	ToInternal    func(interface{}, string) (TAI64NARUXTime, error)
+	FromInternal  func(TAI64NARUXTime, string) (string, error)
+	Offset        func(TAI64NARUXTime, interface{}) (TAI64NARUXTime, error)
 	DefaultFormat string
 }
 
@@ -75,9 +75,9 @@ and saves `defaultFormat` for later use while parsing or formatting.
 */
 func RegisterElements(
 	name string,
-	toInternal func(interface{}, string) (TAI64NAXURTime, error),
-	fromInternal func(TAI64NAXURTime, string) (string, error),
-	offset func(TAI64NAXURTime, interface{}) (TAI64NAXURTime, error),
+	toInternal func(interface{}, string) (TAI64NARUXTime, error),
+	fromInternal func(TAI64NARUXTime, string) (string, error),
+	offset func(TAI64NARUXTime, interface{}) (TAI64NARUXTime, error),
 	defaultFormat string,
 ) {
 	registeredCalendars[canonCalendarName(name)] = calendarRegistration{
@@ -123,9 +123,9 @@ func DefaultFormat(calendar string) string {
 }
 
 // ToInternal returns the associated value from a registered calendar system.
-func ToInternal(calendar string, date interface{}, format string) (TAI64NAXURTime, error) {
+func ToInternal(calendar string, date interface{}, format string) (TAI64NARUXTime, error) {
 	if !Registered(calendar) {
-		return TAI64NAXURTime{}, errors.Wrap(ErrUnknownCalendar(calendar), 1)
+		return TAI64NARUXTime{}, errors.Wrap(ErrUnknownCalendar(calendar), 1)
 	}
 
 	if format == "" {
@@ -143,7 +143,7 @@ func ToInternal(calendar string, date interface{}, format string) (TAI64NAXURTim
 }
 
 // FromInternal returns the associated value from a registered calendar system.
-func FromInternal(calendar string, stamp TAI64NAXURTime, format string) (string, error) {
+func FromInternal(calendar string, stamp TAI64NARUXTime, format string) (string, error) {
 	if !Registered(calendar) {
 		return "", errors.Wrap(ErrUnknownCalendar(calendar), 1)
 	}
@@ -163,9 +163,9 @@ func FromInternal(calendar string, stamp TAI64NAXURTime, format string) (string,
 }
 
 // Offset returns the associated value from a registered calendar system.
-func Offset(calendar string, stamp TAI64NAXURTime, offset interface{}) (TAI64NAXURTime, error) {
+func Offset(calendar string, stamp TAI64NARUXTime, offset interface{}) (TAI64NARUXTime, error) {
 	if !Registered(calendar) {
-		return TAI64NAXURTime{}, errors.Wrap(ErrUnknownCalendar(calendar), 1)
+		return TAI64NARUXTime{}, errors.Wrap(ErrUnknownCalendar(calendar), 1)
 	}
 
 	out, err := registeredCalendars[canonCalendarName(calendar)].Offset(stamp, offset)

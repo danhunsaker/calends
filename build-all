@@ -14,7 +14,7 @@ go mod vendor
 go install github.com/crazy-max/xgo@latest
 ${GOPATH}/bin/xgo -buildmode=c-shared -dest=$(pwd)/dist/ -out=libcalends-${VERSION} -targets=${TARGETS} github.com/danhunsaker/calends/libcalends
 ${GOPATH}/bin/xgo -dest=$(pwd)/dist/bin/ -out=calends-${VERSION} -targets=${TARGETS} ./cli
-GOOS=js GOARCH=wasm go build -o=$(pwd)/dist/calends-${VERSION}.wasm github.com/danhunsaker/calends
+GOOS=js GOARCH=wasm go build -o=$(pwd)/dist/calends-${VERSION}.wasm github.com/danhunsaker/calends/wasm
 
 for h in $(find dist/ -name '*.h')
 do
@@ -41,7 +41,7 @@ do
 
   if [ -e ${dir}/libcalends.dll ]
   then
-    zip ${dir}.zip ${dir}/*
+    zip -j ${dir}.zip ${dir}/*
   else
     tar czvf ${dir}.tgz -C ${dir} .
   fi

@@ -27,8 +27,8 @@ func TestLeapSecondDateCompare(t *testing.T) {
 }
 
 func TestUTCtoTAI(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
-	want := TAI64NAXURTimeFromDecimalString("-6.997489999999999987778664944926276803016662598")
+	in := TAI64NARUXTime{Seconds: 1}
+	want := TAI64NARUXTimeFromDecimalString("-6.997489999999999987778664944926276803016662598")
 	got := UTCtoTAI(in)
 
 	if got != want {
@@ -37,8 +37,8 @@ func TestUTCtoTAI(t *testing.T) {
 }
 
 func TestTAItoUTC(t *testing.T) {
-	in := TAI64NAXURTime{Seconds: 1}
-	want := TAI64NAXURTimeFromDecimalString("9.000081999999999027295416453853249549865722656")
+	in := TAI64NARUXTime{Seconds: 1}
+	want := TAI64NARUXTimeFromDecimalString("9.000081999999999027295416453853249549865722656")
 	got := TAItoUTC(in)
 
 	if got != want {
@@ -48,7 +48,7 @@ func TestTAItoUTC(t *testing.T) {
 
 func TestGetTAIOffset(t *testing.T) {
 	year, month, day := 1970, time.January, 1
-	want := TAI64NAXURTimeFromDecimalString("8.000081999999999027295416453853249549865722656")
+	want := TAI64NARUXTimeFromDecimalString("8.000081999999999027295416453853249549865722656")
 	got := getTAIOffset(year, month, day)
 
 	if got != want {

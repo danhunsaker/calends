@@ -47,7 +47,7 @@ func init() {
 	)
 }
 
-func jdcToInternal(date interface{}, format string) (stamp TAI64NAXURTime, err error) {
+func jdcToInternal(date interface{}, format string) (stamp TAI64NARUXTime, err error) {
 	var jdc, mjd big.Float
 	var jdcP, mjdP *big.Float
 	var in string
@@ -102,12 +102,12 @@ func jdcToInternal(date interface{}, format string) (stamp TAI64NAXURTime, err e
 		jdc.Add(jdc.Add(jdc.Sub(&jdc, jdcP), jdcModifier), jdcBaseDay)
 	}
 
-	stamp = TAI64NAXURTimeFromFloat(*jdc.Mul(jdc.Sub(jdc.Sub(&jdc, jdcModifier), jdcBaseDay), big.NewFloat(86400)))
+	stamp = TAI64NARUXTimeFromFloat(*jdc.Mul(jdc.Sub(jdc.Sub(&jdc, jdcModifier), jdcBaseDay), big.NewFloat(86400)))
 
 	return
 }
 
-func jdcFromInternal(stamp TAI64NAXURTime, format string) (date string, err error) {
+func jdcFromInternal(stamp TAI64NARUXTime, format string) (date string, err error) {
 	var mjd, jdc big.Float
 	timestamp := stamp.Float()
 	mjd.Add(mjd.Quo(timestamp, big.NewFloat(86400)), jdcBaseDay)
@@ -135,7 +135,7 @@ func jdcFromInternal(stamp TAI64NAXURTime, format string) (date string, err erro
 	return
 }
 
-func jdcOffset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err error) {
+func jdcOffset(in TAI64NARUXTime, offset interface{}) (out TAI64NARUXTime, err error) {
 	var jdc float64
 	var mod string
 
@@ -164,7 +164,7 @@ func jdcOffset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err e
 		return
 	}
 
-	out = in.Add(TAI64NAXURTimeFromFloat(*big.NewFloat(jdc * 86400.)))
+	out = in.Add(TAI64NARUXTimeFromFloat(*big.NewFloat(jdc * 86400.)))
 
 	return
 }

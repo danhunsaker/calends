@@ -38,7 +38,7 @@ func testCalends_is_same(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_is_same(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_is_same(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -51,7 +51,7 @@ func testCalends_is_same_duration(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_is_same_duration(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_is_same_duration(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -64,7 +64,7 @@ func testCalends_is_shorter(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_is_shorter(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_is_shorter(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -77,7 +77,7 @@ func testCalends_is_longer(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_is_longer(inst1, inst2)
-	if bool(ret) != true {
+	if !bool(ret) {
 		t.Errorf("Calends_is_longer(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), true)
 	}
 	Calends_release(inst1)
@@ -90,7 +90,7 @@ func testCalends_contains(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_contains(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_contains(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -103,7 +103,7 @@ func testCalends_overlaps(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_overlaps(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_overlaps(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -115,12 +115,22 @@ func testCalends_abuts(t *testing.T) {
 
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
+	inst3 := Calends_create_double_range(C.double(10.0), C.double(15.0), C.CString(""), C.CString(""))
 	ret := Calends_abuts(inst1, inst2)
-	if bool(ret) != false {
-		t.Errorf("Calends_abuts(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
+	if !bool(ret) {
+		t.Errorf("Calends_abuts(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), true)
+	}
+	ret = Calends_abuts(inst1, inst3)
+	if bool(ret) {
+		t.Errorf("Calends_abuts(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst3), bool(ret), false)
+	}
+	ret = Calends_abuts(inst2, inst3)
+	if !bool(ret) {
+		t.Errorf("Calends_abuts(%#v, %#v) returned %#v; wanted %#v", uint64(inst2), uint64(inst3), bool(ret), true)
 	}
 	Calends_release(inst1)
 	Calends_release(inst2)
+	Calends_release(inst3)
 }
 
 func testCalends_is_before(t *testing.T) {
@@ -129,7 +139,7 @@ func testCalends_is_before(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_is_before(inst1, inst2)
-	if bool(ret) != true {
+	if !bool(ret) {
 		t.Errorf("Calends_is_before(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), true)
 	}
 	Calends_release(inst1)
@@ -142,7 +152,7 @@ func testCalends_starts_before(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_starts_before(inst1, inst2)
-	if bool(ret) != true {
+	if !bool(ret) {
 		t.Errorf("Calends_starts_before(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), true)
 	}
 	Calends_release(inst1)
@@ -155,7 +165,7 @@ func testCalends_ends_before(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_ends_before(inst1, inst2)
-	if bool(ret) != true {
+	if !bool(ret) {
 		t.Errorf("Calends_ends_before(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), true)
 	}
 	Calends_release(inst1)
@@ -168,7 +178,7 @@ func testCalends_is_during(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_is_during(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_is_during(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -181,7 +191,7 @@ func testCalends_starts_during(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_starts_during(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_starts_during(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -194,7 +204,7 @@ func testCalends_ends_during(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_ends_during(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_ends_during(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -207,7 +217,7 @@ func testCalends_is_after(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_is_after(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_is_after(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -220,7 +230,7 @@ func testCalends_starts_after(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_starts_after(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_starts_after(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)
@@ -233,7 +243,7 @@ func testCalends_ends_after(t *testing.T) {
 	inst1 := Calends_create_double_range(C.double(0.0), C.double(5.0), C.CString(""), C.CString(""))
 	inst2 := Calends_create_double_range(C.double(5.0), C.double(10.0), C.CString(""), C.CString(""))
 	ret := Calends_ends_after(inst1, inst2)
-	if bool(ret) != false {
+	if bool(ret) {
 		t.Errorf("Calends_ends_after(%#v, %#v) returned %#v; wanted %#v", uint64(inst1), uint64(inst2), bool(ret), false)
 	}
 	Calends_release(inst1)

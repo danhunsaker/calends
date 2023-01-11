@@ -1765,13 +1765,13 @@ class _TAI64Time extends ffi.Struct {
   external int Atto;
 
   @ffi.UnsignedInt()
-  external int Xicto;
+  external int Ronto;
 
   @ffi.UnsignedInt()
-  external int Ucto;
+  external int Udecto;
 
   @ffi.UnsignedInt()
-  external int Rocto;
+  external int Xindecto;
 
   @ffi.UnsignedInt()
   external int padding;

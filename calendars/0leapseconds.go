@@ -127,8 +127,8 @@ func init() {
 	gob.NewDecoder(base64.NewDecoder(base64.StdEncoding, strings.NewReader(encoded))).Decode(&leapSeconds)
 }
 
-// UTCtoTAI removes the UTC leap second offset from a TAI64NAXURTime value.
-func UTCtoTAI(utc TAI64NAXURTime) (tai TAI64NAXURTime) {
+// UTCtoTAI removes the UTC leap second offset from a TAI64NARUXTime value.
+func UTCtoTAI(utc TAI64NARUXTime) (tai TAI64NARUXTime) {
 	// Calculate year, month, day
 	oldYear, oldMonth, oldDay := time.Unix(utc.Seconds, int64(utc.Nano)).UTC().Date()
 	// Remove the leap second offset
@@ -145,8 +145,8 @@ func UTCtoTAI(utc TAI64NAXURTime) (tai TAI64NAXURTime) {
 	return
 }
 
-// TAItoUTC adds the UTC leap second offset to a TAI64NAXURTime value.
-func TAItoUTC(tai TAI64NAXURTime) (utc TAI64NAXURTime) {
+// TAItoUTC adds the UTC leap second offset to a TAI64NARUXTime value.
+func TAItoUTC(tai TAI64NARUXTime) (utc TAI64NARUXTime) {
 	// Calculate year, month, day
 	year, month, day := time.Unix(tai.Seconds, int64(tai.Nano)).UTC().Date()
 	// Add the leap second offset
@@ -155,7 +155,7 @@ func TAItoUTC(tai TAI64NAXURTime) (utc TAI64NAXURTime) {
 	return
 }
 
-func getTAIOffset(year int, month time.Month, day int) (offset TAI64NAXURTime) {
+func getTAIOffset(year int, month time.Month, day int) (offset TAI64NARUXTime) {
 	const baseDay = 40587 //Modified Julian Date at January 1, 1970
 
 	var entry *leapSecondOffset
@@ -174,7 +174,7 @@ func getTAIOffset(year int, month time.Month, day int) (offset TAI64NAXURTime) {
 	timestamp := time.Date(year, month, day, 0, 0, 0, 0, time.UTC).Unix()
 	mjd := int(timestamp/86400 + baseDay)
 
-	offset = TAI64NAXURTimeFromFloat(*big.NewFloat(entry.Offset + entry.Modifier.Calculate(mjd)))
+	offset = TAI64NARUXTimeFromFloat(*big.NewFloat(entry.Offset + entry.Modifier.Calculate(mjd)))
 
 	return
 }

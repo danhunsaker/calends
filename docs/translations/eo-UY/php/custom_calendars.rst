@@ -171,7 +171,7 @@ helpers in the library itself.
 
 .. php:class:: TAITime
 
-   :php:class:`TAITime` stores a ``TAI64NAXUR`` instant in a reliable,
+   :php:class:`TAITime` stores a ``TAI64NARUX`` instant in a reliable,
    easily-converted format. Each 9-digit fractional segment is stored in a
    separate 32-bit integer to preserve its value with a very high degree of
    accuracy, without having to rely on string parsing or external
@@ -189,15 +189,15 @@ helpers in the library itself.
 
       The 10th through 18th digits of the fractional component.
 
-   .. php:attr:: xicto (integer)
+   .. php:attr:: ronto (integer)
 
       The 19th through 27th digits of the fractional component.
 
-   .. php:attr:: ucto (integer)
+   .. php:attr:: udecto (integer)
 
       The 28th through 36th digits of the fractional component.
 
-   .. php:attr:: rocto (integer)
+   .. php:attr:: xindecto (integer)
 
       The 37th through 45th digits of the fractional component.
 

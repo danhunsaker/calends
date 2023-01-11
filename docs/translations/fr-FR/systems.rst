@@ -11,7 +11,7 @@ can also add custom systems to your apps without waiting for us to add them
 ourselves – instructions for that are in the Custom Calendars section, below.
 
 Throughout these documents, the term ``TAITime`` is used to refer generically to
-the ``TAI64NAXURTime``, ``TAI64Time``, or ``TAITime`` type. The exact form of
+the ``TAI64NARUXTime``, ``TAI64Time``, or ``TAITime`` type. The exact form of
 this name you'll see most often varies by programming language, and is covered
 in much more detail in the Custom Calendars section.
 

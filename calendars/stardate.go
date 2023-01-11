@@ -202,7 +202,7 @@ func init() {
 	)
 }
 
-func stardateToInternal(date interface{}, format string) (stamp TAI64NAXURTime, err error) {
+func stardateToInternal(date interface{}, format string) (stamp TAI64NARUXTime, err error) {
 	var jdc big.Float
 	var in string
 
@@ -271,7 +271,7 @@ func stardateToInternal(date interface{}, format string) (stamp TAI64NAXURTime, 
 	return
 }
 
-func stardateFromInternal(stamp TAI64NAXURTime, format string) (date string, err error) {
+func stardateFromInternal(stamp TAI64NARUXTime, format string) (date string, err error) {
 	var jdcFloatP *big.Float
 	var jdcFloat big.Float
 	var jdcString string
@@ -322,9 +322,9 @@ func stardateFromInternal(stamp TAI64NAXURTime, format string) (date string, err
 	return
 }
 
-func stardateOffset(in TAI64NAXURTime, offset interface{}) (out TAI64NAXURTime, err error) {
+func stardateOffset(in TAI64NARUXTime, offset interface{}) (out TAI64NARUXTime, err error) {
 	var date, format, mod string
-	var adjust TAI64NAXURTime
+	var adjust TAI64NARUXTime
 
 	switch offset.(type) {
 	case []byte:

@@ -152,7 +152,7 @@ DeS entirely pong be'nI''a'wI', Datu' narghtaHvIS 'oH helpers.
 
 .. c:type:: TAI64Time
 
-   '' tai64naxur '' instant neH reliable, ngeD-bIDameH format ngevwI'. Hoch
+   '' tai64narux '' instant neH reliable, ngeD-bIDameH format ngevwI'. Hoch
    ngevwI' 9-digit fractional segment neH chev 32-bit integer choq
    jen qechmeyDaj Huj accuracy. ghaH Hutlh vay' wuv lo'laHghach
    SIrgh parse pagh external arbitrary-precision math be'nI''a'wI', Datu'.
@@ -169,17 +169,17 @@ DeS entirely pong be'nI''a'wI', Datu' narghtaHvIS 'oH helpers.
 
         attoseconds qaSchoH nob nanosecond
 
-   .. c:member:: unsigned int xicto
+   .. c:member:: unsigned int ronto
 
-        xictoseconds qaSchoH nob attosecond
+        rontoseconds qaSchoH nob attosecond
 
-   .. c:member:: unsigned int ucto
+   .. c:member:: unsigned int udecto
 
-        uctoseconds qaSchoH nob xictosecond
+        udectoseconds qaSchoH nob rontosecond
 
-   .. c:member:: unsigned int rocto
+   .. c:member:: unsigned int xindecto
 
-        roctoseconds qaSchoH nob uctosecond
+        xindectoseconds qaSchoH nob udectosecond
 
    .. c:member:: unsigned int padding
 

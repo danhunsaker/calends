@@ -23,10 +23,10 @@ object(Calends\TAITime)#%d (6) {
   int(81999)
   ["atto"]=>
   int(999999027)
-  ["xicto"]=>
+  ["ronto"]=>
   int(295416453)
-  ["ucto"]=>
+  ["udecto"]=>
   int(853249549)
-  ["rocto"]=>
+  ["xindecto"]=>
   int(865722656)
 }

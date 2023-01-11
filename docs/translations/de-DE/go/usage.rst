@@ -12,7 +12,7 @@ Calends exposes a very small handful of things for use outside the library
 itself. One is the :go:type:`Calends` class, documented here, which should be
 the only interface users of the library ever need to touch.
 
-Another thing Calends exposes is the :go:type:`calendars.TAI64NAXURTime` class,
+Another thing Calends exposes is the :go:type:`calendars.TAI64NARUXTime` class,
 used to store and manipulate the instants of time which make up a
 :go:type:`Calends` instance. The rest are interfaces for extending the library's
 functionality. These are covered in the :ref:`Custom Calendars in Golang
@@ -63,7 +63,7 @@ Create
    the calendar system itself unchanged.
 
    The calendar system then converts ``value`` to a
-   :go:type:`calendars.TAI64NAXURTime` instant, which the :go:type:`Calends`
+   :go:type:`calendars.TAI64NARUXTime` instant, which the :go:type:`Calends`
    object sets to the appropriate internal value.
 
 Read
