@@ -20,6 +20,8 @@ import (
 	"strings"
 
 	"github.com/go-errors/errors"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 // CalendarDefinition is the primary interface for defining calendar systems.
@@ -177,5 +179,5 @@ func Offset(calendar string, stamp TAI64NARUXTime, offset interface{}) (TAI64NAR
 }
 
 func canonCalendarName(calendar string) string {
-	return strings.Join(strings.Fields(strings.Title(strings.ToLower(calendar))), "")
+	return strings.Join(strings.Fields(cases.Title(language.Und).String(strings.ToLower(calendar))), "")
 }

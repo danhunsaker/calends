@@ -2,8 +2,6 @@
 
 namespace Calends;
 
-require_once('CalendsException.php');
-
 final class TAITime
 {
     private static ?\FFI $ffi = null;
@@ -62,9 +60,14 @@ final class TAITime
         return self::fromNative(self::$ffi->TAI64Time_from_string($stamp));
     }
 
-    public function __toString(): string
+    public function toString(): string
     {
         return \FFI::string(self::$ffi->TAI64Time_string($this->toNative()));
+    }
+
+    public function __toString(): string
+    {
+        return $this->toString();
     }
 
     public static function fromHex(string $stamp): self
@@ -89,31 +92,6 @@ final class TAITime
     public function toNumber(): float
     {
         return (float)self::$ffi->TAI64Time_double($this->toNative());
-    }
-
-    public static function fromText(string $stamp): self
-    {
-        self::ffiInit();
-
-        return self::fromNative(self::$ffi->TAI64Time_decode_text($stamp));
-    }
-
-    public function toText(): string
-    {
-        return \FFI::string(self::$ffi->TAI64Time_encode_text($this->toNative()));
-    }
-
-    public static function fromBinary(string $stamp): self
-    {
-        self::ffiInit();
-
-        return self::fromNative(self::$ffi->TAI64Time_decode_binary($stamp, strlen($stamp)));
-    }
-
-    public function toBinary(): string
-    {
-        $len = 0;
-        return \FFI::string(self::$ffi->TAI64Time_encode_binary($this->toNative(), $len));
     }
 
     public function add(TAITime $other): TAITime

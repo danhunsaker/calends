@@ -29,11 +29,10 @@ section.
 .. php:class:: Calends
 
    The main entry point to Calends and its functionality. :php:class:`Calends`
-   objects should only be created with the :php:meth:`Calends\\Calends::create`
-   function, and never directly (especially given its values are all unexported
-   ones). :php:class:`Calends` *does* implement the :php:class:`Serializable`
-   interface, though, so it's safe to :php:func:`serialize`\ /\
-   :php:func:`unserialize` instances if you want.
+   objects can only be created with the :php:meth:`Calends\\Calends::create`
+   function, and not directly. :php:class:`Calends` *does* implement the
+   :php:class:`Serializable` interface, though, so it's safe to
+   :php:func:`serialize`\ /\ :php:func:`unserialize` instances if you want.
 
 Create
 ------
@@ -56,9 +55,7 @@ Create
 
    In any case, the value can always be an associative array, where the keys are
    any two of ``start``, ``end``, and ``duration``. If all three are provided,
-   ``duration`` is ignored in favor of calculating it directly. If only one of
-   the listed keys is provided, ``$value`` is passed to the calendar system
-   itself unchanged.
+   ``duration`` is ignored in favor of calculating it directly.
 
    The calendar system then converts ``$value`` to a :php:class:`TAITime`
    instant, which the :php:class:`Calends` object sets to the appropriate
@@ -261,7 +258,7 @@ Combine
 
       Returns a :php:class:`Calends` object spanning the overlap between the
       current :php:class:`Calends` object and ``$c2``. If the current object and
-      ``$c2`` don't overlap, returns an error.
+      ``$c2`` don't overlap, throws an error.
 
    .. php:method:: gap($c2)
 
@@ -272,7 +269,7 @@ Combine
 
       Returns a :php:class:`Calends` object spanning the gap between the current
       :php:class:`Calends` object and ``$c2``. If the current object and ``$c2``
-      overlap (and there is, therefore, no gap to return), returns an error.
+      overlap (and there is, therefore, no gap to return), throws an error.
 
 Compare
 -------
@@ -462,7 +459,7 @@ as the :php:func:`__toString` method, so the regular mechanisms for each of
 those are readily available and usable. In addition, it also offers support for
 JSON-decoding values directly:
 
-   .. php:staticmethod:: fromJson($encoded)
+   .. php:staticmethod:: jsonUnserialize($encoded)
 
       :param string $encoded: The JSON-encoded value to import.
       :return: A new :php:class:`Calends` object

@@ -14,8 +14,8 @@ Calends: Documented
    |Latest Stable Version| |GitHub Release Date|
    |Github commits (since latest release)| |GitHub last commit|
 
-   |Maintenance Status| |Travis Build Status| |Codecov coverage|
-   |Scrutinizer Code Quality| |Go Report Card| |Libraries.io Dependency Check|
+   |Maintenance Status| |GitHub branch checks state| |Codecov coverage|
+   |Go Report Card| |Libraries.io Dependency Check|
 
    |Crowdin| |Liberapay receiving|
 
@@ -79,18 +79,15 @@ Appendix
    .. |GitHub last commit| image:: https://img.shields.io/github/last-commit/danhunsaker/calends.png?style=flat-square
       :target: https://github.com/danhunsaker/calends
       :alt: GitHub last commit
-   .. |Maintenance Status| image:: https://img.shields.io/maintenance/yes/2018.png?style=flat-square
+   .. |Maintenance Status| image:: https://img.shields.io/maintenance/yes/2023.png?style=flat-square
       :target: https://github.com/danhunsaker/calends
       :alt: Maintenance Status
-   .. |Travis Build Status| image:: https://img.shields.io/travis/danhunsaker/calends.png?style=flat-square
-      :target: https://travis-ci.org/danhunsaker/calends
-      :alt: Travis Build Status
+   .. |GitHub branch checks state| image:: https://img.shields.io/github/checks-status/danhunsaker/calends/main?style=flat-square
+      :target: https://github.com/danhunsaker/calends/actions
+      :alt: GitHub branch checks state
    .. |Codecov coverage| image:: https://img.shields.io/codecov/c/github/danhunsaker/calends.png?style=flat-square
       :target: https://codecov.io/gh/danhunsaker/calends
       :alt: Codecov coverage
-   .. |Scrutinizer Code Quality| image:: https://img.shields.io/scrutinizer/g/danhunsaker/calends.png?style=flat-square
-      :target: https://scrutinizer-ci.com/g/danhunsaker/calends/
-      :alt: Scrutinizer Code Quality
    .. |Go Report Card| image:: https://goreportcard.com/badge/github.com/danhunsaker/calends?style=flat-square
       :target: https://goreportcard.com/report/github.com/danhunsaker/calends
       :alt: Go Report Card

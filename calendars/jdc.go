@@ -52,21 +52,20 @@ func jdcToInternal(date interface{}, format string) (stamp TAI64NARUXTime, err e
 	var jdcP, mjdP *big.Float
 	var in string
 
-	switch date.(type) {
+	switch date := date.(type) {
 	// TODO - other types
 	case big.Float:
-		tmp := date.(big.Float)
-		in = tmp.String()
+		in = date.String()
 	case *big.Float:
-		in = date.(*big.Float).String()
+		in = date.String()
 	case float64:
-		in = fmt.Sprintf("%f", date.(float64))
+		in = fmt.Sprintf("%f", date)
 	case int:
-		in = fmt.Sprintf("%d", date.(int))
+		in = fmt.Sprintf("%d", date)
 	case []byte:
-		in = string(date.([]byte))
+		in = string(date)
 	case string:
-		in = date.(string)
+		in = date
 	default:
 		err = errors.Wrap(ErrUnsupportedInput, 1)
 		return
@@ -102,14 +101,14 @@ func jdcToInternal(date interface{}, format string) (stamp TAI64NARUXTime, err e
 		jdc.Add(jdc.Add(jdc.Sub(&jdc, jdcP), jdcModifier), jdcBaseDay)
 	}
 
-	stamp = TAI64NARUXTimeFromFloat(*jdc.Mul(jdc.Sub(jdc.Sub(&jdc, jdcModifier), jdcBaseDay), big.NewFloat(86400)))
+	stamp = UTCtoTAI(TAI64NARUXTimeFromFloat(*jdc.Mul(jdc.Sub(jdc.Sub(&jdc, jdcModifier), jdcBaseDay), big.NewFloat(86400))))
 
 	return
 }
 
 func jdcFromInternal(stamp TAI64NARUXTime, format string) (date string, err error) {
 	var mjd, jdc big.Float
-	timestamp := stamp.Float()
+	timestamp := TAItoUTC(stamp).Float()
 	mjd.Add(mjd.Quo(timestamp, big.NewFloat(86400)), jdcBaseDay)
 	jdc.Add(&mjd, jdcModifier)
 
@@ -139,21 +138,20 @@ func jdcOffset(in TAI64NARUXTime, offset interface{}) (out TAI64NARUXTime, err e
 	var jdc float64
 	var mod string
 
-	switch offset.(type) {
+	switch offset := offset.(type) {
 	// TODO - other types
 	case big.Float:
-		tmp := offset.(big.Float)
-		mod = tmp.String()
+		mod = offset.String()
 	case *big.Float:
-		mod = offset.(*big.Float).String()
+		mod = offset.String()
 	case float64:
-		mod = fmt.Sprintf("%f", offset.(float64))
+		mod = fmt.Sprintf("%f", offset)
 	case int:
-		mod = fmt.Sprintf("%d", offset.(int))
+		mod = fmt.Sprintf("%d", offset)
 	case []byte:
-		mod = string(offset.([]byte))
+		mod = string(offset)
 	case string:
-		mod = offset.(string)
+		mod = offset
 	default:
 		err = errors.Wrap(ErrUnsupportedInput, 1)
 		return

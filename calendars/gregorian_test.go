@@ -32,10 +32,11 @@ func TestGregorianToInternal(t *testing.T) {
 
 func TestGregorianFromInternal(t *testing.T) {
 	cases := []map[string][]interface{}{
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, ""}, "want": []interface{}{"Thu, 01 Jan 1970 00:00:01 UTC", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, "2006-01-02 15:04:05 MST"}, "want": []interface{}{"1970-01-01 00:00:01 UTC", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, "%Y-%m-%d %H:%M:%S %Z"}, "want": []interface{}{"1970-01-01 00:00:01 UTC", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, "%Y-%m-%d %H:%M:%S %z"}, "want": []interface{}{"1970-01-01 00:00:01 +0000", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, ""}, "want": []interface{}{"Thu, 01 Jan 1970 00:00:09 UTC", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, "2006-01-02 15:04:05 MST"}, "want": []interface{}{"1970-01-01 00:00:09 UTC", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, "2006-01-02 15:04:05.000000000 MST"}, "want": []interface{}{"1970-01-01 00:00:09.000081999 UTC", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, "%Y-%m-%d %H:%M:%S %Z"}, "want": []interface{}{"1970-01-01 00:00:09 UTC", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, "%Y-%m-%d %H:%M:%S %z"}, "want": []interface{}{"1970-01-01 00:00:09 +0000", nil}},
 	}
 
 	for _, c := range cases {

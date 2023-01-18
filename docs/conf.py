@@ -20,13 +20,13 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Calends'
-copyright = '2018, Dan Hunsaker'
-author = 'Dan Hunsaker'
+copyright = '2023, Hennik Hunsaker'
+author = 'Hennik Hunsaker'
 
 # The short X.Y version
-version = '0.0'
+version = '0.1'
 # The full version, including alpha/beta/rc tags
-release = '0.0.5'
+release = '0.1.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -45,6 +45,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
+    'sphinxcontrib.dartdomain',
     'sphinxcontrib.golangdomain',
     'sphinxcontrib.phpdomain',
 ]
@@ -139,7 +140,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
     (master_doc, 'Calends.tex', 'Calends: Documented',
-     'Dan Hunsaker', 'manual'),
+     'Hennik Hunsaker', 'manual'),
 ]
 
 

@@ -26,11 +26,11 @@ func main() {
 	app.Compiled = time.Now()
 	app.Authors = []*cli.Author{
 		{
-			Name:  "Dan Hunsaker",
-			Email: "danhunsaker@gmail.com",
+			Name:  "Hennik Hunsaker",
+			Email: "hennik@insidiouslogic.systems",
 		},
 	}
-	app.Copyright = "(c) 2018-2022 Dan Hunsaker"
+	app.Copyright = "(c) 2018-2023 Hennik Hunsaker"
 
 	// configuration
 	app.EnableBashCompletion = true

@@ -21,7 +21,7 @@ The interface in question looks like this:
 
 .. go:type:: CalendarDefinition
 
-   .. go:function:: func (CalendarDefinition) ToInternal(date interface, format string) (TAI64NARUXTime, error)
+   .. go:function:: func (CalendarDefinition) ToInternal(date interface{}, format string) (TAI64NARUXTime, error)
 
       :param date: The input date. Should support :go:type:`string` at the very
                    minimum.
@@ -49,7 +49,7 @@ The interface in question looks like this:
 
       Converts an internal :go:type:`TAI64NARUXTime` to a date/time string.
 
-   .. go:function:: func (CalendarDefinition) Offset(stamp TAI64NARUXTime, offset interface) (TAI64NARUXTime, error)
+   .. go:function:: func (CalendarDefinition) Offset(stamp TAI64NARUXTime, offset interface{}) (TAI64NARUXTime, error)
 
       :param stamp: The internal timestamp value.
       :type stamp: :go:type:`TAI64NARUXTime`
@@ -163,10 +163,30 @@ these helpers in the library itself.
                         component.
 
    :go:type:`TAI64NARUXTime` stores a ``TAI64NARUX`` instant in a reliable,
-   easy-converted format. Each 9-digit fractional segment is stored in a
+   easily-converted format. Each 9-digit fractional segment is stored in a
    separate 32-bit integer to preserve its value with a very high degree of
    accuracy, without having to rely on string parsing or Golang's
    :go:type:`math/big.*` values.
+
+   .. note:: TAI vs UTC
+
+      You may have noticed that a TAI64Time object stores times in ``TAI
+      seconds``, not ``Unix seconds``, with a timezone offset of ``TAI`` rather
+      than ``UTC``. This distinction is **very important** as it will affect
+      internal calculations and comparisons to mix the two up. TAI time is very
+      similar to Unix time (itself based on UTC time), with one major
+      difference. While Unix/UTC seconds include the insertion and removal of
+      "leap seconds" to keep the solar zenith at local noon (which is useful for
+      day-to-day living and planning), TAI seconds are a continuous count,
+      unconcerned with dates whatsoever. Indeed, the only reason a date was
+      given in the description above was to make it easier for human readers to
+      know exactly when ``0 TAI`` took place.
+
+      In other words, once you have a Unix timestamp of your instant calculated,
+      be sure to convert it using :go:func:`UTCtoTAI` before returning the
+      result to the rest of the library. And then, of course, you'll also need
+      to convert instants from the library back using :go:func:`TAItoUTC` before
+      generating outputs.
 
    .. go:function:: func (TAI64NARUXTime) Add(z TAI64NARUXTime) TAI64NARUXTime
 

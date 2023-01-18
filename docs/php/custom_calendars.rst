@@ -8,60 +8,20 @@
 Custom Calendars in PHP
 ==========================
 
-Adding new calendars to Calends is a fairly straightforward process. Implement
-one of two interfaces, and then simply pass it to the registration method.
+Adding new calendars to Calends is a fairly straightforward process. Extend the
+:php:class:`CalendarDefinition` abstract class, and implement three methods.
+Then, simply construct an instance of your calendar system, and Calends will do
+the rest.
 
 Define
 ------
 
-The more common interface looks like this:
+Extend the :php:class:`CalendarDefinition` class, implementing the following
+methods:
 
-.. php:interface:: CalendarInterface
+.. php:class:: CalendarDefinition
 
-   .. php:staticmethod:: ToInternal(mixed $date, string $format): TAITime
-
-      :param $date: The input date. Should support strings at the very minimum.
-      :type $date: ``mixed``
-      :param $format: The format string for parsing the input date.
-      :type $format: ``string``
-      :return: The parsed internal timestamp.
-      :rtype: :php:class:`TAITime`
-      :throws CalendsException: when an error occurs
-
-      Converts an input date/time representation to an internal
-      :php:class:`TAITime`.
-
-   .. php:staticmethod:: FromInternal(TAITime $stamp, string $format): string
-
-      :param $stamp: The internal timestamp value.
-      :type $stamp: :php:class:`TAITime`
-      :param $format: The format string for formatting the output date.
-      :type $format: ``string``
-      :return: The formatted date/time.
-      :rtype: ``string``
-      :throws CalendsException: when an error occurs
-
-      Converts an internal :php:class:`TAITime` to a date/time string.
-
-   .. php:staticmethod:: Offset(TAITime $stamp, mixed $offset): TAITime
-
-      :param $stamp: The internal timestamp value.
-      :type $stamp: :php:class:`TAITime`
-      :param $offset: The input offset. Should support strings at the very
-                      minimum.
-      :type $offset: ``mixed``
-      :return: The adjusted internal timestamp.
-      :rtype: :php:class:`TAITime`
-      :throws CalendsException: when an error occurs
-
-      Adds the given offset to an internal :php:class:`TAITime`.
-
-The other is virtually identical, but uses object instances instead of static
-class methods:
-
-.. php:interface:: CalendarObjectInterface
-
-   .. php:method:: ToInternal(mixed $date, string $format): TAITime
+   .. php:method:: toInternal(mixed $date, string $format): TAITime
 
       :param $date: The input date. Should support strings at the very minimum.
       :type $date: ``mixed``
@@ -74,7 +34,7 @@ class methods:
       Converts an input date/time representation to an internal
       :php:class:`TAITime`.
 
-   .. php:method:: FromInternal(TAITime $stamp, string $format): string
+   .. php:method:: fromInternal(TAITime $stamp, string $format): string
 
       :param $stamp: The internal timestamp value.
       :type $stamp: :php:class:`TAITime`
@@ -86,7 +46,7 @@ class methods:
 
       Converts an internal :php:class:`TAITime` to a date/time string.
 
-   .. php:method:: Offset(TAITime $stamp, mixed $offset): TAITime
+   .. php:method:: offset(TAITime $stamp, mixed $offset): TAITime
 
       :param $stamp: The internal timestamp value.
       :type $stamp: :php:class:`TAITime`
@@ -106,39 +66,38 @@ Register
 ::::::::
 
 Once it is registered with the library, your calendar system can be used from
-anywhere in your application. To register a system, pass it to the following
-function:
+anywhere in your application. To register a system, simply construct an
+instance:
 
-.. php:class:: Calends
+.. code-block:: php
 
-.. php:staticmethod:: calendarRegister(string $name, string $defaultFormat, mixed $calendar)
+   $customCalendars[] = new MyCalendarSystem('example', 'yyyy-mm-dd@HH-MM-SS');
 
-   :param $name: The name to register the calendar system under.
-   :type $name: ``string``
-   :param $defaultFormat: The default format string.
-   :type $defaultFormat: ``string``
-   :param $calendar: The calendar system itself.
-   :type $calendar: :php:interface:`CalendarInterface` or
-                    :php:interface:`CalendarObjectInterface`
-
-   Registers a calendar system class or object, storing ``$calendar`` as
-   ``$name``, and saving ``$defaultFormat`` for later use while parsing or
-   formatting.
+The first argument is the calendar system's name. The second is a default
+format string which will be passed to your calendar system whenever users leave
+the format string blank or unset with :php:class:`Calends` methods.
 
 Unregister
 ::::::::::
 
-.. php:staticmethod:: calendarUnregister(string $name)
+There are two ways to unregister a calendar system once it's no longer needed.
+The first is to simply destruct the instance you created to register it. For
+that reason, it's important to store all your calendar systems to variables
+rather than simply constructing them in place. Well, that and the fact you need
+the calendar system object to persist in order to handle requests from the rest
+of the library.
 
-   :param $name: The name of the calendar system to remove.
-   :type $name: ``string``
+The other way to unregister a calendar system is to do so manually, using the
+instance you created to register it in the first place:
+
+.. php:method:: unregister()
 
    Removes a calendar system from the callback list.
 
 Check and List
 ::::::::::::::
 
-.. php:staticmethod:: calendarRegistered(string $name): bool
+.. php:staticmethod:: isRegistered(string $name): bool
 
    :param $name: The calendar system name to check for.
    :type $name: ``string``
@@ -147,7 +106,7 @@ Check and List
 
    Returns whether or not a calendar system has been registered, yet.
 
-.. php:staticmethod:: calendarListRegistered(): array
+.. php:staticmethod:: listRegistered(): array
 
    :return: The sorted list of calendar systems currently registered.
    :rtype: ``[string]``
@@ -179,7 +138,29 @@ helpers in the library itself.
 
    .. php:attr:: seconds (float)
 
-      The number of TAI seconds since ``CE 1970-01-01 00:00:00 TAI``. Should be an integer value; the ``float`` type is used, here, only to be able to hold a full signed 64-bit integer value regardless of architecture.
+      The number of TAI seconds since ``CE 1970-01-01 00:00:00 TAI``. Should be
+      an integer value; the ``float`` type is used, here, only to be able to
+      hold a full signed 64-bit integer value regardless of architecture.
+
+      .. note:: TAI vs UTC
+
+         You may have noticed that a TAI64Time object stores times in ``TAI
+         seconds``, not ``Unix seconds``, with a timezone offset of ``TAI``
+         rather than ``UTC``. This distinction is **very important** as it will
+         affect internal calculations and comparisons to mix the two up. TAI
+         time is very similar to Unix time (itself based on UTC time), with one
+         major difference. While Unix/UTC seconds include the insertion and
+         removal of "leap seconds" to keep the solar zenith at local noon (which
+         is useful for day-to-day living and planning), TAI seconds are a
+         continuous count, unconcerned with dates whatsoever. Indeed, the only
+         reason a date was given in the description above was to make it easier
+         for human readers to know exactly when ``0 TAI`` took place.
+
+         In other words, once you have a Unix timestamp of your instant
+         calculated, be sure to convert it using :php:meth:`fromUTC` before
+         returning the result to the rest of the library. And then, of course,
+         you'll also need to convert instants from the library back using
+         :php:meth:`toUTC` before generating outputs.
 
    .. php:attr:: nano (integer)
 

@@ -159,31 +159,51 @@ handled entirely by these helpers in the library itself.
 
    .. c:member:: long long int seconds
 
-        Seconds since ``CE 1970-01-01 00:00:00 TAI``
+      The number of TAI seconds since ``CE 1970-01-01 00:00:00 TAI``
+
+      .. note:: TAI vs UTC
+
+         You may have noticed that a TAI64Time object stores times in ``TAI
+         seconds``, not ``Unix seconds``, with a timezone offset of ``TAI``
+         rather than ``UTC``. This distinction is **very important** as it will
+         affect internal calculations and comparisons to mix the two up. TAI
+         time is very similar to Unix time (itself based on UTC time), with one
+         major difference. While Unix/UTC seconds include the insertion and
+         removal of "leap seconds" to keep the solar zenith at local noon (which
+         is useful for day-to-day living and planning), TAI seconds are a
+         continuous count, unconcerned with dates whatsoever. Indeed, the only
+         reason a date was given in the description above was to make it easier
+         for human readers to know exactly when ``0 TAI`` took place.
+
+         In other words, once you have a Unix timestamp of your instant
+         calculated, be sure to convert it using :c:func:`TAI64Time_utc_to_tai`
+         before returning the result to the rest of the library. And then, of
+         course, you'll also need to convert instants from the library back
+         using :c:func:`TAI64Time_tai_to_utc` before generating outputs.
 
    .. c:member:: unsigned int nano
 
-        Nanoseconds since the given second
+      Nanoseconds since the given second
 
    .. c:member:: unsigned int atto
 
-        Attoseconds since the given nanosecond
+      Attoseconds since the given nanosecond
 
    .. c:member:: unsigned int ronto
 
-        Rontoseconds since the given attosecond
+      Rontoseconds since the given attosecond
 
    .. c:member:: unsigned int udecto
 
-        Udectoseconds since the given rontosecond
+      Udectoseconds since the given rontosecond
 
    .. c:member:: unsigned int xindecto
 
-        Xindectoseconds since the given udectosecond
+      Xindectoseconds since the given udectosecond
 
    .. c:member:: unsigned int padding
 
-        Unused, except to round the value out to the nearest 64 bits
+      Unused, except to round the value out to the nearest 64 bits
 
 Calculations
 ------------

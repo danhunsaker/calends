@@ -16,5 +16,10 @@
         "psr-4": {
             "Calends\\": "src/"
         }
+    },
+    "scripts": {
+        "pre-autoload-dump": [
+            "@php get_libcalends.php"
+        ]
     }
 }
