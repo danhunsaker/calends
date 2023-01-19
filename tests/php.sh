@@ -25,7 +25,7 @@ echo "#define FFI_SCOPE \"CALENDS\"" > Calends.h
 echo "#define FFI_LIB \"$(dirname $(pwd))/libcalends.${ext}\"" >> Calends.h
 cpp -P -D"__attribute__(ARGS)=" ../libcalends.h | egrep -v '_Complex|^static inline .*\{$|return |^\}$' >> Calends.h
 
-composer install
+composer install --no-scripts --no-interaction
 
 NO_INTERACTION=true php run-tests.php -P -d "ffi.preload=Calends.h" || true
 

@@ -27,7 +27,7 @@ $text = $text -Replace "(#|__)pragma( |\()(pack|warning)\(push.+?pragma( |\()(pa
 $text.Replace("\r\n", "`r`n") | Set-Content -Path tmp.h
 Get-Content -Path tmp.h | Select-String -NotMatch -Pattern 'complex|^static inline .*\{$|return |^\}$|^\s*$|pragma' | Set-Content -Path Calends.h
 
-composer install
+composer install --no-scripts --no-interaction
 
 $s = if ([System.Version]$php -ge [System.Version]"8.0.0") { "s" }
 $env:NO_INTERACTION = 'true'
