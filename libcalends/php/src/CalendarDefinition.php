@@ -30,7 +30,7 @@ abstract class CalendarDefinition
         $this->name = $name;
         $this->defaultFormat = $defaultFormat;
 
-        if (!$this->isRegistered()) {
+        if (!self::isRegistered($this->name)) {
             $toInternalString = function (\FFI\CData $name, \FFI\CData $stamp, \FFI\CData $format): \FFI\CData {
                 $out = $this->toInternal(\FFI::string($stamp), \FFI::string($format))->toNative();
 

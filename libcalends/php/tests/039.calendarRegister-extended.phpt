@@ -10,7 +10,7 @@ if (!extension_loaded('ffi')) {
 <?php
 require_once('vendor/autoload.php');
 
-	if (Calends\CalendarDefinition::calendarRegistered('test')) {
+	if (Calends\CalendarDefinition::isRegistered('test')) {
 		echo "Calendar already registered!";
 		exit;
 	}
@@ -31,7 +31,7 @@ require_once('vendor/autoload.php');
 
 	new TestCalendar('test', 'default');
 
-	if (!Calends\CalendarDefinition::calendarRegistered('test')) {
+	if (!Calends\CalendarDefinition::isRegistered('test')) {
 		echo "Calendar not registered!";
 		exit;
 	}
