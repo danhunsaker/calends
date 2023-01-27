@@ -1,5 +1,5 @@
+preserve_hierarchy: true
+
 files:
-  - source: /docs/**/*.rst
-    ignore:
-      - /docs/translations
-    translation: /docs/translations/%locale%/**/%original_file_name%
+  - source: /docs/.build/gettext/**/*.pot
+    translation: /docs/locales/%locale_with_underscore%/LC_MESSAGES/**/%file_name%.po

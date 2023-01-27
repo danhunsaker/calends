@@ -123,6 +123,145 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: pwsh ./tests/php.ps1 ${{ steps.php.outputs.php-version }} ${{ matrix.ext }}
 
+  crowdin:
+    name: Crowdin Upload
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate POT files
+        run: |
+          cd docs
+          make gettext
+
+      - name: Crowdin push
+        uses: crowdin/github-action@1.5.3
+        with:
+          upload_sources: true
+          upload_translations: false
+          download_translations: false
+          crowdin_branch_name: "${{ env.BRANCH_NAME }}"
+        env:
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+
+  docs:
+    name: ReadTheDocs (${{ matrix.name }})
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Afrikaans
+            lang: af
+            hook: 224245
+          - name: Arabic
+            lang: ar
+            hook: 224244
+          - name: Catalan
+            lang: ca
+            hook: 224246
+          - name: Czech
+            lang: cs
+            hook: 224249
+          - name: Danish
+            lang: da
+            hook: 224250
+          - name: German
+            lang: de
+            hook: 224291
+          - name: Greek
+            lang: el
+            hook: 224293
+          - name: English
+            lang: en
+            hook: 42732
+          - name: Esperanto
+            lang: eo
+            hook: 224288
+          - name: Spanish
+            lang: es-es
+            hook: 224766
+          - name: Finnish
+            lang: fi
+            hook: 224289
+          - name: French
+            lang: fr
+            hook: 224290
+          - name: Hebrew
+            lang: he
+            hook: 224294
+          - name: Hungarian
+            lang: hu
+            hook: 224295
+          - name: Italian
+            lang: it
+            hook: 224296
+          - name: Japanese
+            lang: ja
+            hook: 224298
+          - name: Korean
+            lang: ko
+            hook: 224299
+          - name: Dutch
+            lang: nl
+            hook: 224251
+          - name: Norwegian
+            lang: no
+            hook: 224313
+          - name: Polish
+            lang: pl
+            hook: 224362
+          - name: Brazillian Portugese
+            lang: pt-br
+            hook: 224365
+          - name: Portugese
+            lang: pt-pt
+            hook: 224364
+          - name: Romanian
+            lang: ro
+            hook: 224762
+          - name: Russian
+            lang: ru
+            hook: 224763
+          - name: Serbian
+            lang: sr
+            hook: 224764
+          - name: Swedish
+            lang: sv-se
+            hook: 224767
+          - name: Turkish
+            lang: tr
+            hook: 224768
+          - name: Ukranian
+            lang: uk
+            hook: 224769
+          - name: Vietnamese
+            lang: vi
+            hook: 224770
+          - name: Simplified Chinese
+            lang: zh-cn
+            hook: 224247
+          - name: Traditional Chinese
+            lang: zh-tw
+            hook: 224248
+    steps:
+      - name: Invoke deployment hook
+        uses: distributhor/workflow-webhook@v3
+        if: matrix.lang == 'en'
+        env:
+          webhook_type: json-extended
+          webhook_url: https://readthedocs.org/api/v2/webhook/calends/${{ matrix.hook }}/
+
+      - name: Invoke deployment hook
+        uses: distributhor/workflow-webhook@v3
+        if: matrix.lang != 'en'
+        env:
+          webhook_type: json-extended
+          webhook_url: https://readthedocs.org/api/v2/webhook/calends-${{ matrix.lang }}/${{ matrix.hook }}/
+
   build:
     name: Build Binaries
     needs: test
