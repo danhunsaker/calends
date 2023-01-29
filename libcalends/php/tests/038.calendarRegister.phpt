@@ -10,7 +10,7 @@ if (!extension_loaded('ffi')) {
 <?php
 require_once('vendor/autoload.php');
 
-	var_dump(Calends\CalendarDefinition::calendarRegistered('test'));
+	var_dump(Calends\CalendarDefinition::isRegistered('test'));
 
 	class TestCalendar extends Calends\CalendarDefinition {
 		function toInternal($date, string $format = ''): Calends\TAITime {
@@ -28,7 +28,7 @@ require_once('vendor/autoload.php');
 
 	new TestCalendar('test', 'default');
 
-	var_dump(Calends\CalendarDefinition::calendarRegistered('test'));
+	var_dump(Calends\CalendarDefinition::isRegistered('test'));
 	var_dump(Calends\CalendarDefinition::listRegistered());
 ?>
 --EXPECT--

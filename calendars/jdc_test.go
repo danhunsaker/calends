@@ -17,12 +17,12 @@ func TestJDCToInternal(t *testing.T) {
 		{"in": []interface{}{*big.NewFloat(1), ""}, "want": []interface{}{TAI64NARUXTime{Seconds: -3506630400}, nil}},
 		{"in": []interface{}{[]byte("1"), ""}, "want": []interface{}{TAI64NARUXTime{Seconds: -3506630400}, nil}},
 
-		{"in": []interface{}{"2440588.6", "full"}, "want": []interface{}{TAI64NARUXTime{Seconds: 95040}, nil}},
-		{"in": []interface{}{"2440588.6", "fullday"}, "want": []interface{}{TAI64NARUXTime{Seconds: 86400}, nil}},
-		{"in": []interface{}{"2440588.6", "fulltime"}, "want": []interface{}{TAI64NARUXTime{Seconds: 8640}, nil}},
-		{"in": []interface{}{"40588.1", "modified"}, "want": []interface{}{TAI64NARUXTime{Seconds: 95040}, nil}},
-		{"in": []interface{}{"40588.1", "day"}, "want": []interface{}{TAI64NARUXTime{Seconds: 86400}, nil}},
-		{"in": []interface{}{"40588.1", "time"}, "want": []interface{}{TAI64NARUXTime{Seconds: 8640}, nil}},
+		{"in": []interface{}{"2440588.6", "full"}, "want": []interface{}{TAI64NARUXTime{Seconds: 95032, Nano: 2673999, Atto: 999998954, Ronto: 990587662, Udecto: 905454635, Xindecto: 620117188}, nil}},
+		{"in": []interface{}{"2440588.6", "fullday"}, "want": []interface{}{TAI64NARUXTime{Seconds: 86392, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, nil}},
+		{"in": []interface{}{"2440588.6", "fulltime"}, "want": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, nil}},
+		{"in": []interface{}{"40588.1", "modified"}, "want": []interface{}{TAI64NARUXTime{Seconds: 95032, Nano: 2673999, Atto: 999998954, Ronto: 990587662, Udecto: 905454635, Xindecto: 620117188}, nil}},
+		{"in": []interface{}{"40588.1", "day"}, "want": []interface{}{TAI64NARUXTime{Seconds: 86392, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, nil}},
+		{"in": []interface{}{"40588.1", "time"}, "want": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, nil}},
 
 		{"in": []interface{}{"1.0", "invalid"}, "want": []interface{}{TAI64NARUXTime{}, ErrInvalidFormat}},
 		{"in": []interface{}{TAI64NARUXTime{Seconds: 1}, ""}, "want": []interface{}{TAI64NARUXTime{}, ErrUnsupportedInput}},
@@ -41,15 +41,15 @@ func TestJDCToInternal(t *testing.T) {
 
 func TestJDCFromInternal(t *testing.T) {
 	cases := []map[string][]interface{}{
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 8640}, ""}, "want": []interface{}{"40587.100000", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 8640}, "full"}, "want": []interface{}{"2440587.600000", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 8640}, "fullday"}, "want": []interface{}{"2440587", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 8640}, "fulltime"}, "want": []interface{}{"0.600000", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 8640}, "modified"}, "want": []interface{}{"40587.100000", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 8640}, "day"}, "want": []interface{}{"40587", nil}},
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 8640}, "time"}, "want": []interface{}{"0.100000", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, ""}, "want": []interface{}{"40587.100000", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, "full"}, "want": []interface{}{"2440587.600000", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, "fullday"}, "want": []interface{}{"2440587", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, "fulltime"}, "want": []interface{}{"0.600000", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, "modified"}, "want": []interface{}{"40587.100000", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, "day"}, "want": []interface{}{"40587", nil}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, "time"}, "want": []interface{}{"0.100000", nil}},
 
-		{"in": []interface{}{TAI64NARUXTime{Seconds: 8640}, "invalid"}, "want": []interface{}{"", ErrInvalidFormat}},
+		{"in": []interface{}{TAI64NARUXTime{Seconds: 8632, Nano: 81999, Atto: 999999027, Ronto: 295416453, Udecto: 853249549, Xindecto: 865722656}, "invalid"}, "want": []interface{}{"", ErrInvalidFormat}},
 	}
 
 	for _, c := range cases {

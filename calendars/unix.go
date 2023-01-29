@@ -69,20 +69,20 @@ func init() {
 }
 
 func unixParseDate(date interface{}) (stamp TAI64NARUXTime, err error) {
-	switch date.(type) {
+	switch date := date.(type) {
 	// TODO - other types
 	case int:
-		stamp = TAI64NARUXTimeFromDecimalString(fmt.Sprintf("%d", date.(int)))
+		stamp = TAI64NARUXTimeFromDecimalString(fmt.Sprintf("%d", date))
 	case float64:
-		stamp = TAI64NARUXTimeFromDecimalString(fmt.Sprintf("%f", date.(float64)))
+		stamp = TAI64NARUXTimeFromDecimalString(fmt.Sprintf("%f", date))
 	case big.Float:
-		stamp = TAI64NARUXTimeFromFloat(date.(big.Float))
+		stamp = TAI64NARUXTimeFromFloat(date)
 	case *big.Float:
-		stamp = TAI64NARUXTimeFromFloat(*date.(*big.Float))
+		stamp = TAI64NARUXTimeFromFloat(*date)
 	case []byte:
-		stamp = TAI64NARUXTimeFromDecimalString(string(date.([]byte)))
+		stamp = TAI64NARUXTimeFromDecimalString(string(date))
 	case string:
-		stamp = TAI64NARUXTimeFromDecimalString(date.(string))
+		stamp = TAI64NARUXTimeFromDecimalString(date)
 	default:
 		err = errors.Wrap(ErrUnsupportedInput, 1)
 	}

@@ -15,4 +15,6 @@ around the compiled shared library. Select your language to take a deeper look.
    Command Line <cli/installation.rst>
    Golang <go/installation.rst>
    C/C++ <c/installation.rst>
+   Dart <dart/installation.rst>
+   JS/WASM <js/installation.rst>
    PHP <php/installation.rst>

@@ -41,14 +41,14 @@ func init() {
 		// toInternal
 		func(date interface{}, format string) (stamp TAI64NARUXTime, err error) {
 			var dateString string
-			switch date.(type) {
+			switch date := date.(type) {
 			// TODO - other types
 			case []byte:
-				dateString = string(date.([]byte))
+				dateString = string(date)
 			case string:
-				dateString = date.(string)
+				dateString = date
 			case TAI64NARUXTime:
-				stamp = date.(TAI64NARUXTime)
+				stamp = date
 				return
 			default:
 				err = errors.Wrap(ErrUnsupportedInput, 1)
@@ -114,18 +114,18 @@ func init() {
 		// offset
 		func(in TAI64NARUXTime, offset interface{}) (out TAI64NARUXTime, err error) {
 			var adjust TAI64NARUXTime
-			switch offset.(type) {
+			switch offset := offset.(type) {
 			// TODO - other types
 			case big.Float:
-				adjust = TAI64NARUXTimeFromFloat(offset.(big.Float))
+				adjust = TAI64NARUXTimeFromFloat(offset)
 			case *big.Float:
-				adjust = TAI64NARUXTimeFromFloat(*offset.(*big.Float))
+				adjust = TAI64NARUXTimeFromFloat(*offset)
 			case []byte:
-				adjust = TAI64NARUXTimeFromDecimalString(string(offset.([]byte)))
+				adjust = TAI64NARUXTimeFromDecimalString(string(offset))
 			case string:
-				adjust = TAI64NARUXTimeFromDecimalString(offset.(string))
+				adjust = TAI64NARUXTimeFromDecimalString(offset)
 			case TAI64NARUXTime:
-				adjust = offset.(TAI64NARUXTime)
+				adjust = offset
 			default:
 				err = errors.Wrap(ErrUnsupportedInput, 1)
 			}

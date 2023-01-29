@@ -11,12 +11,11 @@
 [![Github commits (since latest release)](https://img.shields.io/github/commits-since/danhunsaker/calends/latest.svg?style=flat-square)](https://github.com/danhunsaker/calends)
 [![GitHub last commit](https://img.shields.io/github/last-commit/danhunsaker/calends.svg?style=flat-square)](https://github.com/danhunsaker/calends)
 
-[![Maintenance Status](https://img.shields.io/maintenance/yes/2019.svg?style=flat-square)](https://github.com/danhunsaker/calends)
-[![Travis Build Status](https://img.shields.io/travis/danhunsaker/calends.svg?style=flat-square)](https://travis-ci.org/danhunsaker/calends)
+[![Maintenance Status](https://img.shields.io/maintenance/yes/2023.svg?style=flat-square)](https://github.com/danhunsaker/calends)
+[![GitHub branch checks state](https://img.shields.io/github/checks-status/danhunsaker/calends/main?style=flat-square)](https://github.com/danhunsaker/calends/actions)
 [![Codecov coverage](https://img.shields.io/codecov/c/github/danhunsaker/calends.svg?style=flat-square)](https://codecov.io/gh/danhunsaker/calends)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/danhunsaker/calends.svg?style=flat-square)](https://scrutinizer-ci.com/g/danhunsaker/calends/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/danhunsaker/calends?style=flat-square)](https://goreportcard.com/report/github.com/danhunsaker/calends)
-￼[![Libraries.io Dependency Check](https://img.shields.io/librariesio/github/danhunsaker/calends.svg?style=flat-square)](https://libraries.io/github/danhunsaker/calends)
+[![Libraries.io Dependency Check](https://img.shields.io/librariesio/github/danhunsaker/calends.svg?style=flat-square)](https://libraries.io/github/danhunsaker/calends)
 
 [![Code Climate coverage](https://img.shields.io/codeclimate/coverage-letter/danhunsaker/calends.svg?style=flat-square)](https://codeclimate.com/github/danhunsaker/calends)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/danhunsaker/calends.svg?style=flat-square)](https://codeclimate.com/github/danhunsaker/calends)
@@ -56,7 +55,8 @@ documentation][full].
 - [ ] Geo-temporally aware
 - [ ] Time zone support
 - [x] Well-defined interfaces for extending the library
-- [x] Shared library (`.so`/`.dll`)
+- [x] Shared library (`.so`/`.dll`/`.dylib`)
+- [X] WebAssembly binary
 
 ## Installation
 

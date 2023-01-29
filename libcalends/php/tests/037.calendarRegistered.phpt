@@ -1,5 +1,5 @@
 --TEST--
-Calends\CalendarDefinition::calendarRegistered() Basic test
+Calends\CalendarDefinition::isRegistered() Basic test
 --SKIPIF--
 <?php
 if (!extension_loaded('ffi')) {
@@ -10,15 +10,15 @@ if (!extension_loaded('ffi')) {
 <?php
 require_once('vendor/autoload.php');
 
-	$ret = Calends\CalendarDefinition::calendarRegistered('invalid');
+	$ret = Calends\CalendarDefinition::isRegistered('invalid');
 	var_dump($ret);
-	$ret = Calends\CalendarDefinition::calendarRegistered('tai64');
+	$ret = Calends\CalendarDefinition::isRegistered('tai64');
 	var_dump($ret);
-	$ret = Calends\CalendarDefinition::calendarRegistered('unix');
+	$ret = Calends\CalendarDefinition::isRegistered('unix');
 	var_dump($ret);
-	$ret = Calends\CalendarDefinition::calendarRegistered('test');
+	$ret = Calends\CalendarDefinition::isRegistered('test');
 	var_dump($ret);
-	$ret = Calends\CalendarDefinition::calendarRegistered('');
+	$ret = Calends\CalendarDefinition::isRegistered('');
 	var_dump($ret);
 ?>
 --EXPECT--

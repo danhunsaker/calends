@@ -12,7 +12,7 @@ Binary Install
 For use with C/C++, simply grab the latest version of ``libcalends`` from the
 `GitHub Releases page <https://github.com/danhunsaker/calends/releases>`_, and
 extract its contents wherever your compiler expects to find ``.h`` and
-``.so``/``.dll`` files. Be sure to grab the correct version for your
+``.so``/``.dll``/``.dylib`` files. Be sure to grab the correct version for your
 architecture!
 
 Source Install
@@ -20,8 +20,8 @@ Source Install
 
 To install from source, you'll need Golang 1.9+ installed to use its compiler.
 Clone the repository, build ``libcalends``, then copy the resulting
-``.so``/``.dll`` and ``.h`` files to wherever your C/C++ compiler expects to
-find them.
+``.so``/``.dll``/``.dylib`` and ``.h`` files to wherever your C/C++ compiler
+expects to find them.
 
 .. code-block:: bash
 

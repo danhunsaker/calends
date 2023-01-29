@@ -108,10 +108,17 @@ For a current indication of which of these features are fully implemented at the
     Add more calendar systems, type conversions, or geo-temporal relationships
     without forking/modifying the library itself.
 
-* Shared library (``.so``/``.dll``)
+* Shared library (``.so``/``.dll``/``.dylib``)
     In order to use the library outside of Golang projects, we first need to
     export its functionality in a shared library, which can then be accessed
     from other programming evironments and applications, generally via FFI.
+
+* WebAssembly binary
+    In order to use the library in the browser, we first need to export its
+    functionality in a WebAssembly (WASM) binary, which can then be accessed
+    by JavaScript. (Go currently doesn't support the WASI standard, so the
+    functions are registered into the global namespace rather than being
+    ``export``\ ed by WebAssembly itself. More on that in the JS docs.)
 
 .. |10^-45| replace:: 10\ :sup:`-45`
 .. |10^-20| replace:: 10\ :sup:`-20`

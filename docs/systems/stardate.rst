@@ -31,12 +31,12 @@ Original source: http://rinsanity.weebly.com/files/theme/stardate_public.js
   - arbitrary-precision floating point number of seconds
 
 *Supported Format Strings:*
-  - ``main``         - **One of the older, more widely-accepted variants.
+  - ``main``         - **One of the older, more widely-accepted variants.**
     Alternately called the "issue number style" stardate, it's a combined
     TOS/TNG variant, and the one used by Google Calendar. It was originally
-    devised by Anhrew Main in CE 1994, with revisions made through CE 1997. See
+    devised by Andrew Main in CE 1994, with revisions made through CE 1997. See
     http://starchive.cs.umanitoba.ca/?stardates/ for the full explanation of
-    this variant.**
+    this variant.
   - ``kennedy``      - In 2006, Richie Kennedy released another combined
     variant, this one designed to have a single continuous count, more like the
     Julian Day Count than Main's issue number system.

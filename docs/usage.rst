@@ -17,4 +17,6 @@ bit further to see how to do everything you need!
    Command Line <cli/usage.rst>
    Golang <go/usage.rst>
    C/C++ <c/usage.rst>
+   Dart <dart/usage.rst>
+   JS/WASM <js/usage.rst>
    PHP <php/usage.rst>

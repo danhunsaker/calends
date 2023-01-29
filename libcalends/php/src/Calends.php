@@ -2,8 +2,6 @@
 
 namespace Calends;
 
-require_once('CalendsException.php');
-
 class Calends implements \JsonSerializable
 {
     private static ?\FFI $ffi = null;
@@ -30,7 +28,8 @@ class Calends implements \JsonSerializable
     {
         if (!empty($this->instance)) {
             self::$ffi->Calends_release($this->instance);
-        } elseif (!empty(CalendsException::current())) {
+        }
+        if (!empty(CalendsException::current())) {
             throw CalendsException::current();
         }
     }

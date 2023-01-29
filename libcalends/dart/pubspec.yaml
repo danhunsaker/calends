@@ -1,6 +1,6 @@
 name: calends
 description: A library for handling dates and times across arbitrary calendar systems
-version: 0.0.5
+version: 0.1.0
 homepage: https://github.com/danhunsaker/calends/tree/main/libcalends/dart/
 
 environment:

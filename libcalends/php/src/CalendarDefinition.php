@@ -2,8 +2,6 @@
 
 namespace Calends;
 
-require_once('CalendsException.php');
-
 abstract class CalendarDefinition
 {
     protected static ?\FFI $ffi = null;
@@ -25,14 +23,14 @@ abstract class CalendarDefinition
         }
     }
 
-    public function __construct(string $name, string $defaultFormat)
+    public function __construct(string $name, string $defaultFormat = '')
     {
         self::ffiInit();
 
         $this->name = $name;
         $this->defaultFormat = $defaultFormat;
 
-        if (!$this->isRegistered()) {
+        if (!self::isRegistered($this->name)) {
             $toInternalString = function (\FFI\CData $name, \FFI\CData $stamp, \FFI\CData $format): \FFI\CData {
                 $out = $this->toInternal(\FFI::string($stamp), \FFI::string($format))->toNative();
 
@@ -141,16 +139,11 @@ abstract class CalendarDefinition
         $this->unregister();
     }
 
-    public static function calendarRegistered(string $name): bool
+    public static function isRegistered(string $name): bool
     {
         self::ffiInit();
 
         return (bool)self::$ffi->Calends_calendar_registered($name);
-    }
-
-    public function isRegistered(): bool
-    {
-        return (bool)self::$ffi->Calends_calendar_registered($this->name);
     }
 
     public static function listRegistered(): array

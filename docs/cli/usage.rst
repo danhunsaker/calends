@@ -21,9 +21,9 @@ following:
 .. option:: convert <from-calendar> <from-format> <to-calendar> <to-format> [<date>]
 
    :- from-calendar: The calendar system to parse the date/time with.
-   :- from-calendar: The format the date/time is expected to use.
+   :- from-format: The format the date/time is expected to use.
    :- to-calendar: The calendar system to format the date/time with.
-   :- to-calendar: The format the date/time is expected to use.
+   :- to-format: The format the date/time is expected to use.
    :- date: The value to convert.
 
    Converts a date from one calendar/format to another. If ``date`` isn't
@@ -32,7 +32,7 @@ following:
 .. option:: parse <from-calendar> <from-format> [<date>]
 
    :- from-calendar: The calendar system to parse the date/time with.
-   :- from-calendar: The format the date/time is expected to use.
+   :- from-format: The format the date/time is expected to use.
    :- date: The value to parse.
 
    Converts a date from the given calendar/format to a portable/unambiguous date
@@ -41,11 +41,11 @@ following:
 .. option:: format <to-calendar> <to-format> [<stamp>]
 
    :- to-calendar: The calendar system to format the date/time with.
-   :- to-calendar: The format the date/time is expected to use.
+   :- to-format: The format the date/time is expected to use.
    :- stamp: The value to format.
 
    Converts a date stamp from the :option:`parse` command to the given
-   caledar/format.
+   calendar/format.
 
 .. option:: offset <offset-calendar> [<offset> [<stamp>]]
 

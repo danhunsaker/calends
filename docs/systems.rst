@@ -45,4 +45,6 @@ separately, so you don't have to do any mental conversions yourself.
 
    Golang <go/custom_calendars.rst>
    C/C++ <c/custom_calendars.rst>
+   Dart <dart/custom_calendars.rst>
+   JS/WASM <js/custom_calendars.rst>
    PHP <php/custom_calendars.rst>

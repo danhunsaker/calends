@@ -37,13 +37,13 @@ func init() {
 			var in time.Time
 			var str string
 
-			switch date.(type) {
+			switch date := date.(type) {
 			case time.Time:
-				in = date.(time.Time)
+				in = date
 			case string:
-				str = date.(string)
+				str = date
 			case []byte:
-				str = string(date.([]byte))
+				str = string(date)
 			default:
 				err = errors.Wrap(ErrUnsupportedInput, 1)
 				return
@@ -67,7 +67,7 @@ func init() {
 		},
 		// fromInternal
 		func(stamp TAI64NARUXTime, format string) (date string, err error) {
-			tmp := time.Unix(stamp.Seconds, int64(stamp.Nano)).UTC()
+			tmp := time.Unix(TAItoUTC(stamp).Seconds, int64(TAItoUTC(stamp).Nano)).UTC()
 			if strings.ContainsRune(format, '%') {
 				date, err = strtime.Strftime(tmp, format)
 			} else {
@@ -80,17 +80,16 @@ func init() {
 		func(in TAI64NARUXTime, offset interface{}) (out TAI64NARUXTime, err error) {
 			var str string
 
-			switch offset.(type) {
+			switch offset := offset.(type) {
 			case time.Duration:
-				dur := offset.(time.Duration)
-				r := time.Unix(in.Seconds, int64(in.Nano)).UTC().Add(dur)
+				r := time.Unix(in.Seconds, int64(in.Nano)).UTC().Add(offset)
 				out.Seconds = r.Unix()
 				out.Nano = uint32(r.Nanosecond())
 				return
 			case string:
-				str = offset.(string)
+				str = offset
 			case []byte:
-				str = string(offset.([]byte))
+				str = string(offset)
 			default:
 				err = errors.Wrap(ErrUnsupportedInput, 1)
 			}
