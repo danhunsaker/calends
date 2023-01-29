@@ -130,13 +130,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: |
+          pip install git+https://github.com/danhunsaker/sphinxcontrib-golangdomain
+          pip install -r doc-requirements.txt
+
       - name: Generate POT files
-        uses: ammaraskar/sphinx-action@master
+        uses: rickstaa/sphinx-action@master
         with:
           docs-folder: docs/
-          pre-build-command: |
-            pip install git+https://github.com/danhunsaker/sphinxcontrib-golangdomain
-            pip install -r doc-requirements.txt
           build-command: make gettext
 
       - name: Crowdin push
@@ -160,112 +167,138 @@ jobs:
         include:
           - name: Afrikaans
             lang: af
-            hook: 224245
+            hook: 224946
+            token: d3d2dbb65771af8d4a39a7eafc2ffce89f848ade
           - name: Arabic
             lang: ar
-            hook: 224244
+            hook: 224973
+            token: b0d5553e88443377803ad98618bd9adcabf4822b
           - name: Catalan
             lang: ca
-            hook: 224246
+            hook: 224974
+            token: db2e5eeeaf2a505e45858ff91ed86f35b46596b6
           - name: Czech
             lang: cs
-            hook: 224249
+            hook: 224975
+            token: 4968253fc5f36f5940e3c7ab1ff7e645991e10b4
           - name: Danish
             lang: da
-            hook: 224250
+            hook: 224976
+            token: c3b2a2143d3ca69085a285f222c21a09f2112904
           - name: German
             lang: de
-            hook: 224291
+            hook: 224977
+            token: 71851b8d81f9553ae4ebf8275c36448eb2e91143
           - name: Greek
             lang: el
-            hook: 224293
+            hook: 224978
+            token: 43e58abd218482a8492561e3e7cde445fff50336
           - name: English
             lang: en
-            hook: 42732
+            hook: 224947
+            token: e6d4a1348dad83eb5de70f2aef80a51b29914215
           - name: Esperanto
             lang: eo
-            hook: 224288
+            hook: 224979
+            token: 08645d5491ff05c34f1d7e1f6bf59a5e61f3ab58
           - name: Spanish
             lang: es-es
-            hook: 224766
+            hook: 224980
+            token: f69138b226b468667d2884e8ffedb7f1665024e4
           - name: Finnish
             lang: fi
-            hook: 224289
+            hook: 224981
+            token: 7d40d6860a487dfa1a636846f6078c3fc59fc779
           - name: French
             lang: fr
-            hook: 224290
+            hook: 224982
+            token: 50ea1390537bcd87281c7f792bfe53c38ece67bc
           - name: Hebrew
             lang: he
-            hook: 224294
+            hook: 224983
+            token: ac84930cd7c1dc43851f5eec4246149768fa71b9
           - name: Hungarian
             lang: hu
-            hook: 224295
+            hook: 224984
+            token: f64dbd64dc3da63a5f62bec842a5e01ad8248459
           - name: Italian
             lang: it
-            hook: 224296
+            hook: 224985
+            token: 3bde77cf951749c9d5c25ef3b293057edaba98a2
           - name: Japanese
             lang: ja
-            hook: 224298
+            hook: 224986
+            token: 55cb74c901191cb4a56426546edfcae9ac90baba
           - name: Korean
             lang: ko
-            hook: 224299
+            hook: 224987
+            token: f2ee967dbfee2113463b4b7f662773fe288cde19
           - name: Dutch
             lang: nl
-            hook: 224251
+            hook: 224988
+            token: 692ec3247e77f7102a254e470d6fca90190838f8
           - name: Norwegian
             lang: no
-            hook: 224313
+            hook: 224989
+            token: c48fe9d8ba9b62a9e003d82bd550cfb0e8c27a12
           - name: Polish
             lang: pl
-            hook: 224362
+            hook: 224990
+            token: 50e6f1e43bdd304e3c101d6fcbc966e56699915a
           - name: Brazillian Portugese
             lang: pt-br
-            hook: 224365
+            hook: 224991
+            token: 0220074eb659d95c53224e4ffa3a0fce9b5f1d1b
           - name: Portugese
             lang: pt-pt
-            hook: 224364
+            hook: 224992
+            token: df0e2f8d2df66a7e70ed89c21b2a36b533e09e79
           - name: Romanian
             lang: ro
-            hook: 224762
+            hook: 224993
+            token: 15251fc5cf71158b5dac922096bd099be83c2a9f
           - name: Russian
             lang: ru
-            hook: 224763
+            hook: 224994
+            token: ecd28ff93e1c2135da438f9c5ac12bde79c5126d
           - name: Serbian
             lang: sr
-            hook: 224764
+            hook: 224995
+            token: 16c7290e51dfc2da7f18990f1a47d211f57b71a0
           - name: Swedish
             lang: sv-se
-            hook: 224767
+            hook: 224996
+            token: 2b32924a03ba786b4710b3d061b4b36f0c29e23d
           - name: Turkish
             lang: tr
-            hook: 224768
+            hook: 224997
+            token: 33e48cdbc940f554624ee365aa091972c33bc4c3
           - name: Ukranian
             lang: uk
-            hook: 224769
+            hook: 224998
+            token: 946b993325eac9958f18e58146113c6d7578d69e
           - name: Vietnamese
             lang: vi
-            hook: 224770
+            hook: 224999
+            token: 00d5a6278c3751e8aae00593271e0a79b1eb4e69
           - name: Simplified Chinese
             lang: zh-cn
-            hook: 224247
+            hook: 225000
+            token: 519ed25b72abbacb7d86e3e31c34912530fcf945
           - name: Traditional Chinese
             lang: zh-tw
-            hook: 224248
+            hook: 225001
+            token: ca662692070dee46b99175637045ec692f391bf6
     steps:
-      - name: Invoke deployment hook
-        uses: distributhor/workflow-webhook@v3
+      - name: Invoke deployment hook (en)
         if: matrix.lang == 'en'
-        env:
-          webhook_type: json-extended
-          webhook_url: https://readthedocs.org/api/v2/webhook/calends/${{ matrix.hook }}/
+        run: |
+          curl -X POST -d "branches=${{ env.BRANCH_NAME }}" -d "token=${{ matrix.token }}" https://readthedocs.org/api/v2/webhook/calends/${{ matrix.hook }}/
 
-      - name: Invoke deployment hook
-        uses: distributhor/workflow-webhook@v3
+      - name: Invoke deployment hook (${{ matrix.lang }})
         if: matrix.lang != 'en'
-        env:
-          webhook_type: json-extended
-          webhook_url: https://readthedocs.org/api/v2/webhook/calends-${{ matrix.lang }}/${{ matrix.hook }}/
-          verbose: true
+        run: |
+          curl -X POST -d "branches=${{ env.BRANCH_NAME }}" -d "token=${{ matrix.token }}" https://readthedocs.org/api/v2/webhook/calends-${{ matrix.lang }}/${{ matrix.hook }}/
 
   build:
     name: Build Binaries
