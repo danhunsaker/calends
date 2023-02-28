@@ -293,12 +293,12 @@ jobs:
       - name: Invoke deployment hook (en)
         if: matrix.lang == 'en'
         run: |
-          curl -X POST -d "branches=${{ env.BRANCH_NAME }}" -d "token=${{ matrix.token }}" https://readthedocs.org/api/v2/webhook/calends/${{ matrix.hook }}/
+          curl -X POST -d "branches=${{ github.head_ref || github.ref_name }}" -d "token=${{ matrix.token }}" https://readthedocs.org/api/v2/webhook/calends/${{ matrix.hook }}/
 
       - name: Invoke deployment hook (${{ matrix.lang }})
         if: matrix.lang != 'en'
         run: |
-          curl -X POST -d "branches=${{ env.BRANCH_NAME }}" -d "token=${{ matrix.token }}" https://readthedocs.org/api/v2/webhook/calends-${{ matrix.lang }}/${{ matrix.hook }}/
+          curl -X POST -d "branches=${{ github.head_ref || github.ref_name }}" -d "token=${{ matrix.token }}" https://readthedocs.org/api/v2/webhook/calends-${{ matrix.lang }}/${{ matrix.hook }}/
 
   build:
     name: Build Binaries
